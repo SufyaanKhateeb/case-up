@@ -1,3 +1,5 @@
+import { UserButton } from "@clerk/nextjs";
+import { dark } from "@clerk/themes";
 import { type NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
@@ -42,9 +44,19 @@ const Home: NextPage = () => {
               </div>
             </Link>
           </div>
-          <p className="text-2xl text-white">
-            {hello.data ? hello.data.greeting : "Loading tRPC query..."}
-          </p>
+          <div className="flex">
+            <span className="text-2xl text-white">
+              {hello.data ? hello.data.greeting : "Loading tRPC query..."}
+            </span>
+            <UserButton
+              appearance={{
+                baseTheme: dark,
+                elements: { rootBox: "ml-1.5" },
+                userProfile: { baseTheme: dark },
+              }}
+              afterSignOutUrl="/"
+            />
+          </div>
         </div>
       </main>
     </>
