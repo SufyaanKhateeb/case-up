@@ -1,0 +1,4 @@
+.text-container {
+    background-color: var(--color-bg);
+    min-height: 200%;
+}

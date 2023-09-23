@@ -1,10 +1,14 @@
 import { type Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import { type AppType } from "next/app";
+import { createEmotionSsrAdvancedApproach } from "tss-react/next/pagesDir";
 
 import { api } from "~/utils/api";
 
 import "~/styles/globals.css";
+
+const { augmentDocumentWithEmotionCache, withAppEmotionCache } =
+  createEmotionSsrAdvancedApproach({ key: "css" });
 
 const MyApp: AppType<{ session: Session | null }> = ({
   Component,
@@ -17,4 +21,5 @@ const MyApp: AppType<{ session: Session | null }> = ({
   );
 };
 
-export default api.withTRPC(MyApp);
+export { augmentDocumentWithEmotionCache };
+export default withAppEmotionCache(api.withTRPC(MyApp));
