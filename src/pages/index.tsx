@@ -1,7 +1,7 @@
 // import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 // import Link from "next/link";
-import Main from "./main-page";
+import Main from "./components/main-page";
 
 import { api } from "~/utils/api";
 

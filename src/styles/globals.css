@@ -12,6 +12,7 @@
     }
 
     html {
+        background: var(--color-bg);
         font-family: 'Outfit', sans-serif;
     }
 }

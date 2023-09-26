@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from "react";
 import pxToPercentage from "~/utils/pxToPercentage";
 import { motion, useScroll, useTransform } from "framer-motion";
+import dynamic from "next/dynamic";
 
 const NameComponent = (props: {
   containerRef: React.RefObject<HTMLElement>;
@@ -15,7 +16,11 @@ const NameComponent = (props: {
   const [positionAttr, setPositionAttr] = useState(50);
   const [letterSpacing, setLetterSpacing] = useState(50);
 
-  const positionProgress = useTransform(scrollYProgress, [0, 1], [3.125, 50]);
+  const positionProgress = useTransform(
+    scrollYProgress,
+    [0, 1],
+    [pxToPercentage(60, 1080), 50],
+  );
   const fontSizeProgress = useTransform(scrollYProgress, [0, 1], [46, 504]);
   const letterSpacingProgress = useTransform(scrollYProgress, [0, 1], [0, 50]);
 
@@ -28,30 +33,29 @@ const NameComponent = (props: {
   useEffect(() =>
     letterSpacingProgress.on("change", (latest) => setLetterSpacing(latest)),
   );
-  // console.log(scrollYProgress.get())
-  // scrollYProgress.onChange(() => console.log(scrollYProgress.get()));
+
   return (
-    <motion.div
-      className="absolute flex items-center"
-      style={{
-        fontSize: `${pxToPercentage(fontSize)}vw`,
-        gap: `${pxToPercentage(16)}vw`,
-        top: `${positionAttr}%`,
-        left: `${positionAttr}%`,
-        transform: `translate(-${positionAttr}%, -${positionAttr}%)`,
-      }}
-    >
-      <motion.p
-        className="text-grey-light"
+    <div className="pointer-events-none sticky top-0">
+      <motion.a
+        className="text-grey-light no-underline will-change-transform"
+        href="/"
         style={{
+          display: "inline-block",
+          position: "relative",
+          top: `${positionAttr}vh`,
+          margin: "0 auto",
+          left: `50vw`,
+          transform: `translate(-50%, -50%)`,
+          pointerEvents: "auto",
+          fontSize: `${pxToPercentage(fontSize)}vw`,
           fontWeight: 700,
           letterSpacing: `${pxToPercentage(letterSpacing)}vw`,
           lineHeight: "normal",
         }}
       >
         MSK
-      </motion.p>
-      {fontSize == 46 && (
+        <motion.div className="pointer-events-auto absolute top-0 w-full pt-[50%]" />
+        {/* {fontSize == 46 && (
         <div
           className="bg-red-400 text-slate-800"
           style={{
@@ -63,9 +67,12 @@ const NameComponent = (props: {
         >
           Muhammad Sufyaan Khateeb
         </div>
-      )}
-    </motion.div>
+      )} */}
+      </motion.a>
+    </div>
   );
 };
 
-export default NameComponent;
+export default dynamic(() => Promise.resolve(NameComponent), {
+  ssr: false,
+});
