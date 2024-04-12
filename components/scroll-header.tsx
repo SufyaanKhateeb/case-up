@@ -1,0 +1,118 @@
+"use client";
+import React, { useRef, useState } from "react";
+import Logo from "@/public/logo-star.svg";
+import Image from "next/image";
+import { cubicBezier, motion, useMotionValueEvent, useScroll, useSpring, useTransform } from "framer-motion";
+import Link from "next/link";
+
+import { cn } from "@/lib/utils";
+import {
+	NavigationMenu,
+	NavigationMenuContent,
+	NavigationMenuItem,
+	NavigationMenuLink,
+	NavigationMenuList,
+	NavigationMenuTrigger,
+	navigationMenuTriggerStyle,
+} from "@/components/ui/navigation-menu";
+
+type Props = {};
+
+const NavigationMenuCompoent = (props: { withLogo: boolean }) => {
+	return (
+		<NavigationMenu>
+			<NavigationMenuList className="backdrop-blur-2xl bg-foreground/5 rounded-2xl">
+				{props.withLogo && <NavigationMenuItem>
+					<Link href={"/"}>
+						<NavigationMenuLink className={cn(navigationMenuTriggerStyle(), "bg-transparent hover:bg-transparent px-2")}>
+							<Image height={60} width={70} alt="logo" src={Logo} />
+						</NavigationMenuLink>
+					</Link>
+				</NavigationMenuItem>}
+				<NavigationMenuItem>
+					<Link href="#work-section" legacyBehavior passHref>
+						<NavigationMenuLink className={cn(navigationMenuTriggerStyle(), "bg-transparent hover:bg-transparent")}>
+							Work
+						</NavigationMenuLink>
+					</Link>
+				</NavigationMenuItem>
+				<NavigationMenuItem>
+					<Link href="#about-section" legacyBehavior passHref>
+						<NavigationMenuLink className={cn(navigationMenuTriggerStyle(), "bg-transparent hover:bg-transparent")}>
+							About
+						</NavigationMenuLink>
+					</Link>
+				</NavigationMenuItem>
+				<NavigationMenuItem>
+					<Link href="#contact-section" legacyBehavior passHref>
+						<NavigationMenuLink className={cn(navigationMenuTriggerStyle(), "bg-transparent hover:bg-transparent")}>
+							Contact
+						</NavigationMenuLink>
+					</Link>
+				</NavigationMenuItem>
+			</NavigationMenuList>
+		</NavigationMenu>
+	);
+};
+
+const ScrollHeader = (props: Props) => {
+	const triggerRef = useRef(null);
+	const [hideHeader, setHideHeader] = useState(false);
+	const { scrollY, scrollYProgress } = useScroll({ target: triggerRef, offset: ["start end", "end end"] });
+
+	const springScroll = useSpring(scrollYProgress, {
+		stiffness: 200,
+		damping: 30,
+		restDelta: 0.001,
+	});
+
+	const imageLeft = useTransform(springScroll, [0, 0.4], ["15vw", "2vw"]);
+	const imageTop = useTransform(springScroll, [0, 0.4], ["41vh", "2vh"]);
+	const imageHeight = useTransform(springScroll, [0, 0.4], ["54vh", "6vh"]);
+	const imageWidth = useTransform(springScroll, [0, 0.4], ["63vw", "7vw"]);
+
+	// hide and show header if when scrolling down and up respectively
+	useMotionValueEvent(scrollY, "change", (latest) => {
+		const prev = scrollY.getPrevious();
+		const isScrollTriggerComplete = scrollYProgress.get() === 1;
+		const isScrollingDown = prev && latest > prev;
+		setHideHeader(isScrollTriggerComplete);
+		// setHideHeader(!!(isScrollTriggerComplete && isScrollingDown));
+	});
+
+	return (
+		<div className="relative z-10">
+			<div className="header-spacer h-[10vh]" />
+			<motion.div
+				variants={{ visible: { y: 0 }, hidden: { y: -100 } }}
+				animate={hideHeader ? "hidden" : "visible"}
+				transition={{ duration: 0.7, ease: cubicBezier(0, 0.55, 0.45, 1) }}
+				className="fixed top-0 left-0 w-screen h-[10vh]"
+			>
+				<div className="w-full h-full flex items-center justify-end border-b py-[2vh] px-[2vw] bg-background border-dim_gray">
+					<motion.div style={{ top: imageTop, left: imageLeft, height: imageHeight, width: imageWidth }} className="absolute">
+						<Link href={"/"}>
+							<Image fill alt="logo" src={Logo} />
+						</Link>
+					</motion.div>
+					<NavigationMenuCompoent withLogo={false} />
+					{/* <h1 className="uppercase text-xl text-dim_gray">In pursuit of excellence</h1> */}
+				</div>
+			</motion.div>
+			<motion.div
+				variants={{ visible: { y: 0 }, hidden: { y: 100 } }}
+				animate={hideHeader ? "visible" : "hidden"}
+				transition={{ duration: 0.7, ease: cubicBezier(0, 0.55, 0.45, 1) }}
+				className="fixed bottom-0 w-screen grid place-items-center p-2"
+			>
+				<NavigationMenuCompoent withLogo />
+			</motion.div>
+			<div className="absolute top-0 left-0 w-screen h-screen flex flex-col pointer-events-none">
+				<div className="min-w-screen min-h-screen" />
+				<div ref={triggerRef} className="scroll-trigger min-h-[100vh]" />
+			</div>
+		</div>
+	);
+};
+
+export default ScrollHeader;
