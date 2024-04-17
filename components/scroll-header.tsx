@@ -1,4 +1,5 @@
 "use client";
+import dynamic from "next/dynamic";
 import React, { MutableRefObject, useRef, useState } from "react";
 import Logo from "@/public/logo-star.svg";
 import Image from "next/image";
@@ -153,4 +154,4 @@ const ScrollHeader = (props: Props) => {
 	);
 };
 
-export default ScrollHeader;
+export default dynamic(() => Promise.resolve(ScrollHeader), { ssr: false });
