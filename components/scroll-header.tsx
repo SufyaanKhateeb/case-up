@@ -105,7 +105,7 @@ const ScrollHeader = (props: Props) => {
 		restDelta: 0.002,
 	});
 
-	const imageTop = useTransform(springScroll, [0, 0.4], ["38vh", "2.5vh"]);
+	const imageTransform = useTransform(springScroll, [0, 0.4], ["translate(calc(50vw - 51%), 38vh)", "translate(calc(2vw - 0%), 2.5vh)"]);
 	const imageHeight = useTransform(springScroll, [0, 0.4], ["60vh", "5vh"]);
 
 	// hide and show header if when scrolling down and up respectively
@@ -126,13 +126,15 @@ const ScrollHeader = (props: Props) => {
 				transition={{ duration: 0.7, ease: cubicBezier(0, 0.55, 0.45, 1) }}
 				className="fixed top-0 left-0 w-screen h-[10vh]"
 			>
-				<div className="w-full h-full flex items-center justify-end border-b py-[2vh] px-[2vw] bg-background border-dim_gray">
-					<motion.div style={{ top: imageTop, height: imageHeight }} className="absolute w-auto max-w-[95vw] left-[2vw]">
-						<Link href={"/"}>
+				<div className="relative w-full h-full flex items-center border-b py-[2vh] px-[2vw] bg-background border-dim_gray">
+					<Link href={"/"}>
+						<motion.div style={{ transform: imageTransform, height: imageHeight, willChange: 'transform, width' }} className="absolute top-0 left-0 w-auto max-w-[95vw]">
 							<Image className="!h-full w-auto" width={1526} height={624} alt="logo" src={Logo} layout="intrinsic" />
-						</Link>
-					</motion.div>
-					<NavigationMenuCompoent withLogo={false} workRef={workRef} aboutRef={aboutRef} contactRef={contactRef} />
+						</motion.div>
+					</Link>
+					<div className="ml-auto">
+						<NavigationMenuCompoent withLogo={false} workRef={workRef} aboutRef={aboutRef} contactRef={contactRef} />
+					</div>
 					{/* <h1 className="uppercase text-xl text-dim_gray">In pursuit of excellence</h1> */}
 				</div>
 			</motion.div>

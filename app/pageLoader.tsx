@@ -13,7 +13,7 @@ export default function PageLoader() {
 
 	useEffect(() => {
 		const runLoadingAnimation = async () => {
-			await animate(loadingCount, 100, { duration: 1, ease: cubicBezier(0.45, 0, 0.55, 1) });
+			await animate(loadingCount, 100, { duration: Math.ceil(Math.random() * 2), ease: cubicBezier(0.45, 0, 0.55, 1) });
 			await Promise.all([
 				animate(".slide-down", { y: "100%" }, { duration: 0.4, ease: cubicBezier(0.12, 0, 0.39, 0) }),
 				animate(".slide-up", { y: "-100%" }, { duration: 0.3, ease: cubicBezier(0.12, 0, 0.39, 0) }),
@@ -22,7 +22,7 @@ export default function PageLoader() {
 			scope.current.style.display = 'none';
 		};
 		runLoadingAnimation();
-	});
+	}, []);
 
 	return (
 		<div ref={scope} className="page-loader-main z-30 w-screen h-screen fixed top-0 left-0 bg-background">
