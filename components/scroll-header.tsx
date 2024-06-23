@@ -102,13 +102,11 @@ const ScrollHeader = (props: Props) => {
 	const springScroll = useSpring(scrollYProgress, {
 		stiffness: 200,
 		damping: 30,
-		restDelta: 0.001,
+		restDelta: 0.002,
 	});
 
-	const imageLeft = useTransform(springScroll, [0, 0.4], ["15vw", "2vw"]);
-	const imageTop = useTransform(springScroll, [0, 0.4], ["41vh", "2vh"]);
-	const imageHeight = useTransform(springScroll, [0, 0.4], ["54vh", "6vh"]);
-	const imageWidth = useTransform(springScroll, [0, 0.4], ["63vw", "7vw"]);
+	const imageTop = useTransform(springScroll, [0, 0.4], ["38vh", "2.5vh"]);
+	const imageHeight = useTransform(springScroll, [0, 0.4], ["60vh", "5vh"]);
 
 	// hide and show header if when scrolling down and up respectively
 	useMotionValueEvent(scrollY, "change", (latest) => {
@@ -129,9 +127,9 @@ const ScrollHeader = (props: Props) => {
 				className="fixed top-0 left-0 w-screen h-[10vh]"
 			>
 				<div className="w-full h-full flex items-center justify-end border-b py-[2vh] px-[2vw] bg-background border-dim_gray">
-					<motion.div style={{ top: imageTop, left: imageLeft, height: imageHeight, width: imageWidth }} className="absolute">
+					<motion.div style={{ top: imageTop, height: imageHeight }} className="absolute w-auto max-w-[95vw] left-[2vw]">
 						<Link href={"/"}>
-							<Image fill alt="logo" src={Logo} />
+							<Image className="!h-full w-auto" width={1526} height={624} alt="logo" src={Logo} layout="intrinsic" />
 						</Link>
 					</motion.div>
 					<NavigationMenuCompoent withLogo={false} workRef={workRef} aboutRef={aboutRef} contactRef={contactRef} />
@@ -142,7 +140,7 @@ const ScrollHeader = (props: Props) => {
 				variants={{ visible: { y: 0 }, hidden: { y: 100 } }}
 				animate={hideHeader ? "visible" : "hidden"}
 				transition={{ duration: 0.7, ease: cubicBezier(0, 0.55, 0.45, 1) }}
-				className="fixed bottom-0 w-screen grid place-items-center p-2"
+				className="fixed left-0 bottom-0 w-screen grid place-items-center p-2"
 			>
 				<NavigationMenuCompoent withLogo workRef={workRef} aboutRef={aboutRef} contactRef={contactRef} />
 			</motion.div>
