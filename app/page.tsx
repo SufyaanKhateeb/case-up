@@ -30,7 +30,7 @@ export default function Home() {
 			</div>
 			<div className="h-screen w-[94%] pt-[3rem] mx-auto flex flex-col">
 				<ScrollHeader workRef={workSectionRef} aboutRef={aboutSectionRef} contactRef={contactSectionRef} />
-				<section className="flex flex-col md:flex-row gap-[2rem] md:gap-0 pl-[16vw] md:p-0">
+				<section id="website-greetings-section" className="relative top-[50px] opacity-0 flex flex-col md:flex-row gap-[2rem] md:gap-0 pl-[16vw] md:p-0">
 					<div className={`${noto.className} flex flex-col md:text-6xl lg:text-8xl text-2xl uppercase md:pl-[30px] font-semibold text-foreground whitespace-pre-line`}>
 						<p className="md:mb-[2rem]">PERSONAL</p>
 						<p>PORTFOLIO</p>
