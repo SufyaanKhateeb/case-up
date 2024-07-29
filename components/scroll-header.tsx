@@ -101,11 +101,11 @@ const ScrollHeader = (props: Props) => {
 
 	const springScroll = useSpring(scrollYProgress, {
 		stiffness: 200,
-		damping: 30,
+		damping: 40,
 		restDelta: 0.002,
 	});
 
-	const imageTransform = useTransform(springScroll, [0, 0.4], ["translate(calc(50vw - 51%), 38vh)", "translate(calc(2vw - 0%), 2.5vh)"]);
+	const imageTransform = useTransform(springScroll, [0, 0.4], ["translate3d(calc(50vw - 51%), 35vh, 0)", "translate3d(calc(2vw - 0%), 2.5vh, 0)"]);
 	const imageHeight = useTransform(springScroll, [0, 0.4], ["60vh", "5vh"]);
 
 	// hide and show header if when scrolling down and up respectively
@@ -128,7 +128,7 @@ const ScrollHeader = (props: Props) => {
 			>
 				<div className="relative w-full h-full flex items-center border-b py-[2vh] px-[2vw] bg-background border-dim_gray">
 					<Link href={"/"}>
-						<motion.div style={{ transform: imageTransform, height: imageHeight, willChange: 'transform, width' }} className="absolute top-0 left-0 w-auto max-w-[95vw]">
+						<motion.div style={{ transform: imageTransform, height: imageHeight, willChange: 'transform, width, height' }} className="absolute top-0 left-0 w-auto max-w-[95vw]">
 							<Image className="!h-full w-auto" width={1526} height={624} alt="logo" src={Logo} layout="intrinsic" />
 						</motion.div>
 					</Link>

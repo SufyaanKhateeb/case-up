@@ -13,7 +13,7 @@ export default function PageLoader() {
 
 	useEffect(() => {
 		const runLoadingAnimation = async () => {
-			await animate(loadingCount, 100, { duration: Math.ceil(Math.random() * 2), ease: cubicBezier(0.45, 0, 0.55, 1) });
+			await animate(loadingCount, 100, { duration: Math.ceil(Math.random()), ease: cubicBezier(0.45, 0, 0.55, 1) });
 			await Promise.all([
 				animate(".slide-right", { x: "100%" }, { delay: 0.1, duration: 0.3, ease: cubicBezier(0.12, 0, 0.39, 0) }),
 				animate(".slide-down-vanish", { y: 200, opacity: 0, scale: 0.5 }, { delay: 0.1, duration: 0.3, ease: cubicBezier(0.12, 0, 0.39, 0) }),
