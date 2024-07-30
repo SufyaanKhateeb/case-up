@@ -6,7 +6,6 @@ import img1 from "@/public/max-bender-1zFK0pkHo9w-unsplash.jpg";
 import img2 from "@/public/melyna-cote-rLWHLNQFQL8-unsplash.jpg";
 import { Noto_Sans } from "next/font/google";
 import { useEffect, useRef } from "react";
-import LocomotiveScroll from 'locomotive-scroll';
 import styles from "./page.module.css";
 
 const noto = Noto_Sans({ subsets: ["latin"] });
@@ -17,7 +16,10 @@ export default function Home() {
 	const contactSectionRef = useRef<any>(null);
 
 	useEffect(() => {
-		const locomotiveScroll = new LocomotiveScroll();
+		(async() => {
+			const LocomotiveScroll = (await import('locomotive-scroll')).default;
+			const locomotiveScroll = new LocomotiveScroll();
+		})();
 	}, []);
 
 	return (
