@@ -7,8 +7,8 @@ import { cn } from "@/lib/utils";
 import { NavigationMenu, NavigationMenuItem, NavigationMenuList, navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
-import MotionPathPlugin from "@/lib/MotionPathPlugin";
-import DrawSVGPlugin from "@/lib/DrawSVGPlugin";
+import MotionPathPlugin from "gsap/MotionPathPlugin";
+import DrawSVGPlugin from "gsap/DrawSVGPlugin";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import ScrollToPlugin from "gsap/ScrollToPlugin";
 
