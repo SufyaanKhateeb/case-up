@@ -8,7 +8,7 @@ import { NavigationMenu, NavigationMenuItem, NavigationMenuList, navigationMenuT
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import MotionPathPlugin from "gsap/MotionPathPlugin";
-import DrawSVGPlugin from "gsap/DrawSVGPlugin";
+import DrawPlugin from "@/lib/DrawPlugin";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import ScrollToPlugin from "gsap/ScrollToPlugin";
 
@@ -189,7 +189,7 @@ const ScrollHeader = (props: Props) => {
 
     const { contextSafe } = useGSAP(
         () => {
-            gsap.registerPlugin(MotionPathPlugin, DrawSVGPlugin);
+            gsap.registerPlugin(MotionPathPlugin, DrawPlugin);
             const totalTime = 1.5;
             const pathTimeline = gsap
                 .timeline()
