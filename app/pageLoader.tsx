@@ -1,5 +1,6 @@
 "use client";
-import Logo from "@/public/logo-star.svg";
+import Logo from "@/public/new-font-logo.svg";
+import Logo1 from "@/components/svg/logo";
 import { motion, cubicBezier, useAnimate, useMotionValue, useTransform, animate as globalAnimate } from "framer-motion";
 import Lottie from "lottie-react";
 import Image from "next/image";
@@ -32,9 +33,9 @@ export default function PageLoader() {
 	return (
 		<div ref={scope} className="page-loader-main z-30 w-screen h-screen fixed top-0 left-0 bg-background">
 			<div className="slide-up w-full h-[10vh] absolute top-0 left-0">
-				<div className="w-full h-full flex items-center justify-between border-b py-[2.5vh] px-[2vw] border-dim_gray">
-					<div className="relative w-auto h-[5vh]">
-						<Image className="!h-full w-auto" width={1526} height={624} alt="logo" src={Logo} layout="intrinsic" />
+				<div className="w-full h-full flex items-center justify-between border-b px-[2vw] border-dim_gray">
+					<div className="relative w-[11vw] h-auto flex items-center justify-center">
+						<Image className="w-full h-full" width={1959} height={755} alt="logo" src={Logo} />
 					</div>
 					<h1 className="uppercase text-md font-semibold text-foreground">In pursuit of excellence</h1>
 				</div>
