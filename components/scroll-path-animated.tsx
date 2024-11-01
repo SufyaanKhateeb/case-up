@@ -11,7 +11,7 @@ type Props = {};
 const ScrollPathAnimated = (props: Props) => {
 
     useGSAP(() => {
-        gsap.registerPlugin(ScrollTrigger, MotionPathPlugin, DrawSVGPlugin);
+        gsap.registerPlugin(ScrollTrigger, MotionPathPlugin, DrawPlugin);
 
         const t = gsap
             .timeline({
