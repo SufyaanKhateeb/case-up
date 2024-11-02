@@ -3,7 +3,7 @@ import dynamic from "next/dynamic";
 import React, { MutableRefObject, useMemo, useRef, useState } from "react";
 import Logo from "./svg/logo";
 import { cubicBezier, motion } from "framer-motion";
-import { cn } from "@/lib/utils";
+import { cn, getPxValue } from "@/lib/utils";
 import { NavigationMenu, NavigationMenuItem, NavigationMenuList, navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
@@ -11,6 +11,11 @@ import MotionPathPlugin from "gsap/MotionPathPlugin";
 import DrawPlugin from "@/lib/DrawPlugin";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import ScrollToPlugin from "gsap/ScrollToPlugin";
+import resolveConfig from "tailwindcss/resolveConfig";
+import tailwindConfig from "@/tailwind.config";
+import useWindowDimensions from "@/lib/useWindowDimensions";
+
+const { theme } = resolveConfig(tailwindConfig);
 
 const NavigationMenuCompoent = (props: {
     withLogo: boolean;
@@ -142,7 +147,9 @@ type Props = {
 const ScrollHeader = (props: Props) => {
     const { workRef, aboutRef, contactRef } = props;
     const [hideHeader, setHideHeader] = useState(false);
+    const { width } = useWindowDimensions();
     const logoRef = useRef(null);
+    const smWidth = width && width < getPxValue(theme.screens.sm);
 
     useGSAP(() => {
         gsap.timeline({
@@ -156,16 +163,16 @@ const ScrollHeader = (props: Props) => {
             .fromTo(
                 "#header-logo .msk-text",
                 { width: "92vw", translateX: "2vw", translateY: "61vh" },
-                { width: "11vw", translateX: "0vw", translateY: "0vh" },
+                { width: smWidth ? "26vw" : "11vw", translateX: "0vw", translateY: "0vh" },
                 0
             )
             .fromTo(
                 "#header-logo .star-and-path",
                 { width: "92vw", translateX: "2vw", translateY: "61vh" },
-                { width: "11vw", translateX: "0vw", translateY: "0vh" },
+                { width: smWidth ? "26vw" : "11vw", translateX: "0vw", translateY: "0vh" },
                 0
             );
-    }, []);
+    }, [smWidth]);
 
     useGSAP(() => {
         gsap.timeline({
