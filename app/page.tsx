@@ -24,7 +24,7 @@ export default function Home() {
     }, []);
 
     return (
-        <div className="w-full h-full overflow-x-hidden">
+        <div className="relative w-full h-full overflow-x-hidden">
             <PageLoader />
             <div className="w-screen h-screen -z-10 fixed top-0 left-0 flex">
                 <section className="h-full border-l border-dim_gray ml-[2vw]" />
@@ -36,7 +36,7 @@ export default function Home() {
                 <section className="h-full border-l border-dim_gray ml-[2vw]" />
                 <section className="h-full border-l border-dim_gray ml-auto mr-[2vw]" />
             </div>
-            <ScrollPathAnimated />
+            {/* <ScrollPathAnimated /> */}
             <div className="h-screen w-[94%] mx-auto flex flex-col">
                 <ScrollHeader workRef={workSectionRef} aboutRef={aboutSectionRef} contactRef={contactSectionRef} />
                 <section
@@ -61,7 +61,33 @@ export default function Home() {
                 </section>
             </div>
             <div className="m-2" />
+
             <div ref={workSectionRef} id="work-section" className="w-screen h-screen">
+            <div className="carousel">
+                <div
+                    className="logo-carousel-wrap"
+                    // style={{
+                    //     transform: "translate3d(-7.639%, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg)",
+                    //     transformStyle: "preserve-3d",
+                    //     willChange: "transform",
+                    // }}
+                >
+                    <ul role="list" className="logo-carousel">
+                        {[...Array(20)].map((_, index) => (
+                            <li key={index} className="logo-carousel-item">
+                                <div className="rl-heading-style-h2-infinite-scroll">
+                                    <span style={{ verticalAlign: "inherit" }}>
+                                        _selected{" "}
+                                        <span className="text-span-20" style={{ verticalAlign: "inherit" }}>
+                                            work
+                                        </span>
+                                    </span>
+                                </div>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            </div>
                 Work
                 <div className="relative w-[500px] h-[500px]">
                     <Image alt="pic2" className="object-cover" fill src={img2} />
