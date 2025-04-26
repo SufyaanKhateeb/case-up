@@ -2,12 +2,12 @@
 import ScrollHeader from "@/components/scroll-header";
 import PageLoader from "./pageLoader";
 import Image from "next/image";
-import img1 from "@/public/max-bender-1zFK0pkHo9w-unsplash.jpg";
+// import img1 from "@/public/max-bender-1zFK0pkHo9w-unsplash.jpg";
 import img2 from "@/public/melyna-cote-rLWHLNQFQL8-unsplash.jpg";
 import { Noto_Sans } from "next/font/google";
 import { useEffect, useRef, useState } from "react";
-import styles from "./page.module.css";
-import ScrollPathAnimated from "@/components/scroll-path-animated";
+// import styles from "./page.module.css";
+// import ScrollPathAnimated from "@/components/scroll-path-animated";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { z } from "zod";
 
@@ -19,12 +19,19 @@ const formSchema = z.object({
     message: z.string().min(1, "Message cannot be empty").max(500, "Message must be at most 500 characters long"),
 });
 
+// Define a type for form errors
+interface FormErrors {
+    name?: string;
+    email?: string;
+    message?: string;
+}
+
 export default function Home() {
     const workSectionRef = useRef<any>(null);
     const aboutSectionRef = useRef<any>(null);
     const contactSectionRef = useRef<any>(null);
     const [formSubmitted, setFormSubmitted] = useState(false);
-    const [formErrors, setFormErrors] = useState({});
+    const [formErrors, setFormErrors] = useState<FormErrors>({});
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
@@ -34,22 +41,24 @@ export default function Home() {
         })();
     }, []);
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         setIsLoading(true);
 
+        const form = e.target as HTMLFormElement; // Cast e.target to HTMLFormElement
+        const formElements = form.elements as HTMLFormControlsCollection;
         const formData = {
-            name: e.target.name.value,
-            email: e.target.email.value || undefined, // Handle optional email
-            message: e.target.message.value,
+            name: (formElements.namedItem("name") as HTMLInputElement).value,
+            email: (formElements.namedItem("email") as HTMLInputElement)?.value || undefined, // Handle optional email
+            message: (formElements.namedItem("message") as HTMLTextAreaElement).value,
         };
 
         const validation = formSchema.safeParse(formData);
 
         if (!validation.success) {
-            const errors = validation.error.errors.reduce((acc, error) => {
-                acc[error.path[0]] = error.message;
+            const errors = validation.error.errors.reduce((acc: FormErrors, error) => {
+                acc[error.path[0] as keyof FormErrors] = error.message;
                 return acc;
             }, {});
             setFormErrors(errors);
