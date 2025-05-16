@@ -1,7 +1,7 @@
 ## Portfolio site
 
 # Setup details
-- Runs on Node v20
+- Runs on Node v22
 - Uses Nextjs 14, tailwind, framer-motion and gsap
 
 # Updates

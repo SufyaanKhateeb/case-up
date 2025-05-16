@@ -3,7 +3,8 @@ import ScrollHeader from "@/components/scroll-header";
 import PageLoader from "./pageLoader";
 import Image from "next/image";
 // import img1 from "@/public/max-bender-1zFK0pkHo9w-unsplash.jpg";
-import img2 from "@/public/melyna-cote-rLWHLNQFQL8-unsplash.jpg";
+// import img2 from "@/public/melyna-cote-rLWHLNQFQL8-unsplash.jpg";
+import msk_cartoon from "@/public/msk_cartoon.png";
 import { Noto_Sans } from "next/font/google";
 import { useEffect, useRef, useState } from "react";
 // import styles from "./page.module.css";
@@ -244,7 +245,7 @@ export default function Home() {
                                     alt="Profile Picture"
                                     className="object-cover rounded-full border-4 border-[hsl(var(--primary))] shadow-md"
                                     fill
-                                    src={img2}
+                                    src={msk_cartoon}
                                 />
                             </div>
                             <h2 className="text-4xl font-extrabold text-[hsl(var(--foreground))] mb-4">About Me</h2>
