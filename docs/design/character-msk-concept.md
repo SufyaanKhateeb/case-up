@@ -2,7 +2,8 @@
 
 Generated with the built-in imagegen tool on November 1, 2026.
 Preview: `character-msk-concept.png`. This is a raster concept, not a finished
-Three.js model or animation. The live character and fallback are unchanged.
+Three.js model or animation. The user approved the left color panel; it is now
+adapted to the live procedural model and matching fallback.
 
 Inputs:
 
@@ -35,11 +36,12 @@ watermark. Preserve an oversized head but make it a little less round than image
 and let the hair and facial-hair differences carry the identity. This is a concept
 portrait only, not a website screenshot and not a rig.
 
-## Implementing after review
+## Implementation
 
-Use the current code-native rig: adjust its hair silhouette, cropped sides,
-head proportions, nose, eyebrows, moustache and chin beard to match the reference.
-Retain existing expressions, arm pivots, sweatshirt, sunglasses accessory,
-controller priority, compact rendering and pointer-event behavior. A generated
-bitmap cannot replace the interactive renderer. Validate the likeness in the
-actual print pass and update the fallback portrait from the final rig.
+The existing code-native rig now carries the swept locks, cropped sides, taller
+face, longer nose, thicker brows, separate moustache and chin beard. Cream fabric
+and warm skin render in full color through an antialiased transparent composite.
+Expressions, arm pivots, sunglasses, controller priority, crisp compact rendering
+and pointer-event behavior remain intact. The raster is a design reference; the
+site renders actual animated geometry. The matching fallback was exported from
+the final rig with enough room for the raised quiff.

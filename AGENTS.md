@@ -19,8 +19,10 @@ Placement App and Real-Time Chat still need screenshots; their abstract previews
 are labeled as illustrations. The original résumé PDFs are copied without edits,
 with local page images for browser-independent previews.
 The character’s procedural geometry and animation structure were reconstructed
-locally. A likeness concept based on `public/msk_cartoon.png` is for review in
-`docs/design/character-msk-concept.png`; it has not replaced the animated rig.
+locally. The user approved the color panel in `docs/design/character-msk-concept.png`,
+based on `public/msk_cartoon.png`. The live rig now has a swept dark quiff, warm
+skin, elongated face, separated moustache, small chin beard and cream sweatshirt.
+Use clean shaded color rather than the reference’s monochrome dither.
 The brand
 direction retains the arrow/shooting-star mark: it represents the user’s
 aspiration to rise in the world. Preserve it as a personal signature in the
@@ -56,7 +58,7 @@ build failure was resolved by the rebuild.
 - `content/portfolio.ts`: typed identity, draft copy, project records, and scene
   configuration. Keep text/media edits here. `status: "placeholder"` distinguishes
   development content; placeholder detail pages have noindex metadata.
-- `content/character.ts`: reference appearance, palette, provenance, and matching
+- `content/character.ts`: approved color appearance, palette, provenance, and matching
   fallback poster.
 - `app/page.tsx`: semantic, server-rendered homepage. Project chapters use native
   scrolling with CSS sticky stages. Three featured projects map to comparison,
@@ -79,7 +81,7 @@ build failure was resolved by the rebuild.
 - `lib/character-tour.ts`: pure grid placements, continuous travel/turn/scale,
   narration progress/fades, and section gesture selection.
 - `components/character/tour.ts`: measured document anchors and smoothed viewport
-  head coordinates. `scene.tsx` renders one full-viewport canvas, print pass, badge
+  head coordinates. `scene.tsx` renders one full-viewport canvas, antialiased color composite, badge
   clipping, accessory transitions, and synchronized mirrored gestures.
 - `.chapter-lines` / `[data-story-step]`: semantic scrolling narration and gesture
   cues. The biography keeps the character visible; do not restore corner jumps.

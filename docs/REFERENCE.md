@@ -133,3 +133,30 @@ trick-dialog open/close, mobile contact navigation, email-copy feedback, and the
 previously covered mobile work link. DOM hit tests show all mobile footer controls
 receive their own pointer events. Nineteen behavior tests pass, including a new
 footer-clearance regression.
+
+## Approved color likeness — November 2, 2026
+
+Adapted the approved left-hand color concept to the procedural rig: swept dark
+quiff, taller face, longer nose, separate moustache/chin beard, warm skin and
+cream shooting-star sweatshirt. Skin-colored articulated hands replace the
+white gloves. The clean color composite replaces the dither pass, retaining
+circular clipping and the vanish/photo effects. The badge keeps its 256px crop.
+Hat transitions compress the taller hair to prevent crown intersections.
+The transparent fallback and portfolio homepage screenshots now match the model.
+
+Validation: lint, TypeScript, all 22 behavior tests, final production build, and
+all 17 HTTP route/asset checks pass. The obsolete size-dependent dither test was
+removed; camera-crop coverage remains, and a new responsive framing regression
+covers portrait tablets and short-landscape speech. Browser checks at 390 × 844,
+768 × 1024, 1440 × 900 and 844 × 390 covered the opening, the compact badge,
+project-two narration/sunglasses, forward/backward scrolling, reveal-button
+feedback, trick activation and 404 hat/sunglasses toggles. Portrait tablet
+placement was centered below the headline; short-landscape opening speech moves
+beside the guide to clear the header. The final production homepage loads the
+live canvas with no captured console errors. The development preview was
+restarted and checked after build verification.
+
+This is a geometric adaptation of the approved concept, not an identical sculpt.
+Forced WebGL loss, reduced-motion browser emulation, touch feel and sustained
+real-device performance were not newly audited in this revision. Automated
+coverage still verifies reduced-motion neutral poses and trick interruption.

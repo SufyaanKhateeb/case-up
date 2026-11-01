@@ -1,7 +1,7 @@
 # Case-up — Sufyaan Khateeb’s portfolio
 
 A portfolio inspired by [sebg.ch](https://www.sebg.ch/): bold typography, colored
-project chapters, scroll-driven storytelling, a dithered 3D guide, interactive
+project chapters, scroll-driven storytelling, a full-color 3D guide, interactive
 previews, project case studies, and a dress-up 404.
 
 Built with Next.js 14 App Router, React 18, TypeScript, Tailwind CSS, GSAP, Three.js,
@@ -39,12 +39,13 @@ supplied résumés now provide the biography, Wells Fargo/CAST experience and sk
 illustrative previews while screenshots are pending. `/resume` previews and
 downloads the latest software-engineering PDF; `/resume/data` provides the
 data-engineering version. The character retains its procedural rig,
-shooting-star sweatshirt and sunglasses; a custom likeness concept is available
-in `docs/design/character-msk-concept.png` for review.
+shooting-star sweatshirt and sunglasses. The approved color concept in
+`docs/design/character-msk-concept.png` is now adapted to the live model: swept
+quiff, warm skin, separated moustache, chin beard, and a cream crew neck.
 
 - [Content checklist](docs/CONTENT.md): what to supply and how to integrate it.
 - [Character configuration](docs/CHARACTER-ASSETS.md): appearance, poses, fallback,
-  and optional future personalization.
+  and further personalization.
 - [Character reference](docs/CHARACTER-REFERENCE.md): source inspection and reconstruction.
 - [Reference and QA notes](docs/REFERENCE.md): design baseline and validation scope.
 - [AI guidance](AGENTS.md): architecture and working conventions.
@@ -59,7 +60,7 @@ in `docs/design/character-msk-concept.png` for review.
 | `app/projects/[slug]/page.tsx` | Statically generated case studies |
 | `app/404/`, `app/not-found.tsx` | Dress-up scene and real HTTP 404 handling |
 | `components/portfolio/` | Runtime, scroll director, demo controls, local art |
-| `components/character/` | Shared shell, procedural model, articulated motion, dither renderer |
+| `components/character/` | Shared shell, procedural model, articulated motion, color renderer |
 | `lib/character-state.ts` | Interaction priority, chapter selection, preferences |
 | `lib/character-tour.ts` | Grid anchors, continuous scroll travel, narration timing |
 | `app/globals.css` | Design system, layouts, responsive and reduced-motion styles |

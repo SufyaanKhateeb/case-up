@@ -31,15 +31,18 @@ beard `#c49c74`, sweater `#a4ad9b`, ink `#0b0b0c`, and paper `#fbfbf8`.
 curly hair distribution, beard shading, accessories, and articulated hands with
 readable Three.js code. `motion.ts` adapts the observed pose/timeline structure to
 our controller, including proper interruption and cleanup. `scene.tsx` owns the
-render target and single post-lighting print pass.
+render targets and post-lighting composite.
 
 The vendor bundle and original page script are not executed or shipped. The
 reference’s Astro router, analytics, browser globals, event listeners, and
 infinite timer loops are not imported. Portfolio copy and navigation remain local.
 
-The active character now follows the reference’s appearance, as requested.
-A custom Sufyaan likeness can later be made through `content/character.ts` and
-geometry changes; a separately authored GLB is not a prerequisite for this rig.
+The original reconstruction followed the reference’s appearance. On November 1,
+2026, the user approved a custom color likeness concept based on
+`public/msk_cartoon.png`. That direction now overrides the reference’s appearance:
+swept quiff, elongated face, longer nose, separate moustache and chin beard,
+warm skin, cream sweatshirt and clean color shading. The underlying articulated
+rig, scroll path, gestures, and accessory IDs remain compatible.
 
 ## Eye rendering correction
 

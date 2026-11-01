@@ -1,6 +1,8 @@
 # Character configuration and maintenance
 
-The active character reconstructs the sebg.ch appearance requested by the user.
+The active character adapts the user-approved color concept to the existing rig.
+Identity cues come from `public/msk_cartoon.png`; the concept is in
+`docs/design/character-msk-concept.png`.
 The reference uses procedural Three.js geometry and GSAP poses, not a GLB.
 See `CHARACTER-REFERENCE.md` for source inspection and provenance.
 
@@ -8,7 +10,8 @@ See `CHARACTER-REFERENCE.md` for source inspection and provenance.
 
 - `content/character.ts`: hair, beard, palette, and fallback URL.
 - `components/character/model.ts`: geometry, spherical face anchors, dynamic
-  mouth, vertex-colored beard, instanced curls, accessories, articulated hands.
+  mouth, chin beard, separated moustache, accessories, articulated hands.
+- `components/character/quiff.ts`: a cropped cap and five swept, tapered locks.
 - `components/character/sweatshirt.ts`: straight, relaxed torso, rounded shoulders,
   ribbed crew neck, and a shooting-star chest emblem conforming to the fabric.
   Matching sleeves/cuffs use the existing articulated arm pivots in `model.ts`.
@@ -16,12 +19,14 @@ See `CHARACTER-REFERENCE.md` for source inspection and provenance.
   smoked lenses, reflections, camera details, and temples. The bow tie is removed.
 - `components/character/motion.ts`: facial/hand presets and owned timelines for
   tour gestures, grabbing, and all eleven tricks.
-- `components/character/scene.tsx`: lights, camera, low-resolution large-character
-  framebuffer and a cropped, antialiased 256px badge target. Output DPR is capped
-  at 2; only the compact crop gets extra scene detail. Both targets are disposed.
-- `lib/character-print.ts`: continuous size-dependent print strength and the
-  camera/UV crop. Small faces retain fine tonal shading; large faces retain the
-  original ordered dither. This avoids magnified print cells inside the circle.
+- `components/character/scene.tsx`: lights, camera, antialiased color framebuffer
+  and a cropped 256px badge target. Both use four-sample MSAA and byte textures
+  to bound memory. Output DPR is capped at 2; the main target at 1.5.
+  Both targets are disposed.
+- `components/character/composite.ts`: transparent color output, circular clipping,
+  and vanish/photo trick effects, with a single linear-to-sRGB conversion.
+- `lib/character-render.ts`: the camera/UV crop. The compact face keeps its
+  own detailed render rather than magnifying pixels from the full viewport.
 - `public/character/poster.png`: transparent still rendered from the actual rig.
 
 Keep each action within the controller’s 4.2-second window, or update the runtime
@@ -30,12 +35,15 @@ punches restart the action; direct manipulation interrupts other performances.
 All child timelines belong to one owned parent and must be killed on interruption.
 Dispose geometries, materials, instancing buffers, and render targets on teardown.
 
-## Optional future likeness
+## Likeness and poster
 
-The chosen appearance is the reference character, not a claimed Sufyaan likeness.
-A custom likeness can be made later by adjusting these editable sources, with
-front/three-quarter references and preferred hair, facial hair, and clothing.
-Review the result in the actual print renderer before authoring more poses.
+The color concept is implemented as editable geometry, not a raster billboard.
+Expressions, tour poses, arm pivots and the sunglasses/hat/watch mounts retain
+the existing controller. The source-inspired monochrome pass is retired.
+The poster is a transparent 512px render of the same rig and lighting. Its square
+camera spans 5.75 world units, with the head center at 50% x / 40% y; CSS maps
+that to 5.75 / HEAD_RADIUS times the screen head radius. Keep this framing when
+re-exporting so the quiff fits and the fallback aligns with the live character.
 No separately modeled asset or GLB is required by the current runtime.
 
 ## Sound and failure modes
