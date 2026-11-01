@@ -20,12 +20,12 @@ export default function HunyuanStudyPage() {
         <CharacterReferenceViews />
       </section>
       <section className={styles.panel}>
-        <div className={styles.label}><h2>Generated geometry</h2><span>Hunyuan3D</span></div>
+        <div className={styles.label}><h2>Model comparison</h2><span>Textured GLB + studies</span></div>
         <HunyuanStudy />
       </section>
     </div>
     <footer className={styles.footer}>
-      <p>AI-generated shape study. Color textures and an animation rig are still needed. This model is separate from the portfolio’s animated guide.</p>
+      <p>Your supplied model includes color and PBR textures. It has no animation rig or facial controls yet. The earlier AI-generated geometry studies remain available for comparison.</p>
       <a href="https://huggingface.co/spaces/tencent/Hunyuan3D-2mv">Multi-view source ↗</a>
     </footer>
   </main>;

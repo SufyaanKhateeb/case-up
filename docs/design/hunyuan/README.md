@@ -1,5 +1,36 @@
 # Hunyuan character study
 
+## Supplied textured model
+
+The user subsequently supplied `generated_model.glb`. This is now the default
+asset in the comparison page. The original remains unchanged in the repository
+root (not copied to `public/`). Its generator provenance is not inferred from
+the filename. `supplied-model.json` records its hash and conversion details.
+
+The source has 1,500,002 triangles, three embedded 4K PNG PBR maps and no skeleton,
+animation clips or morph targets. `scripts/character/prepare-supplied-model.py`
+retains the UVs and PBR material connections while making a 100,000-triangle
+derivative with 2K WebP maps at quality 95 and Draco-compressed geometry. The
+runtime file is approximately 1.8 MB instead of the original 78.8 MB. The
+lossless 2K PNG derivative is retained locally in
+`artifacts/character/supplied-model/textured-png.glb` for comparison.
+
+```sh
+blender -b --disable-autoexec --python scripts/character/prepare-supplied-model.py -- \
+  --input generated_model.glb
+```
+
+The shared asset loader uses a bundled local WASM decoder with one worker;
+no remote model service, texture URL or decoder CDN is required. The existing
+animated guide remains active on portfolio routes until this unrigged bust has
+been given appropriate head/body and facial controls. Imported color textures
+alone cannot drive the current blink, smile, mouth and hand animation APIs.
+
+The restrictions documented for the earlier Hunyuan studies are not assumed to
+describe this supplied asset's provenance or license.
+
+## Earlier geometry studies
+
 The user approved the color concept, uploading its isolated reference to
 Tencent's Hunyuan3D-2.1 demo, then producing a turnaround and uploading all four
 views to the separate Hunyuan3D-2mv demo. This is an asset study, separate from
@@ -85,10 +116,15 @@ Primary sources:
 
 ## Validation
 
-The Next.js production build, lint, TypeScript and 24 focused behavior tests
+The Next.js production build, lint, TypeScript and 25 focused behavior tests
 passed. Production HTTP checks cover existing portfolio routes plus the study's
 SSR content, noindex metadata, hidden guide and both valid optimized GLB files.
 Browser review covered reference/model switching and front, three-quarter and
 back views at the available narrow viewport, with no console errors. Desktop
 parity, finished likeness, animation and textured rendering are not claimed.
 `model-study-preview.png` shows the actual browser-rendered study.
+`supplied-model-preview.png` shows the user's textured asset after optimization.
+Its color, normal and packed roughness/metallic maps and local WASM decoder were
+verified in the production route checks. Front/rear rendering and switching
+between textured and untextured models were checked in the browser with no
+console errors. Shared decoded ImageBitmaps are explicitly closed on teardown.

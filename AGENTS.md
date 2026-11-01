@@ -121,6 +121,12 @@ do not reintroduce a mandatory asset-production dependency.
 The user subsequently approved an optional Hunyuan image-to-3D study. The route
 `/character/hunyuan` compares 2.1 single-view and 2mv Turbo four-view geometry;
 it intentionally hides the animated guide. These GLBs have no textures or rig.
+The comparison now defaults to the user-supplied `generated_model.glb`, exported
+as `public/character/sufyaan-textured.glb` (100k triangles, 2K WebP PBR maps,
+local Draco compression). It has textures but no rig or facial morphs. Preserve
+the original file and use `scripts/character/prepare-supplied-model.py` for
+runtime derivatives. Decoder files and Apache license live in
+`public/character/draco/`; loading must not depend on a remote decoder CDN.
 Inputs, generation records and authoring scripts are documented in
 `docs/design/hunyuan/README.md`. Preserve the procedural guide until a generated
 asset has passed likeness, expression, accessory, performance and license review.
