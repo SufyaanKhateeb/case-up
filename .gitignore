@@ -34,3 +34,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Raw 3D authoring exports and hosted-demo download caches
+/artifacts/character/
