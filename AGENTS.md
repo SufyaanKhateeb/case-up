@@ -118,6 +118,13 @@ and `docs/CONTENT.md`. See `docs/CHARACTER-REFERENCE.md` for inspected source an
 implementation findings. The reference itself uses procedural geometry, not GLB;
 do not reintroduce a mandatory asset-production dependency.
 
+The user subsequently approved an optional Hunyuan image-to-3D study. The route
+`/character/hunyuan` compares 2.1 single-view and 2mv Turbo four-view geometry;
+it intentionally hides the animated guide. These GLBs have no textures or rig.
+Inputs, generation records and authoring scripts are documented in
+`docs/design/hunyuan/README.md`. Preserve the procedural guide until a generated
+asset has passed likeness, expression, accessory, performance and license review.
+
 ## Verification and handoff
 
 Run lint, typecheck, focused tests, and production build for application changes.

@@ -164,6 +164,7 @@ export function PortfolioRuntime({ children }: { children: React.ReactNode }) {
 
   return <RuntimeContext.Provider value={value}>
     {children}
+    {pathname !== "/character/hunyuan" && <>
     <CharacterShell />
     <button className="sound-toggle" aria-label={sound ? "Mute sound" : "Enable sound"} aria-pressed={sound} onClick={() => {
       const next = !sound;
@@ -180,6 +181,7 @@ export function PortfolioRuntime({ children }: { children: React.ReactNode }) {
         <p>Or grab me and move me around.</p>
       </div>
     </dialog>
+    </>}
   </RuntimeContext.Provider>;
 }
 

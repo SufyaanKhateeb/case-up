@@ -82,3 +82,13 @@ Primary sources:
 - [2mv hosted demo](https://huggingface.co/spaces/tencent/Hunyuan3D-2mv)
 - [2.1 license](https://github.com/Tencent-Hunyuan/Hunyuan3D-2.1/blob/main/LICENSE)
 - [2mv license](https://huggingface.co/tencent/Hunyuan3D-2mv/blob/main/LICENSE)
+
+## Validation
+
+The Next.js production build, lint, TypeScript and 24 focused behavior tests
+passed. Production HTTP checks cover existing portfolio routes plus the study's
+SSR content, noindex metadata, hidden guide and both valid optimized GLB files.
+Browser review covered reference/model switching and front, three-quarter and
+back views at the available narrow viewport, with no console errors. Desktop
+parity, finished likeness, animation and textured rendering are not claimed.
+`model-study-preview.png` shows the actual browser-rendered study.

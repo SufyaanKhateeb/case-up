@@ -8,6 +8,7 @@ for (const [route, status, expected] of [
   ["/projects/portfolio", 200, "Personal Portfolio"],
   ["/resume", 200, "September 2026"],
   ["/resume/data", 200, "Data engineering"],
+  ["/character/hunyuan", 200, "Generated geometry"],
   ["/404", 404, "Back home"],
   ["/this-route-does-not-exist", 404, "Back home"],
   ["/projects/does-not-exist", 404, "Back home"],
@@ -15,6 +16,17 @@ for (const [route, status, expected] of [
   const response = await fetch(new URL(route, base));
   assert.equal(response.status, status, route);
   assert.ok((await response.text()).includes(expected), `${route} should render its content without JavaScript`);
+  console.log(`${response.status} ${route}`);
+}
+const study = await (await fetch(new URL("/character/hunyuan", base))).text();
+assert.match(study, /name="robots" content="noindex, nofollow"/, "The asset study should stay out of search results");
+assert.ok(!study.includes('aria-label="Interactive portfolio guide"'), "The guide should not overlay the inspection canvas");
+for (const route of ["/character/hunyuan-shape-study.glb", "/character/hunyuan-multiview-study.glb"]) {
+  const response = await fetch(new URL(route, base));
+  assert.equal(response.status, 200, route);
+  const data = Buffer.from(await response.arrayBuffer());
+  assert.equal(data.subarray(0, 4).toString(), "glTF", `${route} should be a real binary model`);
+  assert.ok(data.length < 4_000_000, `${route} should serve the optimized inspection export`);
   console.log(`${response.status} ${route}`);
 }
 for (const [route, type] of [
