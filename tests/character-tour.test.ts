@@ -10,6 +10,20 @@ const right = tourPlacement("right", viewport);
 const badge = tourPlacement("badge", viewport);
 const near = (actual: number, expected: number) => assert.ok(Math.abs(actual - expected) < .01, `${actual} ≠ ${expected}`);
 
+test("the taller likeness fits portrait tablets and short-landscape speech clears the header", () => {
+  for (const [width, height] of [[768, 1024], [820, 1180]]) {
+    for (const kind of ["hero", "error"] as const) {
+      const frame = tourPlacement(kind, { width, height, margin: 20, gap: 10 });
+      assert.ok(frame.x - frame.radius * 1.3 > 20);
+      assert.ok(frame.x + frame.radius * 1.3 < width - 20);
+      assert.ok(frame.y - frame.radius * 1.7 > height * .4);
+    }
+  }
+  const short = tourPlacement("hero", { width: 844, height: 390, margin: 20, gap: 10 });
+  assert.equal(short.beside, 1);
+  assert.equal(hero.beside, 0);
+});
+
 test("landscape anchors match the source grid, head radius, and height", () => {
   near(hero.x, 1179.84); near(hero.y, 540); near(hero.radius, 153);
   near(left.x, 202.68); near(right.x, 1237.32); near(left.radius, 129.6); near(left.y, 588.96);

@@ -28,7 +28,11 @@ export function tourPlacement(kind: TourKind, viewport: TourViewport, textBottom
     return { ...frame, x: span(1, 3), y: Math.max(h * .76, ceiling + radius * 1.75), radius };
   }
   if (kind === "hero" || kind === "outro" || kind === "error") {
-    return { ...frame, x: w < 768 ? span(1, kind === "outro" ? 3 : 4) : span(9, 12), y: h * (w < 768 ? .74 : kind === "outro" ? .62 : .6), radius: w < 768 ? Math.min(h * .13, w * .3) : h * .17 };
+    if (w >= 768 && h >= w && kind !== "outro") {
+      // Portrait tablets need room for the quiff below the opening headline.
+      return { ...frame, x: w / 2, y: h * .74, radius: Math.min(h * .13, w * .23), bubble: columns(7) };
+    }
+    return { ...frame, x: w < 768 ? span(1, kind === "outro" ? 3 : 4) : span(9, 12), y: h * (w < 768 ? .74 : kind === "outro" ? .62 : .6), radius: w < 768 ? Math.min(h * .13, w * .3) : h * .17, beside: kind === "hero" && w >= 768 && h < 500 ? 1 : 0 };
   }
   return frame;
 }

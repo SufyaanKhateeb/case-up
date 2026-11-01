@@ -355,8 +355,7 @@ em { font-style: normal; font-weight: 350; }
 .character-grab { position: absolute; top: 0; left: 0; touch-action: none; cursor: grab; pointer-events: auto; user-select: none; border-radius: 45% 45% 0 0; }
 .is-dragging .character-grab { cursor: grabbing; }
 .character-badge { position: absolute; left: calc(var(--head-x) - 42px); top: calc(var(--head-y) - 38px); width: 84px; height: 84px; border-radius: 50%; background: var(--paper); box-shadow: 0 0 0 4px var(--paper),0 0 0 6px var(--blue); opacity: var(--badge-opacity,0); }
-.character-fallback, .character-loading { position: absolute; left: 0; top: 0; pointer-events: none; }
-.character-loading { width: calc(var(--head-radius) * 3.5); height: calc(var(--head-radius) * 3.5); transform: translate(calc(var(--head-x) - var(--head-radius) * 1.75),calc(var(--head-y) - var(--head-radius) * 1.4)); }
+.character-fallback, .character-loading { position: absolute; left: 0; top: 0; pointer-events: none; clip-path: circle(var(--character-clip,10000px) at 50% 40%); width: calc(var(--head-radius) * 4.107143); height: calc(var(--head-radius) * 4.107143); transform: translate(calc(var(--head-x) - var(--head-radius) * 2.0535715),calc(var(--head-y) - var(--head-radius) * 1.6428572)); }
 .character-poster { width: 100%; height: 100%; object-fit: contain; }
 .speech-bubble { position: absolute; left: 0; top: 0; width: max-content; max-width: calc(100vw - 40px); background: var(--paper); color: var(--black); padding: 20px 24px; border-radius: 27px; font-size: clamp(16px,1.6vw,24px); line-height: 1.15; font-weight: 550; letter-spacing: -.025em; text-align: left; box-shadow: 6px 6px #111; will-change: transform; }
 .speech-bubble::after { content: ''; width: 19px; height: 19px; background: var(--paper); position: absolute; bottom: -9px; left: calc(var(--tail-x,50%) - 10px); transform: rotate(45deg); box-shadow: 5px 4px #111; }

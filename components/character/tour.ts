@@ -15,7 +15,6 @@ export function useCharacterTour(stage: RefObject<HTMLElement>, state: Character
     const element = stage.current!; if (!element) return;
     const bubble = element.querySelector<HTMLElement>(".speech-bubble")!;
     const handle = element.querySelector<HTMLElement>(".character-grab")!;
-    const poster = element.querySelector<HTMLElement>(".character-fallback");
     let viewport: TourViewport = initialViewport, anchors: TourAnchor[] = [];
     let scroll = window.scrollY, lastScroll = scroll, direction = 1, targetDirection = 1;
     let alive = true;
@@ -67,7 +66,6 @@ export function useCharacterTour(stage: RefObject<HTMLElement>, state: Character
       } else delete bubble.dataset.tail;
       bubble.style.transform = `translate(${Math.round(bx)}px,${Math.round(Math.max(viewport.margin, by))}px)`;
       bubble.style.setProperty("--tail-x", `${Math.max(24, Math.min(bubble.offsetWidth - 24, x - bx))}px`);
-      if (poster) { poster.style.width = `${radius * 3.5}px`; poster.style.height = `${radius * 3.5}px`; poster.style.transform = `translate(${x - radius * 1.75}px,${y - radius * 1.4}px)`; }
     }
     function pointer(event: PointerEvent) {
       if (event.pointerType !== "mouse") return;

@@ -1,8 +1,9 @@
 import * as THREE from "three";
 import { createSunglasses } from "./sunglasses";
 import { createSweatshirt } from "./sweatshirt";
+import { createQuiff } from "./quiff";
 
-/** Geometry and palette reconstructed from the public sebg.ch mascot implementation.
+/** Sufyaan likeness on the articulated rig reconstructed from the sebg.ch mascot.
  * Source/provenance: docs/CHARACTER-REFERENCE.md. No remote scripts run in the app.
  */
 export const HEAD_RADIUS = 1.4;
@@ -12,7 +13,7 @@ export const HEAD_HEIGHT = 4.55;
 export type HandPose = "relaxed" | "open" | "point" | "thumb" | "peace";
 export type MouthPose = "smile" | "laugh" | "open" | "flat" | "oh" | "yawn";
 export const mouths = {
-  smile: { width: .36, open: .24, smile: .08 },
+  smile: { width: .36, open: .065, smile: .13 },
   laugh: { width: .42, open: .34, smile: .1 },
   open: { width: .27, open: .32, smile: .03 },
   flat: { width: .16, open: .04, smile: -.02 },
@@ -27,7 +28,7 @@ export const hands = {
   peace: { fingers: [0, 0, 1, 1], thumb: [.35, .9] },
 };
 export type CharacterLook = {
-  hair: "curly" | "straight";
+  hair: "curly" | "straight" | "quiff";
   beard: boolean;
   colors: { skin: string; hair: string; beard: string; sweater: string; ink: string; paper: string };
 };
@@ -57,20 +58,21 @@ export function createCharacter(look: CharacterLook) {
   const neck = new THREE.Group();
   const headTilt = new THREE.Group();
   const head = new THREE.Group();
-  root.name = "ReferenceCharacter";
+  root.name = "SufyaanCharacter";
   root.rotation.order = "ZYX";
   root.add(body); body.add(neck); neck.add(headTilt); headTilt.add(head);
   neck.position.y = NECK_HEIGHT;
   head.position.y = HEAD_HEIGHT - NECK_HEIGHT;
-  head.scale.set(.92, 1.04, .96);
+  head.scale.set(.89, 1.09, .95);
 
   const skin = new THREE.MeshStandardMaterial({ color: look.colors.skin, roughness: .55 });
   const skinTint = new THREE.MeshStandardMaterial({ color: look.colors.skin, roughness: .55, vertexColors: true });
-  const neckMaterial = new THREE.MeshStandardMaterial({ color: new THREE.Color(look.colors.skin).multiplyScalar(.3), roughness: .6 });
-  const hair = new THREE.MeshStandardMaterial({ color: look.colors.hair, roughness: .6 });
+  const neckMaterial = new THREE.MeshStandardMaterial({ color: new THREE.Color(look.colors.skin).multiplyScalar(.82), roughness: .6 });
+  const hair = new THREE.MeshStandardMaterial({ color: look.colors.hair, roughness: .88 });
   const sweatshirt = createSweatshirt(look.colors.sweater);
   const sweater = sweatshirt.fabric;
-  const cuffs = new THREE.MeshStandardMaterial({ color: "#f4f4f2", roughness: .5 });
+  const cuffs = skin;
+  const dialMaterial = new THREE.MeshStandardMaterial({ color: "#f4f4f2", roughness: .5 });
   const dark = new THREE.MeshStandardMaterial({ color: "#1c1c1c", roughness: .4 });
   const black = new THREE.MeshBasicMaterial({ color: "#000000" });
   const white = new THREE.MeshBasicMaterial({ color: "#ffffff" });
@@ -96,12 +98,14 @@ export function createCharacter(look: CharacterLook) {
   }
   faceGeometry.setAttribute("color", new THREE.Float32BufferAttribute(faceColors, 3));
   head.add(new THREE.Mesh(faceGeometry, skinTint));
-  const nose = blob(skin, [.17, .13, .12]);
-  nose.position.copy(surface(0, -.24, HEAD_RADIUS - .02));
-  head.add(nose);
+  const bridge = blob(skin, [.12, .29, .16]);
+  bridge.position.set(0, -.12, HEAD_RADIUS + .015);
+  const nose = blob(skin, [.22, .17, .24]);
+  nose.position.copy(surface(0, -.25, HEAD_RADIUS + .09));
+  head.add(bridge, nose);
   for (const side of [-1, 1]) {
     const ear = blob(skin, [.17, .3, .22]);
-    ear.position.set(side * (HEAD_RADIUS - .03), -.14, -.08);
+    ear.position.set(side * (HEAD_RADIUS - .04), -.24, -.02);
     ear.rotation.y = side * .4;
     head.add(ear);
   }
@@ -125,8 +129,8 @@ export function createCharacter(look: CharacterLook) {
   });
   const brows = [1, -1].map((side) => {
     const lift = new THREE.Group();
-    const bar = new THREE.Mesh(new THREE.CapsuleGeometry(.065, .26, 4, 12).rotateZ(Math.PI / 2).scale(1, 1, .55), black);
-    bar.position.z = HEAD_RADIUS; bar.rotation.z = side * -.12;
+    const bar = new THREE.Mesh(new THREE.CapsuleGeometry(.085, .32, 4, 12).rotateZ(Math.PI / 2).scale(1, 1, .55), black);
+    bar.position.z = HEAD_RADIUS; bar.rotation.z = side * -.06;
     lift.add(bar); head.add(anchor(side * .36, .31).add(lift));
     return { lift, bar, side };
   });
@@ -152,49 +156,64 @@ export function createCharacter(look: CharacterLook) {
   head.add(new THREE.Mesh(mouthGeometry, black));
   updateMouth();
 
-  const hairCap = new THREE.Mesh(new THREE.SphereGeometry(HEAD_RADIUS * 1.02, 32, 16, 0, Math.PI * 2, 0, look.hair === "curly" ? 1.53 : 1.35), hair);
-  hairCap.rotation.x = look.hair === "curly" ? -.83 : -.42;
   const curls = new THREE.Group();
-  head.add(hairCap, curls);
-  if (look.hair === "curly") {
-    const axis = new THREE.Vector3(0, 1, 0).applyEuler(hairCap.rotation);
-    const threshold = Math.cos(1.53);
-    const matrices: THREE.Matrix4[] = [];
-    let seed = 7;
-    const random = () => { seed = seed * 16807 % 2147483647; return .85 + seed / 2147483647 * .3; };
-    for (let index = 0; index < 400; index++) {
-      const y = 1 - (index + .5) / 400 * 2;
-      const radius = Math.sqrt(1 - y * y);
-      const direction = new THREE.Vector3(Math.cos(index * 2.4) * radius, y, Math.sin(index * 2.4) * radius);
-      const size = (direction.dot(axis) > threshold ? .1 + .24 * math.smoothstep(direction.y + .25 * direction.z, .1, .6) : 0) * random();
-      if (direction.x < 0 || !size) continue;
-      direction.multiplyScalar(HEAD_RADIUS - .03 + size * .3);
-      matrices.push(new THREE.Matrix4().makeScale(size, size, size).setPosition(direction), new THREE.Matrix4().makeScale(size, size, size).setPosition(-direction.x, direction.y, direction.z));
+  curls.name = "HairVolume";
+  head.add(curls);
+  if (look.hair === "quiff") curls.add(createQuiff(hair));
+  else {
+    const hairCap = new THREE.Mesh(new THREE.SphereGeometry(HEAD_RADIUS * 1.02, 32, 16, 0, Math.PI * 2, 0, look.hair === "curly" ? 1.53 : 1.35), hair);
+    hairCap.rotation.x = look.hair === "curly" ? -.83 : -.42;
+    curls.add(hairCap);
+    if (look.hair === "curly") {
+      const axis = new THREE.Vector3(0, 1, 0).applyEuler(hairCap.rotation);
+      const threshold = Math.cos(1.53);
+      const matrices: THREE.Matrix4[] = [];
+      let seed = 7;
+      const random = () => { seed = seed * 16807 % 2147483647; return .85 + seed / 2147483647 * .3; };
+      for (let index = 0; index < 400; index++) {
+        const y = 1 - (index + .5) / 400 * 2;
+        const radius = Math.sqrt(1 - y * y);
+        const direction = new THREE.Vector3(Math.cos(index * 2.4) * radius, y, Math.sin(index * 2.4) * radius);
+        const size = (direction.dot(axis) > threshold ? .1 + .24 * math.smoothstep(direction.y + .25 * direction.z, .1, .6) : 0) * random();
+        if (direction.x < 0 || !size) continue;
+        direction.multiplyScalar(HEAD_RADIUS - .03 + size * .3);
+        matrices.push(new THREE.Matrix4().makeScale(size, size, size).setPosition(direction), new THREE.Matrix4().makeScale(size, size, size).setPosition(-direction.x, direction.y, direction.z));
+      }
+      const clusters = new THREE.InstancedMesh(sphere, hair, matrices.length);
+      matrices.forEach((matrix, index) => clusters.setMatrixAt(index, matrix));
+      curls.add(clusters);
     }
-    const clusters = new THREE.InstancedMesh(sphere, hair, matrices.length);
-    matrices.forEach((matrix, index) => clusters.setMatrixAt(index, matrix));
-    curls.add(clusters);
   }
   if (look.beard) {
-    const geometry = new THREE.SphereGeometry(HEAD_RADIUS, 160, 120);
+    // Only the chin and lower jaw carry hair; keep the cheeks and lips clear.
+    const geometry = new THREE.SphereGeometry(HEAD_RADIUS, 96, 72);
     const skinColor = new THREE.Color(look.colors.skin), beardColor = new THREE.Color(look.colors.beard), color = new THREE.Color();
     const colors: number[] = [];
     for (let index = 0; index < geometry.attributes.position.count; index++) {
       vector.fromBufferAttribute(geometry.attributes.position, index).normalize();
       const yaw = Math.abs(Math.atan2(vector.x, vector.z));
       const pitch = Math.asin(vector.y);
-      const edge = -.5 + .26 * math.smoothstep(yaw, .45, 1.25) + .54 * math.smoothstep(yaw, 1.26, 1.34);
-      const chin = (1 - math.smoothstep(pitch, edge - .08, edge + .04)) * (1 - math.smoothstep(yaw, 1.4, 1.5));
-      const moustache = (1 - math.smoothstep(pitch, -.36 - .5 * yaw * yaw, -.3 - .5 * yaw * yaw)) * (1 - math.smoothstep(yaw, .42, .5));
-      const mouthCutout = math.smoothstep((yaw / .34) ** 4 + ((pitch + .59) / .14) ** 4, .8, 1.3);
-      const weight = Math.max(chin, moustache) * mouthCutout * (1 + math.smoothstep(-vector.y, .6, .95));
-      colors.push(...color.lerpColors(skinColor, beardColor, math.smoothstep(weight, .4, 1)).toArray());
-      vector.multiplyScalar(HEAD_RADIUS - .015 + weight * .035);
+      const chinEdge = -.83 + .12 * math.smoothstep(yaw, .3, .95);
+      const weight = (1 - math.smoothstep(pitch, chinEdge - .025, chinEdge + .025)) * (1 - math.smoothstep(yaw, 1.1, 1.4));
+      colors.push(...color.lerpColors(skinColor, beardColor, weight).toArray());
+      vector.multiplyScalar(HEAD_RADIUS - .012 + weight * .035);
       geometry.attributes.position.setXYZ(index, vector.x, vector.y, vector.z);
     }
     geometry.setAttribute("color", new THREE.Float32BufferAttribute(colors, 3));
     geometry.computeVertexNormals();
-    head.add(new THREE.Mesh(geometry, new THREE.MeshStandardMaterial({ vertexColors: true, roughness: .6 })));
+    head.add(new THREE.Mesh(geometry, new THREE.MeshStandardMaterial({ vertexColors: true, roughness: .9 })));
+    const moustacheMaterial = new THREE.MeshStandardMaterial({ color: look.colors.beard, roughness: .85 });
+    for (const side of [-1, 1]) {
+      const curve = new THREE.CatmullRomCurve3([
+        new THREE.Vector3(side * .045, -.505, 1.335),
+        new THREE.Vector3(side * .16, -.49, 1.35),
+        new THREE.Vector3(side * .3, -.48, 1.315),
+        new THREE.Vector3(side * .4, -.545, 1.265),
+      ]);
+      const moustache = new THREE.Mesh(new THREE.TubeGeometry(curve, 20, .055, 8, false), moustacheMaterial);
+      moustache.name = "SeparatedMoustache";
+      head.add(moustache);
+    }
   }
 
   const arms: Arm[] = [1, -1].map((side) => {
@@ -234,7 +253,7 @@ export function createCharacter(look: CharacterLook) {
   const watch = new THREE.Group();
   const strap = new THREE.Mesh(new THREE.TorusGeometry(.26, .06, 8, 24).rotateX(Math.PI / 2), dark);
   const caseMesh = new THREE.Mesh(new THREE.CylinderGeometry(.24, .24, .1, 24).rotateX(Math.PI / 2), dark); caseMesh.position.z = -.3;
-  const dial = new THREE.Mesh(new THREE.CylinderGeometry(.18, .18, .02, 24).rotateX(Math.PI / 2), cuffs); dial.position.z = -.36;
+  const dial = new THREE.Mesh(new THREE.CylinderGeometry(.18, .18, .02, 24).rotateX(Math.PI / 2), dialMaterial); dial.position.z = -.36;
   watch.add(strap, caseMesh, dial); watch.position.y = .2; arms[0].wrist.add(watch);
   const accessories = { hat, glasses, watch };
   Object.values(accessories).forEach((item) => { item.visible = false; item.scale.setScalar(0); });

@@ -1,27 +1,12 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import * as THREE from "three";
-import { characterPrintSettings, characterPrintWindow } from "../lib/character-print";
+import { characterRenderWindow } from "../lib/character-render";
 
-test("compact print keeps fine shading and restores the large print continuously", () => {
-  const small = characterPrintSettings(23.52, 2);
-  assert.equal(small.pixelSize, 1);
-  assert.ok(small.ditherStrength < .2);
-  const large = characterPrintSettings(120, 2);
-  assert.equal(large.pixelSize, 2);
-  assert.equal(large.ditherStrength, 1);
-  for (const boundary of [24, 90]) {
-    const a = characterPrintSettings(boundary - .001, 2);
-    const b = characterPrintSettings(boundary + .001, 2);
-    assert.ok(Math.abs(a.ditherStrength - b.ditherStrength) < .001);
-    assert.ok(Math.abs(a.pixelSize - b.pixelSize) < .001);
-  }
-});
-
-test("badge camera crop and print UVs agree, including a badge dragged across the viewport edge", () => {
+test("badge camera crop and color UVs agree, including a badge dragged across the viewport edge", () => {
   const width = 1440, height = 900;
   for (const [x, y] of [[80, 800], [12, 24], [1450, 910]]) {
-    const crop = characterPrintWindow(x, y, 42, width, height)!;
+    const crop = characterRenderWindow(x, y, 42, width, height)!;
     const camera = new THREE.OrthographicCamera(-width / 2, width / 2, height / 2, -height / 2, .1, 4000);
     camera.position.set(width / 2, -height / 2, 2000);
     camera.lookAt(width / 2, -height / 2, 0);
@@ -35,5 +20,5 @@ test("badge camera crop and print UVs agree, including a badge dragged across th
       assert.ok(Math.abs(v - (position.y + 1) / 2) < 1e-10);
     }
   }
-  assert.equal(characterPrintWindow(100, 100, 10000, width, height), null);
+  assert.equal(characterRenderWindow(100, 100, 10000, width, height), null);
 });

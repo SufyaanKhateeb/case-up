@@ -1,12 +1,12 @@
-// The reference is a procedural model, not a GLB. Its look is configurable here.
+// Approved color likeness, sculpted on the existing procedural animation rig.
 export const characterManifest = {
-  version: 2,
-  status: "reference-procedural-character",
-  source: "https://www.sebg.ch/",
+  version: 3,
+  status: "sufyaan-color-character",
+  source: "/msk_cartoon.png",
   look: {
-    hair: "curly" as const,
+    hair: "quiff" as const,
     beard: true,
-    colors: { skin: "#fbf3ec", hair: "#77573d", beard: "#c49c74", sweater: "#a4ad9b", ink: "#0b0b0c", paper: "#fbfbf8" },
+    colors: { skin: "#d69a69", hair: "#302019", beard: "#39271e", sweater: "#eee3d1", ink: "#0b0b0c", paper: "#fbfbf8" },
   },
   poster: "/character/poster.png",
 };
