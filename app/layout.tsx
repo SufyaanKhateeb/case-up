@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
-import { cn } from "@/lib/utils";
+import { PortfolioRuntime } from "@/components/portfolio/runtime";
+import { portfolio } from "@/content/portfolio";
 
-const inter = Inter({ subsets: ["latin"] });
+const funnel = localFont({ src: "../public/fonts/FunnelDisplay.ttf", variable: "--font-funnel", display: "swap", weight: "300 800" });
 
 export const metadata: Metadata = {
-	title: "MSK's Portfolio",
-	description: "Sufyaan Khateeb's Portfolio developed in Nextjs.",
+	title: { default: `${portfolio.name} — ${portfolio.title}`, template: `%s — ${portfolio.name}` },
+	description: "Sufyaan Khateeb’s personal portfolio. Building software for a better future.",
 };
 
 export default function RootLayout({
@@ -18,10 +18,9 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
-			<body className={cn(inter.className,"has-[.page-loader-main:hover]:overflow-hidden")}>
-				<ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
-					{children}
-				</ThemeProvider>
+			<body className={funnel.variable}>
+				<a className="skip-link" href="#main">Skip to content</a>
+				<PortfolioRuntime>{children}</PortfolioRuntime>
 			</body>
 		</html>
 	);
