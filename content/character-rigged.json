@@ -1,0 +1,47 @@
+{
+  "source": "Strut Walking.fbx",
+  "source_sha256": "34846a1751bac848b1ce49e5ff14c852d7c07076c1561b22d726dc04721df49f",
+  "model": "/character/rigged-walk-review.glb",
+  "bones": 65,
+  "source_triangles": 497582,
+  "runtime_triangles": 180000,
+  "rest_bounds_blender": [
+    [
+      -0.4700048565864563,
+      -0.1924426257610321,
+      6.688218423533954e-09
+    ],
+    [
+      0.4660511612892151,
+      0.21903051435947418,
+      1.1288264989852905
+    ]
+  ],
+  "palette_faces": {
+    "skin": 71818,
+    "hair": 219211,
+    "cream": 146628,
+    "pants": 57171,
+    "eye": 2574,
+    "white": 180
+  },
+  "correspondence": {
+    "median_distance": 0.00011455894855316728,
+    "max_distance": 0.0035411743447184563,
+    "over_1cm": 0
+  },
+  "max_vertex_influences": 8,
+  "fps": 30,
+  "actions": [
+    {
+      "name": "StrutWalking",
+      "frames": [
+        1.0,
+        44.0
+      ]
+    }
+  ],
+  "facial_blendshapes": 0,
+  "uv_layers": 0,
+  "materials": "Nearest-part solid palette, not restored texture images"
+}

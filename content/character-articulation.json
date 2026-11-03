@@ -1,0 +1,240 @@
+{
+  "version": 1,
+  "source": "artifacts/character/full-model-hq/smoothed-exact-decoded.glb",
+  "source_sha256": "426104f07f924282539373912d67480d5a0fefa7bf36125cb984bcd059e61106",
+  "runtime": "/character/articulation-study.glb",
+  "runtime_bytes": 5607092,
+  "runtime_sha256": "d9cd2f7496f5e2c50879806ef6cffba21055a4986f4f77a26dd6e188a428ee50",
+  "method": "closed anatomical cuts, UV-preserving mesh separation, rigid parent pivots",
+  "source_triangles": 200000,
+  "source_exterior_area": 1.3947353496372015,
+  "separated_exterior_area": 1.3947353493422492,
+  "exterior_area_relative_error": 2.114754493711467e-10,
+  "body_parts_capped": true,
+  "facial_features_are_surface_patches": true,
+  "skinning": false,
+  "morph_targets": false,
+  "parts": [
+    {
+      "id": "torso",
+      "parent": null,
+      "pivot": [
+        0.0,
+        0.25,
+        0.0
+      ],
+      "triangles": 49002,
+      "kind": "rigid-part",
+      "cut_triangles": 612
+    },
+    {
+      "id": "neck",
+      "parent": "torso",
+      "pivot": [
+        0.0,
+        0.4519999921321869,
+        -0.014999999664723873
+      ],
+      "triangles": 3402,
+      "kind": "rigid-part",
+      "cut_triangles": 403
+    },
+    {
+      "id": "head",
+      "parent": "neck",
+      "pivot": [
+        -0.0055144308134913445,
+        0.48806479573249817,
+        -0.010945607908070087
+      ],
+      "triangles": 23706,
+      "kind": "rigid-part",
+      "cut_triangles": 204
+    },
+    {
+      "id": "upper_arm.R",
+      "parent": "torso",
+      "pivot": [
+        -0.17499999701976776,
+        0.375,
+        -0.017999999225139618
+      ],
+      "triangles": 3428,
+      "kind": "rigid-part",
+      "cut_triangles": 397
+    },
+    {
+      "id": "forearm.R",
+      "parent": "upper_arm.R",
+      "pivot": [
+        -0.2512996196746826,
+        0.23406529426574707,
+        -0.008626514114439487
+      ],
+      "triangles": 6262,
+      "kind": "rigid-part",
+      "cut_triangles": 239
+    },
+    {
+      "id": "hand.R",
+      "parent": "forearm.R",
+      "pivot": [
+        -0.3286024034023285,
+        0.11478085815906525,
+        0.005625234916806221
+      ],
+      "triangles": 7792,
+      "kind": "rigid-part",
+      "cut_triangles": 67
+    },
+    {
+      "id": "upper_arm.L",
+      "parent": "torso",
+      "pivot": [
+        0.17499999701976776,
+        0.375,
+        -0.017999999225139618
+      ],
+      "triangles": 2736,
+      "kind": "rigid-part",
+      "cut_triangles": 353
+    },
+    {
+      "id": "forearm.L",
+      "parent": "upper_arm.L",
+      "pivot": [
+        0.24316009879112244,
+        0.2287358045578003,
+        -0.005688022822141647
+      ],
+      "triangles": 6256,
+      "kind": "rigid-part",
+      "cut_triangles": 250
+    },
+    {
+      "id": "hand.L",
+      "parent": "forearm.L",
+      "pivot": [
+        0.3158670961856842,
+        0.11329475045204163,
+        0.005276711657643318
+      ],
+      "triangles": 7720,
+      "kind": "rigid-part",
+      "cut_triangles": 85
+    },
+    {
+      "id": "face.beard",
+      "parent": "head",
+      "pivot": [
+        -0.004402199760079384,
+        0.493643194437027,
+        0.12422497570514679
+      ],
+      "triangles": 1764,
+      "kind": "surface-patch",
+      "cut_triangles": 0
+    },
+    {
+      "id": "face.brow.L",
+      "parent": "head",
+      "pivot": [
+        0.062152519822120667,
+        0.7117690443992615,
+        0.13043710589408875
+      ],
+      "triangles": 653,
+      "kind": "surface-patch",
+      "cut_triangles": 0
+    },
+    {
+      "id": "face.brow.R",
+      "parent": "head",
+      "pivot": [
+        -0.06769830733537674,
+        0.7130566835403442,
+        0.1323729157447815
+      ],
+      "triangles": 869,
+      "kind": "surface-patch",
+      "cut_triangles": 0
+    },
+    {
+      "id": "face.eye.L",
+      "parent": "head",
+      "pivot": [
+        0.045629579573869705,
+        0.6489109396934509,
+        0.130180224776268
+      ],
+      "triangles": 762,
+      "kind": "surface-patch",
+      "cut_triangles": 0
+    },
+    {
+      "id": "face.eye.R",
+      "parent": "head",
+      "pivot": [
+        -0.0653565526008606,
+        0.6471394300460815,
+        0.12665879726409912
+      ],
+      "triangles": 723,
+      "kind": "surface-patch",
+      "cut_triangles": 0
+    },
+    {
+      "id": "face.hair",
+      "parent": "head",
+      "pivot": [
+        0.004057080950587988,
+        0.7886293530464172,
+        -0.021917911246418953
+      ],
+      "triangles": 85772,
+      "kind": "surface-patch",
+      "cut_triangles": 0
+    },
+    {
+      "id": "face.moustache",
+      "parent": "head",
+      "pivot": [
+        -0.004047820344567299,
+        0.5649047493934631,
+        0.1370507925748825
+      ],
+      "triangles": 1392,
+      "kind": "surface-patch",
+      "cut_triangles": 0
+    },
+    {
+      "id": "face.mouth",
+      "parent": "head",
+      "pivot": [
+        -0.004347628448158503,
+        0.5412710309028625,
+        0.13826271891593933
+      ],
+      "triangles": 1069,
+      "kind": "surface-patch",
+      "cut_triangles": 0
+    },
+    {
+      "id": "face.nose",
+      "parent": "head",
+      "pivot": [
+        -0.0031649174634367228,
+        0.5957066416740417,
+        0.16770398616790771
+      ],
+      "triangles": 1210,
+      "kind": "surface-patch",
+      "cut_triangles": 0
+    }
+  ],
+  "limitations": [
+    "Rigid joint seams open/intersect in poses; weighting is the next stage.",
+    "Face patches are not eyeballs, eyelids, mouth internals or expressions.",
+    "No individual finger articulation. Homepage rig is unchanged."
+  ]
+}

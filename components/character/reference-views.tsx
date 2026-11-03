@@ -2,15 +2,15 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import concept from "@/docs/design/hunyuan/character-reference.png";
-import front from "@/docs/design/hunyuan/front.png";
-import left from "@/docs/design/hunyuan/left.png";
-import right from "@/docs/design/hunyuan/right.png";
-import back from "@/docs/design/hunyuan/back.png";
+import concept from "@/docs/design/character-with-arms/three-quarter.png";
+import front from "@/docs/design/character-with-arms/front.png";
+import left from "@/docs/design/character-with-arms/left-profile.png";
+import right from "@/docs/design/character-with-arms/right-profile.png";
+import back from "@/docs/design/character-with-arms/back.png";
 import styles from "@/app/character/hunyuan/study.module.css";
 
 const references = [
-  { label: "Concept", image: concept }, { label: "Front", image: front },
+  { label: "Front", image: front }, { label: "Three-quarter", image: concept },
   { label: "Left", image: left }, { label: "Right", image: right }, { label: "Back", image: back },
 ];
 

@@ -20,12 +20,12 @@ export default function HunyuanStudyPage() {
         <CharacterReferenceViews />
       </section>
       <section className={styles.panel}>
-        <div className={styles.label}><h2>Model comparison</h2><span>Textured GLB + studies</span></div>
+        <div className={styles.label}><h2>Model comparison</h2><span>Full character + earlier studies</span></div>
         <HunyuanStudy />
       </section>
     </div>
     <footer className={styles.footer}>
-      <p>Your supplied model includes color and PBR textures. It has no animation rig or facial controls yet. The earlier AI-generated geometry studies remain available for comparison.</p>
+      <p>The high-quality character has a gentle smoothing pass, 200,000 runtime triangles and 4K PBR maps. Compare it with the unsmoothed high-quality model above. Both full-density authoring copies and your original file are preserved. It has no skeleton, animation clips or facial controls yet.</p>
       <a href="https://huggingface.co/spaces/tencent/Hunyuan3D-2mv">Multi-view source ↗</a>
     </footer>
   </main>;

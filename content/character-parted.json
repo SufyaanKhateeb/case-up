@@ -1,0 +1,369 @@
+{
+  "model": "/character/parted-review.glb",
+  "source": "full_body_model_parted.fbx",
+  "rigged": false,
+  "morphs": false,
+  "textured": false,
+  "parts": [
+    {
+      "name": "Hand_L",
+      "source": "part_0",
+      "palette": "skin",
+      "bounds_blender": [
+        [
+          0.321031391620636,
+          -0.07859260588884354,
+          0.3348544239997864
+        ],
+        [
+          0.4660341441631317,
+          0.05879509449005127,
+          0.43032777309417725
+        ]
+      ],
+      "source_triangles": 19902,
+      "budget": 7000,
+      "runtime_triangles": 6998
+    },
+    {
+      "name": "Hand_R",
+      "source": "part_1",
+      "palette": "skin",
+      "bounds_blender": [
+        [
+          -0.4699118137359619,
+          -0.07876286655664444,
+          0.33484947681427
+        ],
+        [
+          -0.3235539197921753,
+          0.05873299017548561,
+          0.4304428994655609
+        ]
+      ],
+      "source_triangles": 19902,
+      "budget": 7000,
+      "runtime_triangles": 6998
+    },
+    {
+      "name": "Eye_L",
+      "source": "part_10",
+      "palette": "eye",
+      "bounds_blender": [
+        [
+          0.040616974234580994,
+          -0.1509469598531723,
+          0.8162810802459717
+        ],
+        [
+          0.08154415339231491,
+          -0.11951493471860886,
+          0.8858832716941833
+        ]
+      ],
+      "source_triangles": 19902,
+      "budget": 2500,
+      "runtime_triangles": 2500
+    },
+    {
+      "name": "Eye_R",
+      "source": "part_11",
+      "palette": "eye",
+      "bounds_blender": [
+        [
+          -0.08482865244150162,
+          -0.15081439912319183,
+          0.8163289427757263
+        ],
+        [
+          -0.04485860466957092,
+          -0.11954692751169205,
+          0.8858904838562012
+        ]
+      ],
+      "source_triangles": 19902,
+      "budget": 2500,
+      "runtime_triangles": 2500
+    },
+    {
+      "name": "Brow_L",
+      "source": "part_12",
+      "palette": "hair",
+      "bounds_blender": [
+        [
+          0.02466672472655773,
+          -0.1675872951745987,
+          0.8931282162666321
+        ],
+        [
+          0.11190465092658997,
+          -0.11412675678730011,
+          0.9342520236968994
+        ]
+      ],
+      "source_triangles": 19902,
+      "budget": 2500,
+      "runtime_triangles": 2500
+    },
+    {
+      "name": "Brow_R",
+      "source": "part_13",
+      "palette": "hair",
+      "bounds_blender": [
+        [
+          -0.1156238466501236,
+          -0.16760413348674774,
+          0.893237829208374
+        ],
+        [
+          -0.028210697695612907,
+          -0.1140337586402893,
+          0.9343101382255554
+        ]
+      ],
+      "source_triangles": 19902,
+      "budget": 2500,
+      "runtime_triangles": 2500
+    },
+    {
+      "name": "Moustache",
+      "source": "part_14",
+      "palette": "hair",
+      "bounds_blender": [
+        [
+          -0.07231689244508743,
+          -0.17254965007305145,
+          0.7540115714073181
+        ],
+        [
+          0.0682622417807579,
+          -0.14298659563064575,
+          0.7810298800468445
+        ]
+      ],
+      "source_triangles": 19902,
+      "budget": 3500,
+      "runtime_triangles": 3498
+    },
+    {
+      "name": "Chin_beard",
+      "source": "part_15",
+      "palette": "hair",
+      "bounds_blender": [
+        [
+          -0.059151723980903625,
+          -0.15644805133342743,
+          0.6651725172996521
+        ],
+        [
+          0.055102087557315826,
+          -0.12438250333070755,
+          0.7135031223297119
+        ]
+      ],
+      "source_triangles": 19902,
+      "budget": 3500,
+      "runtime_triangles": 3498
+    },
+    {
+      "name": "Eye_detail_L",
+      "source": "part_16",
+      "palette": "white",
+      "bounds_blender": [
+        [
+          0.04193246364593506,
+          -0.14917750656604767,
+          0.8469241261482239
+        ],
+        [
+          0.07190893590450287,
+          -0.10827590525150299,
+          0.8806391358375549
+        ]
+      ],
+      "source_triangles": 19902,
+      "budget": 2000,
+      "runtime_triangles": 2000
+    },
+    {
+      "name": "Eye_detail_R",
+      "source": "part_17",
+      "palette": "white",
+      "bounds_blender": [
+        [
+          -0.07593782991170883,
+          -0.14889970421791077,
+          0.8469851613044739
+        ],
+        [
+          -0.04523908719420433,
+          -0.10815620422363281,
+          0.8804893493652344
+        ]
+      ],
+      "source_triangles": 19902,
+      "budget": 2000,
+      "runtime_triangles": 2000
+    },
+    {
+      "name": "Hair",
+      "source": "part_2",
+      "palette": "hair",
+      "bounds_blender": [
+        [
+          -0.21308095753192902,
+          -0.18274977803230286,
+          0.6050457954406738
+        ],
+        [
+          0.21029402315616608,
+          0.21903283894062042,
+          1.1278611421585083
+        ]
+      ],
+      "source_triangles": 208978,
+      "budget": 26000,
+      "runtime_triangles": 26000
+    },
+    {
+      "name": "Legs_and_shoes",
+      "source": "part_3",
+      "palette": "pants",
+      "bounds_blender": [
+        [
+          -0.18328268826007843,
+          -0.1583840399980545,
+          -2.71162730314245e-06
+        ],
+        [
+          0.17956991493701935,
+          0.1051243245601654,
+          0.3344857692718506
+        ]
+      ],
+      "source_triangles": 219880,
+      "budget": 16000,
+      "runtime_triangles": 16000
+    },
+    {
+      "name": "Head",
+      "source": "part_4",
+      "palette": "skin",
+      "bounds_blender": [
+        [
+          -0.2076551467180252,
+          -0.1927436739206314,
+          0.6742599010467529
+        ],
+        [
+          0.20366688072681427,
+          0.10873307287693024,
+          1.0366405248641968
+        ]
+      ],
+      "source_triangles": 99956,
+      "budget": 32000,
+      "runtime_triangles": 32000
+    },
+    {
+      "name": "Sweatshirt",
+      "source": "part_5",
+      "palette": "cream",
+      "bounds_blender": [
+        [
+          -0.18175913393497467,
+          -0.17337235808372498,
+          0.2871921956539154
+        ],
+        [
+          0.17785367369651794,
+          0.13529963791370392,
+          0.6382652521133423
+        ]
+      ],
+      "source_triangles": 121634,
+      "budget": 18000,
+      "runtime_triangles": 18000
+    },
+    {
+      "name": "Waistband",
+      "source": "part_6",
+      "palette": "cream",
+      "bounds_blender": [
+        [
+          -0.1726962774991989,
+          -0.15584903955459595,
+          0.24904026091098785
+        ],
+        [
+          0.16903363168239594,
+          0.11959005892276764,
+          0.31139832735061646
+        ]
+      ],
+      "source_triangles": 48984,
+      "budget": 6000,
+      "runtime_triangles": 6000
+    },
+    {
+      "name": "Sleeve_L",
+      "source": "part_7",
+      "palette": "cream",
+      "bounds_blender": [
+        [
+          0.1427152007818222,
+          -0.061994265764951706,
+          0.36162009835243225
+        ],
+        [
+          0.39630192518234253,
+          0.06941121816635132,
+          0.6189356446266174
+        ]
+      ],
+      "source_triangles": 53818,
+      "budget": 10000,
+      "runtime_triangles": 10000
+    },
+    {
+      "name": "Collar",
+      "source": "part_8",
+      "palette": "cream",
+      "bounds_blender": [
+        [
+          -0.11204343289136887,
+          -0.11952736228704453,
+          0.5913816690444946
+        ],
+        [
+          0.10808686912059784,
+          0.0861605629324913,
+          0.6612657904624939
+        ]
+      ],
+      "source_triangles": 26832,
+      "budget": 6000,
+      "runtime_triangles": 6000
+    },
+    {
+      "name": "Sleeve_R",
+      "source": "part_9",
+      "palette": "cream",
+      "bounds_blender": [
+        [
+          -0.40031981468200684,
+          -0.062135953456163406,
+          0.3614266812801361
+        ],
+        [
+          -0.14657758176326752,
+          0.07125107198953629,
+          0.6209374070167542
+        ]
+      ],
+      "source_triangles": 54073,
+      "budget": 10000,
+      "runtime_triangles": 9999
+    }
+  ]
+}
