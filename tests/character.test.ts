@@ -1,8 +1,9 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { Vector3 } from "three";
-import { createCharacter, HEAD_RADIUS } from "../components/character/model";
+import { Mesh, Texture, Vector3 } from "three";
+import { createCharacter, mouths } from "../components/character/model";
 import { createCharacterMotion } from "../components/character/motion";
+import { faceFrontZ } from "../components/character/sculpt";
 import { characterManifest } from "../content/character";
 import { tricks } from "../lib/character-state";
 
@@ -62,11 +63,42 @@ test("smiling eyes stay above the face through a blink", () => {
         for (let index = 0; index < positions.count; index++) {
           vertex.fromBufferAttribute(positions, index);
           happy.localToWorld(vertex); rig.head.worldToLocal(vertex);
-          assert.ok(vertex.length() > HEAD_RADIUS, "smile arc must not intersect the face");
+          assert.ok(vertex.z > faceFrontZ(vertex.x, vertex.y), "smile arc must stay above the sculpted face");
         }
       }
     }
   } finally { rig.dispose(); }
+});
+
+test("every mouth expression follows the sculpted lips without sinking into the face", () => {
+  const rig = createCharacter(characterManifest.look);
+  try {
+    const mesh = rig.head.getObjectByName("AnimatedMouth");
+    assert.ok(mesh instanceof Mesh);
+    for (const pose of Object.values(mouths)) for (const chatter of [0, .8]) {
+      Object.assign(rig.mouth, pose, { chatter }); rig.updateMouth();
+      const points = mesh.geometry.attributes.position;
+      for (let i = 0; i < points.count; i++) {
+        assert.ok(points.getZ(i) > faceFrontZ(points.getX(i), points.getY(i)) + .01);
+      }
+    }
+  } finally { rig.dispose(); }
+});
+
+test("shared procedural surface textures are released exactly once with the rig", () => {
+  const rig = createCharacter(characterManifest.look), disposed = new Map<Texture, number>();
+  rig.root.traverse((object) => {
+    if (!(object instanceof Mesh)) return;
+    for (const material of Array.isArray(object.material) ? object.material : [object.material]) {
+      for (const value of Object.values(material)) {
+        if (!(value instanceof Texture) || disposed.has(value)) continue;
+        disposed.set(value, 0); value.addEventListener("dispose", () => disposed.set(value, disposed.get(value)! + 1));
+      }
+    }
+  });
+  assert.ok(disposed.size >= 3);
+  rig.dispose();
+  disposed.forEach((count) => assert.equal(count, 1));
 });
 
 test("eye expressions swap only at the closed point and reopen together", () => {
@@ -107,7 +139,7 @@ test("tour poses mirror their active arm and include the source wrist-view pose"
     assert.equal(rig.arms[0].elbow.rotation.x, 0);
     motion.gesture("watch", 1).seek(1.1, false);
     assert.ok(rig.arms[0].elbow.rotation.x < -1.5);
-    assert.ok(rig.neck.rotation.x > .5);
+    assert.equal(rig.neck.rotation.x, 0);
     motion.grab();
     motion.rest(true);
     assert.equal(rig.arms[0].elbow.rotation.x, 0);

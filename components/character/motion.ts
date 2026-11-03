@@ -1,7 +1,9 @@
 import gsap from "gsap";
 import { MathUtils } from "three";
-import { hands, mouths, type Arm, type CharacterRig, type HandPose, type MouthPose } from "./model";
+import { HEAD_HEIGHT, hands, mouths, type Arm, type CharacterRig, type HandPose, type MouthPose } from "./model";
 import type { TourGesture } from "@/lib/character-tour";
+import { connectedArmMotion } from "./connected-arm-motion";
+import type { ArmsPose } from "@/lib/continuous-arms-study";
 import type { Trick } from "@/lib/character-state";
 
 type Pose = { shoulder: [number, number, number]; elbow: number; wrist: [number, number, number]; hand: HandPose };
@@ -13,7 +15,8 @@ const selfie: Pose = { shoulder: [1.3, -.2, -Math.PI / 2], elbow: 1.3, wrist: [M
 const dance: Pose = { shoulder: [1.3, -.3, -Math.PI / 2], elbow: 1.3, wrist: [Math.PI / 2, 0, -.3], hand: "point" };
 
 /** One owned timeline per performance; interrupting it cancels its child motions. */
-export function createCharacterMotion(rig: CharacterRig) {
+export function createCharacterMotion(rig: CharacterRig & { armPoses?: ArmsPose }) {
+  const connected = rig.armPoses ? connectedArmMotion(rig.armPoses) : undefined;
   let active: gsap.core.Timeline | null = null;
   let enabled = true;
   let grabbing = false;
@@ -41,20 +44,22 @@ export function createCharacterMotion(rig: CharacterRig) {
       .add(hand(arm, pose.hand, duration * .7), duration * .2);
   }
   function armRest(arm: Arm, duration = .35) {
-    return armPose(arm, { shoulder: [0, 0, 0], elbow: 0, wrist: [0, 0, 0], hand: "relaxed" }, duration);
+    return armPose(arm, { shoulder: [.16, 0, 0], elbow: 0, wrist: [0, 0, 0], hand: "relaxed" }, duration);
   }
   function face({ mouth = "smile", happy = false, brow = 0, gazeY = 0, wide = 1 }: Face = {}, duration = .3) {
     return gsap.timeline().to(rig.mouth, { ...mouths[mouth], chatter: 0, duration, ease: "power3.out" }, 0)
       .to(rig.face, { happy: happy ? 1 : 0, browLeft: brow, browRight: brow, gazeY, eyeOpen: 1, eyeWide: wide, duration, ease: "power2.out" }, 0);
   }
   function neutral(duration = .5) {
-    return gsap.timeline().to(rig.neck.rotation, { x: 0, y: 0, z: 0, duration, ease: "power3.inOut" }, 0)
+    const timeline = gsap.timeline().to(rig.neck.rotation, { x: 0, y: 0, z: 0, duration, ease: "power3.inOut" }, 0)
       .to(rig.headTilt.rotation, { x: 0, y: 0, z: 0, duration, ease: "power3.inOut" }, 0)
       .to(rig.body.rotation, { x: 0, y: 0, z: 0, duration, ease: "power3.inOut" }, 0)
       .to(rig.motion, { hop: 0, turn: 0, lean: 0, cover: 1, develop: 1, gazeAngle: 0, duration, ease: "power3.out" }, 0)
       .to(rig.face, { gazeX: 0, gazeY: 0, duration }, 0)
       .add(armRest(rig.arms[0], duration), 0).add(armRest(rig.arms[1], duration), 0)
       .add(face({}, duration), 0);
+    connected?.rest(timeline, duration);
+    return timeline;
   }
   function start() {
     active?.kill();
@@ -74,26 +79,30 @@ export function createCharacterMotion(rig: CharacterRig) {
     if (pose && name === "point") {
       // Aim in character space, as the source does, rather than pointing below
       // the viewport with one fixed shoulder angle at every screen size.
-      const angle = aim ? Math.atan2(Math.abs(aim.x * direction - 1.1), -(aim.y + 4.55 - 2.05)) : 2;
+      const angle = aim ? Math.atan2(Math.abs(aim.x * direction - arm.shoulder.position.x), -(aim.y + HEAD_HEIGHT - arm.shoulder.position.y)) : 2;
       const shoulder = MathUtils.clamp(angle, .6, 2);
       pose.shoulder[0] = shoulder; pose.wrist[2] = MathUtils.clamp(angle - shoulder, -.7, .7);
     }
     if (pose) timeline.add(armPose(arm, pose, .7), .05);
-    const neck = name === "watch" ? [.3, .05, .55] : name === "think" ? [.15, .08, 0] : name === "thumbs" ? [.12, -.06, 0] : [.1, -.1, 0];
+    const neck = name === "watch" ? [.22, .045, 0] : name === "think" ? [.15, .08, 0] : name === "thumbs" ? [.12, -.06, 0] : [.1, -.1, 0];
     timeline.to(rig.neck.rotation, { y: neck[0] * direction, z: neck[1] * direction, x: neck[2], duration: .9, ease: "power3.out" }, .05)
       .to(rig.body.rotation, { z: -direction * .04, duration: .9, ease: "power3.out" }, 0);
     if (name === "wave") timeline.to(arm.wrist.rotation, { z: .45, duration: .2, repeat: 5, yoyo: true, ease: "sine.inOut" }, .62)
       .to(arm.elbow.rotation, { x: .35, duration: .2, repeat: 5, yoyo: true, ease: "sine.inOut" }, .55);
-    if (name === "think") timeline.to(arm.wrist.rotation, { x: .4, duration: .2, repeat: 3, yoyo: true, ease: "sine.inOut" }, .6);
+    if (name === "think") {
+      timeline.to(arm.wrist.rotation, { x: .4, duration: .2, repeat: 3, yoyo: true, ease: "sine.inOut" }, .6)
+        .to(rig.face, { browLeft: .015, browRight: .12, duration: .3, ease: "power2.out" }, .55);
+    }
     if (name === "thumbs") timeline.to(arm.elbow.rotation, { x: 1.35, duration: .2, repeat: 1, yoyo: true, ease: "sine.inOut" }, .65);
     timeline.to(rig.mouth, { chatter: .55, duration: .07, repeat: 9, yoyo: true, ease: "power2.inOut" }, .25);
     timeline.add(neutral(.8), "+=1.6");
+    connected?.gesture(timeline, name, direction, aim);
     return timeline;
   }
   function swipe(direction: number, aim?: { x: number; y: number }) {
     const timeline = start(); swiping = true;
     const arm = rig.arms[direction > 0 ? 0 : 1];
-    const angle = aim ? Math.atan2(Math.abs(aim.x * direction - 1.1), -(aim.y + 4.55 - 2.05)) : 2;
+    const angle = aim ? Math.atan2(Math.abs(aim.x * direction - arm.shoulder.position.x), -(aim.y + HEAD_HEIGHT - arm.shoulder.position.y)) : 2;
     const shoulder = MathUtils.clamp(angle, .6, 2), wrist = MathUtils.clamp(angle - shoulder, -.7, .7);
     timeline.add(face({ mouth: "smile", brow: .05 }), 0)
       .add(armPose(arm, { shoulder: [shoulder, -.3, 0], elbow: -.25, wrist: [0, 0, wrist], hand: "open" }, .45), 0)
@@ -107,6 +116,7 @@ export function createCharacterMotion(rig: CharacterRig) {
       .to(arm.shoulder.rotation, { z: shoulder, duration: .4, ease: "power2.inOut" }, .7)
       .to(arm.wrist.rotation, { z: wrist, duration: .4, ease: "power2.inOut" }, .7)
       .add(neutral(.6), 1.5);
+    connected?.swipe(timeline, direction);
     return timeline;
   }
   function grab() {
@@ -133,7 +143,7 @@ export function createCharacterMotion(rig: CharacterRig) {
         break;
       case "Punching bag":
         timeline.add(face({ mouth: "oh", happy: true, brow: .12 }), 0)
-          .to(rig.headTilt.rotation, { x: -.22, y: -.3, z: .18, duration: .08, ease: "power3.out" }, .05)
+          .to(rig.headTilt.rotation, { x: -.08, y: -.3, z: .18, duration: .08, ease: "power3.out" }, .05)
           .to(rig.motion, { hop: -.15, lean: .08, duration: .08 }, .05)
           .to(rig.headTilt.rotation, { x: 0, y: 0, z: 0, duration: 1.4, ease: "elastic.out(1,.3)" }, .15)
           .to(rig.motion, { hop: 0, lean: 0, duration: 1.2, ease: "elastic.out(1,.4)" }, .15)
@@ -187,17 +197,17 @@ export function createCharacterMotion(rig: CharacterRig) {
       case "Dizzy":
         timeline.add(face({ mouth: "oh", brow: .1 }), .1)
           .to(rig.motion, { gazeAngle: Math.PI * 6, duration: 1.2, ease: "power1.inOut" }, .1)
-          .to(rig.headTilt.rotation, { x: .05, z: .07, duration: .3, repeat: 3, yoyo: true, ease: "sine.inOut" }, .1)
+          .to(rig.headTilt.rotation, { x: 0, z: .07, duration: .3, repeat: 3, yoyo: true, ease: "sine.inOut" }, .1)
           .to(rig.headTilt.rotation, { y: .12, duration: .07, repeat: 5, yoyo: true }, 1.35).add(neutral(.6), 2.1);
         break;
       case "Sneeze":
         timeline.add(face({ mouth: "open", brow: .12, gazeY: .04 }), .1)
           .to(rig.face, { eyeOpen: .5, duration: .5 }, .1)
           .to(rig.headTilt.rotation, { x: -.1, duration: .4, ease: "power2.inOut" }, .1)
-          .to(rig.headTilt.rotation, { x: -.2, duration: .4, ease: "power2.inOut" }, .6)
+          .to(rig.headTilt.rotation, { x: -.08, duration: .4, ease: "power2.inOut" }, .6)
           .to(rig.motion, { hop: .06, duration: 1, ease: "power1.in" }, .1)
           .add(face({ mouth: "oh", happy: true, brow: -.04 }, .08), 1.15)
-          .to(rig.headTilt.rotation, { x: .24, duration: .09, ease: "power3.out" }, 1.15)
+          .to(rig.headTilt.rotation, { z: .12, duration: .09, ease: "power3.out" }, 1.15)
           .to(rig.motion, { hop: 0, duration: .12, ease: "power3.out" }, 1.15)
           .to(Object.values(rig.accessories).map((accessory) => accessory.position), { y: "+=.5", duration: .14, repeat: 1, yoyo: true, ease: "power2.out" }, 1.15)
           .add(neutral(.6), 1.9);
@@ -205,13 +215,14 @@ export function createCharacterMotion(rig: CharacterRig) {
       case "Sulk":
         timeline.add(face({ mouth: "flat", brow: .06 }), .1)
           .to(rig.face, { eyeOpen: .1, duration: .15 }, .1)
-          .to(rig.headTilt.rotation, { x: -.14, duration: .3 }, .1)
+          .to(rig.headTilt.rotation, { z: -.08, duration: .3 }, .1)
           .to(rig.motion, { turn: 2.5, duration: .8, ease: "power2.inOut" }, .35)
           .to(rig.headTilt.rotation, { y: -1, duration: .45, ease: "power2.inOut" }, 2.1)
           .to(rig.face, { eyeOpen: .6, duration: .2 }, 2.2)
           .add(neutral(.8), 3.2);
         break;
     }
+    connected?.perform(timeline, trick);
     return timeline;
   }
 
@@ -222,13 +233,14 @@ export function createCharacterMotion(rig: CharacterRig) {
     rig.root.rotation.set(0, -.15 + rig.motion.turn, rig.motion.lean);
     rig.body.position.y = Math.sin(t * 1.8) * .03;
     rig.head.rotation.z = Math.sin(t * .8) * .035;
-    rig.head.rotation.x = Math.sin(t * .6) * .03;
+    rig.head.rotation.x = Math.min(0, Math.sin(t * .6)) * .02;
     if (!reduced && grabbing) {
+      connected?.grab(look.x, delta);
       rig.motion.lean = MathUtils.damp(rig.motion.lean, -look.x * .15, 5, delta);
       rig.arms.forEach((arm, index) => { arm.shoulder.rotation.z = MathUtils.damp(arm.shoulder.rotation.z, Math.max(0, look.x * (index ? -1 : 1)) * .8, 7, delta); });
     } else if (!active?.isActive() && !reduced) {
       rig.neck.rotation.y = MathUtils.damp(rig.neck.rotation.y, look.x * .25, 5, delta);
-      rig.neck.rotation.x = MathUtils.damp(rig.neck.rotation.x, look.y * .12, 5, delta);
+      rig.neck.rotation.x = MathUtils.damp(rig.neck.rotation.x, Math.min(0, look.y) * .06, 5, delta);
     }
     const wantsHappyEyes = rig.face.happy >= .5;
     if (reduced) {

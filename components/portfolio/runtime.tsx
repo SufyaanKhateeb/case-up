@@ -1,4 +1,5 @@
 "use client";
+import { isCharacterAccessory } from "@/lib/character-accessories";
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useReducer, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
@@ -88,6 +89,7 @@ export function PortfolioRuntime({ children }: { children: React.ReactNode }) {
   }, [playSound, reducedMotion]);
 
   const equip = useCallback((name: string) => {
+    if (!isCharacterAccessory(name)) return;
     setAccessories((current) => current.includes(name) ? current.filter((item) => item !== name) : [...current, name]);
     playSound(4);
   }, [playSound]);
@@ -164,7 +166,7 @@ export function PortfolioRuntime({ children }: { children: React.ReactNode }) {
 
   return <RuntimeContext.Provider value={value}>
     {children}
-    {pathname !== "/character/hunyuan" && <>
+    {!["/character/hunyuan", "/character/articulation", "/character/parted", "/character/rigged"].includes(pathname) && <>
     <CharacterShell />
     <button className="sound-toggle" aria-label={sound ? "Mute sound" : "Enable sound"} aria-pressed={sound} onClick={() => {
       const next = !sound;

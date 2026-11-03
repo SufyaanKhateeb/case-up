@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, type MutableRefObject } from "react";
+import { useEffect, useMemo, useRef, useState, type MutableRefObject } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 import { characterManifest } from "@/content/character";
@@ -10,7 +10,8 @@ import { chapterGesture, type TourFrame } from "@/lib/character-tour";
 import { HEAD_HEIGHT, HEAD_RADIUS } from "./model";
 import { chapterStep } from "@/lib/character-state";
 import { characterRenderWindow } from "@/lib/character-render";
-import { createCharacter } from "./model";
+import { createCharacterAssetLoader, disposeCharacterAsset } from "@/lib/character-assets";
+import { createImportedCharacter, type ImportedCharacterRig } from "./imported-model";
 import { createCharacterMotion } from "./motion";
 import { createCharacterComposite } from "./composite";
 
@@ -44,12 +45,12 @@ type Props = {
   active: boolean;
   reducedMotion: boolean;
   onFailure: () => void;
+  onReady: () => void;
   look: MutableRefObject<{ x: number; y: number }>;
 };
 
-function ColorCharacter({ state, tour, accessories, active, reducedMotion, look }: Omit<Props, "onFailure">) {
+function ColorCharacter({ state, tour, accessories, active, reducedMotion, look, rig }: Omit<Props, "onFailure" | "onReady"> & { rig: ImportedCharacterRig }) {
   const { gl, scene, camera, size, invalidate } = useThree();
-  const rig = useMemo(() => createCharacter(characterManifest.look), []);
   const animation = useMemo(() => createCharacterMotion(rig), [rig]);
   const previousMode = useRef(state.mode);
   const previousCue = useRef({ chapter: state.chapter, step: 0 });
@@ -109,17 +110,16 @@ function ColorCharacter({ state, tour, accessories, active, reducedMotion, look 
       if (worn) object.visible = true;
       timeline.to(object.scale, { x: worn ? 1 : 0, y: worn ? 1 : 0, z: worn ? 1 : 0, duration: reducedMotion ? 0 : worn ? .5 : .2, ease: worn ? "back.out(2.5)" : "power2.in", onUpdate: invalidate, onComplete: () => { object.visible = worn; invalidate(); } }, 0);
     });
-    const hairScale = names.includes("hat") ? (characterManifest.look.hair === "quiff" ? .7 : .82) : 1;
-    timeline.to(rig.curls.scale, { x: hairScale, y: hairScale, z: hairScale, duration: reducedMotion ? 0 : .4, onUpdate: invalidate }, 0);
     return () => { timeline.kill(); };
   }, [accessoryKey, reducedMotion, rig, invalidate]);
   useEffect(() => () => {
-    animation.dispose(); rig.dispose(); composite.target.dispose(); composite.detailTarget.dispose(); composite.material.dispose(); composite.geometry.dispose();
+    animation.dispose(); composite.target.dispose(); composite.detailTarget.dispose(); composite.material.dispose(); composite.geometry.dispose();
   }, [animation, rig, composite]);
 
   // Shade in linear light, then composite once into the transparent color canvas.
   useFrame(({ clock }, delta) => {
     animation.update(clock.elapsedTime, Math.min(delta, .05), look.current, reducedMotion);
+    rig.sync();
     const frame = tour.current;
     const scale = frame.radius / HEAD_RADIUS;
     const velocity = (frame.x - travel.current.x) / Math.max(frame.radius, 1) / Math.max(delta * 60, .1);
@@ -151,15 +151,36 @@ function ColorCharacter({ state, tour, accessories, active, reducedMotion, look 
   return <primitive object={rig.root} dispose={null} />;
 }
 
+function ApprovedCharacter(props: Props) {
+  const [rig, setRig] = useState<ImportedCharacterRig | null>(null);
+  const callbacks = useRef({ onReady: props.onReady, onFailure: props.onFailure });
+  callbacks.current = { onReady: props.onReady, onFailure: props.onFailure };
+  useEffect(() => {
+    let cancelled = false, ownedRig: ImportedCharacterRig | undefined;
+    const asset = createCharacterAssetLoader();
+    asset.loader.load(characterManifest.model, (gltf) => {
+      if (cancelled) { disposeCharacterAsset(gltf.scene); return; }
+      try {
+        ownedRig = createImportedCharacter(gltf.scene, characterManifest.look);
+        setRig(ownedRig); callbacks.current.onReady();
+      } catch {
+        disposeCharacterAsset(gltf.scene); callbacks.current.onFailure();
+      }
+    }, undefined, () => { if (!cancelled) callbacks.current.onFailure(); });
+    return () => { cancelled = true; ownedRig?.dispose(); asset.dispose(); };
+  }, []);
+  return rig ? <ColorCharacter {...props} rig={rig} /> : null;
+}
+
 export default function CharacterScene(props: Props) {
   // R3F defaults its wrapper to pointer-events:auto, overriding the paint layer.
   // All character input belongs to the separate, tightly bounded HTML handle.
-  return <Canvas style={{ pointerEvents: "none" }} aria-hidden="true" orthographic camera={{ position: [0, 0, 2000], zoom: 1, near: .1, far: 4000 }} dpr={[1, 2]} frameloop={props.active && !props.reducedMotion ? "always" : "demand"} gl={{ alpha: true, antialias: false, powerPreference: "low-power" }} onCreated={({ gl }) => { gl.setClearColor(0x000000, 0); gl.toneMapping = THREE.NoToneMapping; }} fallback={<span>Character preview unavailable</span>}>
+  return <Canvas style={{ pointerEvents: "none" }} aria-hidden="true" orthographic camera={{ position: [0, 0, 2000], zoom: 1, near: .1, far: 4000 }} dpr={[1, 2]} frameloop={props.active && !props.reducedMotion ? "always" : "demand"} gl={{ alpha: true, antialias: false, powerPreference: "low-power" }} onCreated={({ gl }) => { gl.setClearColor(0x000000, 0); gl.toneMapping = THREE.ACESFilmicToneMapping; }} fallback={<span>Character preview unavailable</span>}>
     <FitCamera />
     <ContextHealth onFailure={props.onFailure} />
-    <hemisphereLight args={["#fff5e8", "#81899d", 1.8]} />
-    <directionalLight position={[-3, 4, 5]} intensity={2.2} />
-    <directionalLight position={[5, 1.5, -4]} intensity={.8} />
-    <ColorCharacter {...props} />
+    <hemisphereLight args={["#f5f4ed", "#626987", 1.2]} />
+    <directionalLight position={[-3, 4, 5]} color="#ffffff" intensity={2.5} />
+    <directionalLight position={[4, 1, -3]} color="#ffffff" intensity={1.4} />
+    <ApprovedCharacter {...props} />
   </Canvas>;
 }

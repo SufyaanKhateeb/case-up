@@ -1,45 +1,42 @@
 import * as THREE from "three";
+import { facePoint, sweptGeometry } from "./sculpt";
 
-/** Broad swept locks, tapering into lifted tips rather than a ball of curls. */
+/** A fitted, scalloped hairline with overlapping sculpted waves and fine ridges. */
 export function createQuiff(material: THREE.Material) {
-  const group = new THREE.Group();
-  group.name = "SweptQuiff";
-  const cap = new THREE.Mesh(new THREE.SphereGeometry(1.425, 48, 32, 0, Math.PI * 2, 0, 1.65), material);
-  cap.rotation.x = -.57;
-  group.add(cap);
-
-  const lock = (points: number[][], width: number, depth: number) => {
-    const curve = new THREE.CatmullRomCurve3(points.map(([x, y, z]) => new THREE.Vector3(x, y, z)));
-    const steps = 36, sides = 16;
-    const frames = curve.computeFrenetFrames(steps, false);
-    const vertices: number[] = [], indices: number[] = [];
-    for (let i = 0; i <= steps; i++) {
-      const t = i / steps, center = curve.getPointAt(t);
-      const taper = Math.max(.003, Math.sin(Math.PI * Math.pow(t, .68)) ** .65);
-      for (let j = 0; j <= sides; j++) {
-        const angle = j / sides * Math.PI * 2;
-        const point = center.clone()
-          .addScaledVector(frames.normals[i], Math.cos(angle) * width * taper)
-          .addScaledVector(frames.binormals[i], Math.sin(angle) * depth * taper);
-        vertices.push(...point.toArray());
-        if (i < steps && j < sides) {
-          const a = i * (sides + 1) + j, b = a + sides + 1;
-          indices.push(a, a + 1, b, b, a + 1, b + 1);
-        }
-      }
+  const group = new THREE.Group(); group.name = "SweptQuiff";
+  const positions: number[] = [], uvs: number[] = [], indices: number[] = [];
+  const around = 128, rows = 48;
+  for (let row = 0; row <= rows; row++) {
+    const t = row / rows;
+    for (let j = 0; j <= around; j++) {
+      const yaw = j / around * Math.PI * 2;
+      const angle = Math.abs(Math.atan2(Math.sin(yaw), Math.cos(yaw)));
+      const temple = THREE.MathUtils.smoothstep(angle, .88, 1.28);
+      const hairline = THREE.MathUtils.lerp(.95 + .025 * Math.cos(yaw * 9), -.29, temple) - .15 * THREE.MathUtils.smoothstep(angle, 1.7, 2.8);
+      const y = THREE.MathUtils.lerp(hairline, 1.4, t);
+      const p = facePoint(yaw, Math.asin(THREE.MathUtils.clamp(y / 1.4, -1, 1)), .035);
+      p.y += .12 * t * t;
+      positions.push(...p.toArray()); uvs.push(j / around, t);
+      if (row < rows && j < around) { const a = row * (around + 1) + j, b = a + around + 1; indices.push(a, a + 1, b, b, a + 1, b + 1); }
     }
-    const geometry = new THREE.BufferGeometry();
-    geometry.setAttribute("position", new THREE.Float32BufferAttribute(vertices, 3));
-    geometry.setIndex(indices); geometry.computeVertexNormals();
+  }
+  const capGeometry = new THREE.BufferGeometry(); capGeometry.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+  capGeometry.setAttribute("uv", new THREE.Float32BufferAttribute(uvs, 2)); capGeometry.setIndex(indices); capGeometry.computeVertexNormals();
+  group.add(new THREE.Mesh(capGeometry, material));
+  const lock = (points: number[][], width: number, depth: number) => {
+    const geometry = sweptGeometry(points, width, depth, .018);
+    geometry.scale(1, .7, 1); geometry.translate(0, .59, 0);
     const mesh = new THREE.Mesh(geometry, material);
-    mesh.name = "SweptHairLock";
-    group.add(mesh);
+    mesh.name = "SculptedHairWave"; group.add(mesh);
   };
-  // Overlapping sections form a continuous side part and an asymmetric crest.
-  lock([[-1.18, .65, .65], [-1.05, 1.2, .78], [-.55, 1.6, .52], [.05, 1.7, .05]], .3, .28);
-  lock([[-1.08, .9, .98], [-.7, 1.38, 1.03], [-.12, 1.7, .77], [.42, 1.91, .32]], .36, .29);
-  lock([[-.65, .99, 1.12], [-.05, 1.35, 1.22], [.52, 1.55, 1.03], [.78, 1.92, .61]], .38, .32);
-  lock([[-.12, 1, 1.16], [.45, 1.22, 1.2], [1.02, 1.32, .96], [1.22, 1.66, .51]], .32, .3);
-  lock([[.48, .85, 1.08], [.97, .98, 1.01], [1.35, 1.07, .63], [1.48, 1.4, .14]], .27, .26);
+  // Back layers sit under the broad frontal sweep instead of repeating its silhouette.
+  lock([[-.8, 1.15, -.3], [-.5, 1.65, -.1], [0, 1.81, -.2], [.16, 2.08, -.5]], .26, .22);
+  lock([[-.2, 1.38, -.4], [.2, 1.7, -.3], [.65, 1.78, -.48], [.95, 2, -.65]], .25, .2);
+  lock([[-1.06, .5, .12], [-1.05, 1.13, .2], [-.69, 1.65, .05], [-.3, 1.72, -.48]], .32, .29);
+  lock([[-.7, 1.1, .08], [-.3, 1.58, .29], [.18, 1.75, .03], [.45, 1.79, -.47]], .36, .3);
+  lock([[-1.05, .41, .77], [-1.12, 1.02, .93], [-.7, 1.48, .74], [-.25, 1.78, .06]], .29, .22);
+  lock([[-.98, .78, 1.05], [-.5, 1.16, 1.25], [.26, 1.42, 1.01], [.6, 1.86, .43]], .4, .29);
+  lock([[-.45, .85, 1.18], [.26, 1.05, 1.32], [.92, 1.2, 1.01], [1.14, 1.63, .48]], .34, .27);
+  lock([[.44, .62, 1.03], [1.02, .75, .99], [1.34, 1.04, .53], [1.42, 1.34, .12]], .26, .23);
   return group;
 }

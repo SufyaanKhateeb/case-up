@@ -28,7 +28,8 @@ export function useCharacterTour(stage: RefObject<HTMLElement>, state: Character
         const last = section.lastElementChild as HTMLElement | null;
         // Fit the mobile outro below the text at the document's maximum scroll.
         // Otherwise the guide's HTML handle covers footer links and buttons.
-        const textBottom = kind === "outro" && last ? viewport.height - section.offsetHeight + last.offsetTop + last.offsetHeight : undefined;
+        const tray = kind === "error" ? section.querySelector<HTMLElement>(".accessory-tray") : null;
+        const textBottom = tray ? tray.getBoundingClientRect().bottom : kind === "outro" && last ? viewport.height - section.offsetHeight + last.offsetTop + last.offsetHeight : undefined;
         return { top: section.getBoundingClientRect().top + window.scrollY, frame: tourPlacement(kind, viewport, textBottom) };
       });
       scroll = window.scrollY; update(0, 1000);

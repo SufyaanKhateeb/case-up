@@ -27,6 +27,12 @@ export function tourPlacement(kind: TourKind, viewport: TourViewport, textBottom
     const radius = Math.max(12, Math.min(h * .12, w * .28, (h - ceiling) / 3.75));
     return { ...frame, x: span(1, 3), y: Math.max(h * .76, ceiling + radius * 1.75), radius };
   }
+  if (kind === "error" && textBottom !== undefined && (w < 768 || h < 500)) {
+    // Reserve space for both the accessory controls and the speech above the head.
+    const ceiling = textBottom + 16;
+    const radius = Math.max(12, Math.min(h * (w < 768 ? .13 : .17), w * (w < 768 ? .3 : .09), (h - ceiling - 72) / 2.8));
+    return { ...frame, x: w < 768 ? span(1, 4) : span(9, 12), y: Math.max(h * (w < 768 ? .74 : .6), ceiling + 72 + radius * 1.75), radius };
+  }
   if (kind === "hero" || kind === "outro" || kind === "error") {
     if (w >= 768 && h >= w && kind !== "outro") {
       // Portrait tablets need room for the quiff below the opening headline.

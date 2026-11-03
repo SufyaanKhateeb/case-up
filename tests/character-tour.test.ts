@@ -84,3 +84,13 @@ test("mobile outro fits below footer controls instead of covering their click ta
   assert.ok(tallerText.radius < frame.radius);
   assert.ok(tallerText.y - tallerText.radius * 1.2 > footerBottom + 60);
 });
+
+test("404 speech and character clear accessory controls on phones and short landscapes", () => {
+  for (const [width, height, controlsBottom] of [[390, 844, 355.5], [390, 667, 355.5], [390, 568, 355.5], [360, 640, 342], [900, 390, 131]]) {
+    const frame = tourPlacement("error", { width, height, margin: 20, gap: 10 }, controlsBottom);
+    assert.ok(frame.y - frame.radius * 1.75 - 54 - 18 >= controlsBottom + 16 - .01);
+    assert.ok(frame.y - frame.radius * 1.2 > controlsBottom);
+    assert.ok(frame.y + frame.radius < height);
+  }
+  near(tourPlacement("error", viewport, 172).y, tourPlacement("error", viewport).y);
+});

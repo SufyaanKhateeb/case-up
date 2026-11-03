@@ -3,11 +3,12 @@
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import gsap from "gsap";
-import { Component, useEffect, useRef, useState, type ReactNode } from "react";
+import { Component, useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { usePortfolio } from "@/components/portfolio/runtime";
 import { characterManifest } from "@/content/character";
 import { portfolio, scenes } from "@/content/portfolio";
 import { useCharacterTour } from "./tour";
+import { isCharacterAccessory } from "@/lib/character-accessories";
 import { chapterStep, type Trick } from "@/lib/character-state";
 
 const CharacterScene = dynamic(() => import("./scene"), { ssr: false, loading: () => <div className="character-loading"><Poster /></div> });
@@ -26,6 +27,9 @@ export function CharacterShell() {
   const [offset, setOffset] = useState({ x: 0, y: 0 });
   const [active, setActive] = useState(true);
   const [webgl, setWebgl] = useState<boolean | null>(null);
+  const [assetReady, setAssetReady] = useState(false);
+  const assetLoaded = useCallback(() => setAssetReady(true), []);
+  const assetFailed = useCallback(() => { setAssetReady(false); setWebgl(false); }, []);
   const drag = useRef<{ x: number; y: number; moved: boolean } | null>(null);
   const look = useRef({ x: 0, y: 0 });
   const releaseTween = useRef<gsap.core.Tween | null>(null);
@@ -41,7 +45,7 @@ export function CharacterShell() {
     : character.trick ? trickDialogue[character.trick]
     : scene ? scene.dialogue[chapterStep(character.progress)]
     : chapter === "contact" ? portfolio.dialogue.contact
-    : chapter === "error" ? ["hat", "glasses"].every((name) => accessories.includes(name)) ? "Looking sharp. Thanks for the help!" : portfolio.dialogue.error
+    : chapter === "error" ? accessories.some(isCharacterAccessory) ? "Looking sharp. Thanks for the help!" : portfolio.dialogue.error
     : chapter === "detail" ? "Here’s a closer look."
     : returning ? portfolio.dialogue.returning : portfolio.dialogue.welcome;
 
@@ -66,11 +70,11 @@ export function CharacterShell() {
   return <aside className={`character-stage ${chapter === "hero" ? "is-hero" : ""} ${compact ? "is-compact" : ""} ${hidden ? "is-hidden" : ""} ${chapter === "detail" ? "is-detail" : ""} ${scene ? `is-project is-${scene.side}` : ""} ${character.mode === "drag" ? "is-dragging" : ""}`} ref={stage} aria-label="Interactive portfolio guide">
     <span className="character-grid-measure" aria-hidden="true" />
     <div className="character-badge" aria-hidden="true" />
-    <div className="character-render"><SceneBoundary>{webgl ? <CharacterScene state={{ ...character, chapter }} tour={tour} look={look} accessories={[...accessories, ...(character.chapter === "project-one" ? ["watch"] : character.chapter === "project-two" ? ["glasses"] : character.chapter === "project-three" ? ["hat"] : [])]} active={active && !hidden} reducedMotion={reducedMotion} onFailure={() => setWebgl(false)} /> : null}</SceneBoundary></div>
-    <div className="character-fallback" aria-hidden="true" style={{ display: webgl ? "none" : undefined }}>{!webgl && <Poster />}</div>
+    <div className="character-render"><SceneBoundary>{webgl ? <CharacterScene state={{ ...character, chapter }} tour={tour} look={look} accessories={[...accessories, ...(character.chapter === "project-one" ? ["watch"] : character.chapter === "project-two" ? ["glasses"] : character.chapter === "project-three" ? ["headphones"] : [])]} active={active && !hidden} reducedMotion={reducedMotion} onFailure={assetFailed} onReady={assetLoaded} /> : null}</SceneBoundary></div>
+    <div className="character-fallback" aria-hidden="true" style={{ display: webgl && assetReady ? "none" : undefined }}>{(!webgl || !assetReady) && <Poster />}</div>
     <div className="speech-bubble" role="status" aria-live="polite" aria-hidden={character.mode === "tour" && !["hero", "contact", "error", "detail"].includes(chapter)}>{dialogue}</div>
     <div className="character-grab" role="button" tabIndex={hidden ? -1 : 0} aria-label={compact ? "Open character tricks" : "Move the character. Use arrow keys to move, Enter for tricks, Escape to reset."}
-      onDragOver={(event) => event.preventDefault()} onDrop={(event) => { event.preventDefault(); const item = event.dataTransfer.getData("text/character-accessory"); if (["hat", "glasses"].includes(item)) equip(item); }}
+      onDragOver={(event) => event.preventDefault()} onDrop={(event) => { event.preventDefault(); const item = event.dataTransfer.getData("text/character-accessory"); if (isCharacterAccessory(item)) equip(item); }}
       onKeyDown={(event) => {
         if (event.key === "Enter" || event.key === " ") { event.preventDefault(); openTricks(); }
         if (event.key === "Escape") { setOffset({ x: 0, y: 0 }); dispatch({ type: "release" }); }

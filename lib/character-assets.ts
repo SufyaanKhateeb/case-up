@@ -14,8 +14,10 @@ export function createCharacterAssetLoader() {
 /** GLTFLoader's ImageBitmaps need explicit closing as well as GPU disposal. */
 export function disposeCharacterAsset(object: THREE.Object3D) {
   const geometries = new Set<THREE.BufferGeometry>(), materials = new Set<THREE.Material>(), textures = new Set<THREE.Texture>(), bitmaps = new Set<ImageBitmap>();
+  const skeletons = new Set<THREE.Skeleton>();
   object.traverse((child) => {
     if (!(child instanceof THREE.Mesh)) return;
+    if (child instanceof THREE.SkinnedMesh) skeletons.add(child.skeleton);
     geometries.add(child.geometry);
     for (const material of Array.isArray(child.material) ? child.material : [child.material]) {
       materials.add(material);
@@ -29,4 +31,5 @@ export function disposeCharacterAsset(object: THREE.Object3D) {
     texture.dispose();
   });
   bitmaps.forEach((bitmap) => bitmap.close());
+  skeletons.forEach((skeleton) => skeleton.dispose());
 }

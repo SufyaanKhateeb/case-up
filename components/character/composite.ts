@@ -31,6 +31,7 @@ export function createCharacterComposite(texture: THREE.Texture) {
         if(color.a<=.001 || key>=cover) discard;
         // Keep the vanish/photo tricks; ordinary rendering retains shaded color.
         gl_FragColor=vec4(key<develop ? color.rgb : vec3(.008),color.a*circle);
+        #include <tonemapping_fragment>
         #include <colorspace_fragment>
       }`,
   });
