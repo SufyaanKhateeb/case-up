@@ -37,3 +37,8 @@ next-env.d.ts
 
 # Raw 3D authoring exports and hosted-demo download caches
 /artifacts/character/
+
+# Supplied full-density source models stay local; optimized exports live in public.
+/*.fbx
+/generated*.glb
+/docs/design/sufyaan-character-with-arms.zip

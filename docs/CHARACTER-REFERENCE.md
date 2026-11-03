@@ -85,3 +85,17 @@ smoked lenses with subtle glints, temples, and camera details. The accessory ID
 remains `glasses` so existing poses and mounting continue to work. The first
 chapter now wears only the watch, and the 404 offers a hat and sunglasses; its
 completion message checks those two selectable accessories.
+
+
+## Expressive custom character — November 3, 2026
+
+Revisited the live homepage and its trick interaction. Its strength is coordinated
+face/hand timing: blinks, brows, mouth changes, gestures and anticipation. The
+custom connected mesh now receives six restrained local blendshapes driven by
+those existing controller channels. No reference bundle is executed or shipped.
+The generated mesh's single surface/UVs and corrected jaw weights are preserved.
+This adapts the behavior to the custom likeness rather than copying its facial
+geometry. Downward pitch is removed at the cue and runtime-adapter levels.
+The user rejected the hat; collar headphones replace it in the third chapter
+and 404, alongside the retained sunglasses and watch. See
+`design/expressive-character/README.md` for implementation and validation.

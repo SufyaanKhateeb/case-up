@@ -120,18 +120,89 @@ do not reintroduce a mandatory asset-production dependency.
 
 The user subsequently approved an optional Hunyuan image-to-3D study. The route
 `/character/hunyuan` compares 2.1 single-view and 2mv Turbo four-view geometry;
-it intentionally hides the animated guide. These GLBs have no textures or rig.
-The comparison now defaults to the user-supplied `generated_model.glb`, exported
-as `public/character/sufyaan-textured.glb` (100k triangles, 2K WebP PBR maps,
-local Draco compression). It has textures but no rig or facial morphs. Preserve
-the original file and use `scripts/character/prepare-supplied-model.py` for
-runtime derivatives. Decoder files and Apache license live in
+it intentionally hides the animated guide. The early studies have no textures or rig.
+The user approved the smoothed high-quality model, then the connected-arm
+workshop model for the live website while retaining hand animation.
+`content/character.ts` now selects `/character/arms-continuous.glb` (seven-bone
+body/arms skin). `imported-model.ts` preserves the tested arm weights and bind
+frames, registers the asset to the existing head-centre tour, and adds Neck/Head
+bones at runtime. Use the angled under-jaw field (`y + .28*z`, .480–.495) for
+head weights: a horizontal height ramp pins the actual low/front chin to the
+body. The real-mesh regression checks jaw rigidity through turns/tilts and a
+fixed collar; keep it intact.
+`connected-arm-motion.ts` drives the workshop's tested shoulder/elbow/wrist
+channels from the existing owned GSAP timelines; do not copy procedural Euler
+angles to these bones. Keep sleeve continuity and fixed central chest/waist.
+This approval supersedes the earlier temporary requirement to keep arms rigid.
+The unrigged smoothed source remains the default `/character/hunyuan` inspection
+model. `/character/articulation` remains the manual arm review.
+The old procedural rig remains as the controller with its surfaces hidden.
+Preserve scroll choreography, drag priorities, clipping, tricks, muted audio and
+reduced-motion rest. `facial-expressions.ts` now generates six restrained relative
+blendshapes on the approved surface: blink, wide eyes, separate brows, smile and
+open-mouth reaction. `motion.ts` drives them through the existing face channels.
+Keep the nose, low chin, neck, hair and clothing outside these masks. This is not
+full lip-sync or individual finger animation. Remove downward-facing cues; the
+live adapter's `safeHeadPitch` also guards neck, tilt and idle rotations at -.12–0.
+The hat is retired. `character-accessories.ts` defines headphones, sunglasses and
+watch for UI/drop validation. Headphones rest around the collar and follow Body;
+sunglasses follow Head and watch follows LeftHand. Read
+`docs/design/expressive-character/README.md`.
+The matching loading/failure fallback is `/character/smoothed-poster.png`,
+exported at `/character/hunyuan?poster` with the same rest silhouette. Keep local
+decoding and dispose owned textures, ImageBitmaps and skeletons on unmount.
+The higher-quality full model was supplied
+as `generated_full_high_quality.glb` (1.5m triangles) and cleaned into
+`public/character/sufyaan-full-hq-smooth.glb` (200k runtime triangles, 4K WebP PBR maps,
+explicit tangents, local Draco compression).
+`scripts/character/clean-textured-model.py` welds coincident UV-seam vertices
+without altering source face-corner UVs and saves the full-density packed 4K
+authoring file before runtime decimation in `artifacts/character/full-model-hq/`.
+Use `--smooth-iterations 5 --faces 200000 --texture-size 4096` for the approved
+smoothed version; preserve the unsmoothed derivative for comparison. It has no embedded rig or facial
+morphs. Textured/clay/wireframe modes and five camera views support inspection;
+complete-arm reference images live in `docs/design/character-with-arms/`.
+The previous full model remains `public/character/sufyaan-full.glb` (50k
+triangles, 2K maps). The previous bust remains `public/character/sufyaan-textured.glb`
+(100k triangles) using `scripts/character/prepare-supplied-model.py`.
+Preserve all supplied originals and unrelated procedural character edits.
+Decoder files and Apache license live in
 `public/character/draco/`; loading must not depend on a remote decoder CDN.
 Inputs, generation records and authoring scripts are documented in
-`docs/design/hunyuan/README.md`. Preserve the procedural guide until a generated
-asset has passed likeness, expression, accessory, performance and license review.
+`docs/design/hunyuan/README.md`. Preserve the procedural source and all supplied
+originals. The user's approval to use the smoothed model supersedes the earlier
+instruction to keep it confined to the study. Deployment was subsequently
+authorized on November 4, 2026: create a PR, merge the approved current portfolio
+into `main`, and publish through the existing Vercel project. Preserve the approved
+live character for this release. Future facial work must use OmniFaceRig only;
+its public release currently lacks the custom-model fitter. No OmniFaceRig dataset
+assets or manual laugh prototype are part of the live portfolio. See
+`docs/design/omnifacerig/README.md`.
 
 ## Verification and handoff
+
+The user also supplied `full_body_model_parted.fbx` and `Strut Walking.fbx` on
+November 4. These remain separate review assets: `/character/parted` inspects 18
+unrigged parts; `/character/rigged` plays the supplied 65-bone Mixamo walk with
+simple colors transferred from the parted geometry. Neither FBX has UVs or
+facial blendshapes. The mouth stays on the head and the source hair shell includes
+the neck. Preserve originals and the active connected-arm character. Read
+`docs/design/rigged-fbx/README.md` for preparation, weight normalization, rest-pose
+parent handling and outstanding facial integration. Hide the guide on review routes.
+
+The user rejected the disconnected part experiment and requested a continuous
+right-arm study, then the same treatment for the left arm. `/character/articulation`
+now renders `arms-continuous.glb`: one original manifold mesh, seven-bone skin,
+independent shoulder/elbow/wrist chains and a shared fixed body. The demo defaults
+to the left arm; selecting a side retains both poses. `prepare-right-arm.py -- --both`
+prepares the new asset while preserving the earlier right-only export; run it
+through Blender with `--background --disable-autoexec --python`.
+`normalize-skin-export.cjs` validates/normalizes decoded skin attributes;
+`lib/continuous-arms-study.ts` poses bones in their bind frames. Read
+`docs/design/connected-arms/README.md`. Keep the head, chest and waist fixed,
+protect the unposed arm. The homepage now uses this same asset with its live
+head and gesture adapter; keep manual review controls confined to the workshop. The old
+right-only and split-part sources/assets remain historical experiments.
 
 Run lint, typecheck, focused tests, and production build for application changes.
 Check route HTTP status and SSR after routing changes. Use browser QA for mobile,

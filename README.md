@@ -38,10 +38,12 @@ The interaction system and responsive page structure are implemented. Content fr
 supplied résumés now provide the biography, Wells Fargo/CAST experience and skills. Placement App and Chat still use labeled
 illustrative previews while screenshots are pending. `/resume` previews and
 downloads the latest software-engineering PDF; `/resume/data` provides the
-data-engineering version. The character retains its procedural rig,
-shooting-star sweatshirt and sunglasses. The approved color concept in
-`docs/design/character-msk-concept.png` is now adapted to the live model: swept
-quiff, warm skin, separated moustache, chin beard, and a cream crew neck.
+data-engineering version. The character uses the approved smoothed, textured
+model with continuous articulated arms, head movement, a shooting-star sweatshirt
+and interactive accessories. Its controller preserves the scroll tour and tricks.
+The approved color concept in `docs/design/character-msk-concept.png` supplied its
+design direction. The Personal Portfolio project previews show desktop and mobile
+captures of the current implementation.
 
 - [Content checklist](docs/CONTENT.md): what to supply and how to integrate it.
 - [Character configuration](docs/CHARACTER-ASSETS.md): appearance, poses, fallback,
@@ -60,7 +62,7 @@ quiff, warm skin, separated moustache, chin beard, and a cream crew neck.
 | `app/projects/[slug]/page.tsx` | Statically generated case studies |
 | `app/404/`, `app/not-found.tsx` | Dress-up scene and real HTTP 404 handling |
 | `components/portfolio/` | Runtime, scroll director, demo controls, local art |
-| `components/character/` | Shared shell, procedural model, articulated motion, color renderer |
+| `components/character/` | Shared shell, imported character adapter, articulated motion, color renderer |
 | `lib/character-state.ts` | Interaction priority, chapter selection, preferences |
 | `lib/character-tour.ts` | Grid anchors, continuous scroll travel, narration timing |
 | `app/globals.css` | Design system, layouts, responsive and reduced-motion styles |
@@ -68,4 +70,8 @@ quiff, warm skin, separated moustache, chin beard, and a cream crew neck.
 
 The previous loader/header and Locomotive Scroll initialization have been retired.
 Unreferenced legacy SVGs, utility components, and asset files remain available.
-Deployment is separate from this local build.
+The user approved publishing this milestone on November 4, 2026 through a pull
+request into `main`. The existing production portfolio is hosted on Vercel at
+[sufyaankhateeb.site](https://sufyaankhateeb.site). Keep raw model originals and
+research-only third-party assets out of deployments. Future OmniFaceRig work
+remains separate; see [the release audit](docs/design/omnifacerig/README.md).
