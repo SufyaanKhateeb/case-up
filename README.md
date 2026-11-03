@@ -78,8 +78,9 @@ remains separate; see [the release audit](docs/design/omnifacerig/README.md).
 
 ## Version history
 
-- `1.0.0`: the previous production portfolio, `content-test` commit `9471953`.
-- `2.0.0`: this rebuilt portfolio; tag the final merged release commit on `main`.
+- `1.0.0`: the original `main` portfolio, commit `432a5e8`.
+- `2.0.0`: the latest `content-test` portfolio, commit `9471953`.
+- `3.0.0`: this rebuilt portfolio; tag the final merged release commit on `main`.
 
 Node.js is pinned to `22.x` for hosting and local builds. Next.js uses the
 compatible `14.2.35` patch while retaining React 18 and React Three Fiber 8.
