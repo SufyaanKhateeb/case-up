@@ -75,3 +75,11 @@ request into `main`. The existing production portfolio is hosted on Vercel at
 [sufyaankhateeb.site](https://sufyaankhateeb.site). Keep raw model originals and
 research-only third-party assets out of deployments. Future OmniFaceRig work
 remains separate; see [the release audit](docs/design/omnifacerig/README.md).
+
+## Version history
+
+- `1.0.0`: the previous production portfolio, `content-test` commit `9471953`.
+- `2.0.0`: this rebuilt portfolio; tag the final merged release commit on `main`.
+
+Node.js is pinned to `22.x` for hosting and local builds. Next.js uses the
+compatible `14.2.35` patch while retaining React 18 and React Three Fiber 8.
