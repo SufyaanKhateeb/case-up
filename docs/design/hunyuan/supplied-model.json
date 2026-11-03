@@ -1,0 +1,48 @@
+{
+  "source": "generated_model.glb",
+  "source_sha256": "505a19d482d4f48a9102f209f1accac6a9df95b1ea34f629998e62982a730077",
+  "source_bytes": 78751352,
+  "source_triangles": 1500002,
+  "output": "public/character/sufyaan-textured.glb",
+  "output_bytes": 1763328,
+  "output_triangles": 100000,
+  "images": [
+    {
+      "name": "texture_pbr_20250901",
+      "original": [
+        4096,
+        4096
+      ],
+      "optimized": [
+        2048,
+        2048
+      ]
+    },
+    {
+      "name": "texture_pbr_20250901_metallic-texture_pbr_20250901_roughness",
+      "original": [
+        4096,
+        4096
+      ],
+      "optimized": [
+        2048,
+        2048
+      ]
+    },
+    {
+      "name": "texture_pbr_20250901_normal",
+      "original": [
+        4096,
+        4096
+      ],
+      "optimized": [
+        2048,
+        2048
+      ]
+    }
+  ],
+  "rigged": false,
+  "compression": "KHR_draco_mesh_compression",
+  "texture_format": "WEBP",
+  "texture_quality": 95
+}

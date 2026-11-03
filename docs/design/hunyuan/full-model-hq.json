@@ -1,0 +1,100 @@
+{
+  "source": "generated_full_high_quality.glb",
+  "source_sha256": "62998a2f30bbbacacfe3694df8ac3e8e9425351ea8a3ee59ca670351c563c37a",
+  "source_bytes": 78577808,
+  "runtime": "sufyaan-full-hq.glb",
+  "runtime_bytes": 4709840,
+  "runtime_sha256": "97e86460537c80e1e30feb0109c0f58bc1cb1956d250e22d35d7dd0830d9e04a",
+  "authoring": "sufyaan-full-hq-clean.blend",
+  "blender": "4.5.9 LTS",
+  "meshes": [
+    {
+      "name": "node_0",
+      "before": {
+        "vertices": 846096,
+        "edges": 2344010,
+        "triangles": 1500000,
+        "boundary_edges": 188020,
+        "nonmanifold_edges": 188020,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "degenerate_faces": 0,
+        "duplicate_faces": 0,
+        "nonfinite_vertices": 0,
+        "connected_components": 4385,
+        "largest_component_triangles": 35512
+      },
+      "after": {
+        "vertices": 749998,
+        "edges": 2250000,
+        "triangles": 1500000,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "loose_vertices": 0,
+        "degenerate_faces": 0,
+        "duplicate_faces": 0,
+        "nonfinite_vertices": 0,
+        "connected_components": 1,
+        "largest_component_triangles": 1500000
+      },
+      "weld_tolerance": 9.160360097885132e-08,
+      "welded_vertices": 96098,
+      "reoriented_faces": 0,
+      "signed_volume": 0.05490728236207599,
+      "uv_face_corners_preserved": true,
+      "single_sided": true,
+      "smoothing_iterations": 0,
+      "smoothing_max_displacement": 0,
+      "smoothing_mean_displacement": 0
+    }
+  ],
+  "images": [
+    {
+      "name": "texture_pbr_20250901",
+      "original": [
+        4096,
+        4096
+      ],
+      "runtime": [
+        4096,
+        4096
+      ],
+      "color_space": "sRGB"
+    },
+    {
+      "name": "texture_pbr_20250901_metallic-texture_pbr_20250901_roughness",
+      "original": [
+        4096,
+        4096
+      ],
+      "runtime": [
+        4096,
+        4096
+      ],
+      "color_space": "Non-Color"
+    },
+    {
+      "name": "texture_pbr_20250901_normal",
+      "original": [
+        4096,
+        4096
+      ],
+      "runtime": [
+        4096,
+        4096
+      ],
+      "color_space": "Non-Color"
+    }
+  ],
+  "rigged": false,
+  "animation_clips": 0,
+  "facial_morphs": 0,
+  "compression": "KHR_draco_mesh_compression",
+  "texture_format": "WEBP",
+  "texture_quality": 95,
+  "source_triangles": 1500000,
+  "runtime_triangles": 200000,
+  "geometry_decimated": true,
+  "uvs_repacked": false
+}

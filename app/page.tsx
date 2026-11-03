@@ -1,129 +1,28 @@
-"use client";
-import ScrollHeader from "@/components/scroll-header";
-import PageLoader from "./pageLoader";
-import Image from "next/image";
-import img1 from "@/public/max-bender-1zFK0pkHo9w-unsplash.jpg";
-import img2 from "@/public/melyna-cote-rLWHLNQFQL8-unsplash.jpg";
-import { Noto_Sans } from "next/font/google";
-import { useEffect, useRef } from "react";
-import styles from "./page.module.css";
-import ScrollPathAnimated from "@/components/scroll-path-animated";
-
-const noto = Noto_Sans({ subsets: ["latin"] });
+import Link from "next/link";
+import type { CSSProperties } from "react";
+import { portfolio, projects, scenes } from "@/content/portfolio";
+import { ProjectDemo } from "@/components/portfolio/project-demo";
+import { DeviceFrame, ProjectArt } from "@/components/portfolio/project-art";
+import { CopyEmail, TrickButton } from "@/components/portfolio/runtime";
+import { ShootingStar } from "@/components/portfolio/shooting-star";
 
 export default function Home() {
-    const workSectionRef = useRef<any>(null);
-    const aboutSectionRef = useRef<any>(null);
-    const contactSectionRef = useRef<any>(null);
-
-    useEffect(() => {
-        (async () => {
-            const LocomotiveScroll = (await import("locomotive-scroll")).default;
-            const locomotiveScroll = new LocomotiveScroll();
-        })();
-    }, []);
-
-    return (
-        <div className="relative w-full h-full overflow-x-hidden">
-            <PageLoader />
-            <div className="w-screen h-screen -z-10 fixed top-0 left-0 flex">
-                <section className="h-full border-l border-dim_gray ml-[2vw]" />
-                <section className="h-full border-l border-dim_gray ml-[2vw]" />
-                <section className="h-full border-l border-dim_gray ml-[2vw]" />
-                <section className="h-full border-l border-dim_gray ml-[2vw]" />
-                <section className="h-full border-l border-dim_gray ml-[2vw]" />
-                <section className="h-full border-l border-dim_gray ml-[2vw]" />
-                <section className="h-full border-l border-dim_gray ml-[2vw]" />
-                <section className="h-full border-l border-dim_gray ml-auto mr-[2vw]" />
-            </div>
-            {/* <ScrollPathAnimated /> */}
-            <div className="h-screen w-[94%] mx-auto flex flex-col">
-                <ScrollHeader workRef={workSectionRef} aboutRef={aboutSectionRef} contactRef={contactSectionRef} />
-                <section
-                    id="website-greetings-section"
-                    className="relative top-[50px] opacity-0 flex flex-col md:flex-row gap-[2rem] md:gap-0 pt-5 md:pt-12 pl-[16vw] md:pl-[30px]"
-                >
-                    <div
-                        className={`${noto.className} flex flex-col md:text-6xl lg:text-7xl text-2xl uppercase md:pl-[30px] font-bold text-foreground whitespace-pre-line`}
-                    >
-                        <p>PERSONAL</p>
-                        <p>PORTFOLIO</p>
-                    </div>
-                    <div
-                        className={`${noto.className} uppercase whitespace-pre-line w-[90%] !italic md:pl-[90px] text-sm md:text-xl lg:text-2xl font-light`}
-                    >
-                        <p className="py-2 md:py-2 text-xs md:text-sm not-italic uppercase font-semibold">CURRENTLY:</p>
-                        <p className="mb-[1rem] md:mb-[2rem]">
-                            {'Hacking software solutions to make real impact while witnessing the "A.I. revolution".'}
-                        </p>
-                        <p>Building for a better future.</p>
-                    </div>
-                </section>
-            </div>
-            <div className="m-2" />
-
-            <div ref={workSectionRef} id="work-section" className="w-screen h-screen">
-            <div className="carousel">
-                <div
-                    className="logo-carousel-wrap"
-                    // style={{
-                    //     transform: "translate3d(-7.639%, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg)",
-                    //     transformStyle: "preserve-3d",
-                    //     willChange: "transform",
-                    // }}
-                >
-                    <ul role="list" className="logo-carousel">
-                        {[...Array(20)].map((_, index) => (
-                            <li key={index} className="logo-carousel-item">
-                                <div className="rl-heading-style-h2-infinite-scroll">
-                                    <span style={{ verticalAlign: "inherit" }}>
-                                        _selected{" "}
-                                        <span className="text-span-20" style={{ verticalAlign: "inherit" }}>
-                                            work
-                                        </span>
-                                    </span>
-                                </div>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            </div>
-                Work
-                <div className="relative w-[500px] h-[500px]">
-                    <Image alt="pic2" className="object-cover" fill src={img2} />
-                </div>
-            </div>
-            <div ref={aboutSectionRef} id="about-section" className="w-screen h-screen">
-                About
-                <div className="relative w-[500px] h-[500px]">
-                    <Image alt="pic2" className="object-cover" fill src={img1} />
-                </div>
-            </div>
-            <div ref={contactSectionRef} id="contact-section" className="w-screen h-screen">
-                Contact
-                <div className="relative w-[500px] h-[500px]">
-                    <Image alt="pic2" className="object-cover" fill src={img2} />
-                </div>
-            </div>
-            <div className="bg-background p-8 rounded-lg shadow-lg text-center">
-                <h1 className="text-4xl font-bold text-violet-500 mb-4">Site Under Construction</h1>
-                <div className="flex justify-center">
-                    <svg className="animate-spin h-10 w-10 text-foreground" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path
-                            className="opacity-75"
-                            fill="currentColor"
-                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                        ></path>
-                    </svg>
-                </div>
-                <p className="text-foreground mt-6">
-                    In the meantime, you can reach me at{" "}
-                    <a href="mailto:sufyaankhateeb@gmail.com" className="text-violet-400 underline">
-                        sufaankhateeb@gmail.com
-                    </a>
-                </p>
-            </div>
-        </div>
-    );
+  return <main id="main">
+    <section className="hero grid-surface" data-character="hero" data-tour="hero" aria-labelledby="hero-heading">
+      <header className="site-header"><a className="identity" href="#main"><ShootingStar className="identity-mark" /><span className="identity-copy"><strong>{portfolio.name}</strong><span>{portfolio.title}</span></span></a><a className="pill" href="#contact">Get in touch <span aria-hidden="true">↓</span></a></header>
+      <h1 id="hero-heading">{portfolio.headline.firstLine}{" "}<br />{portfolio.headline.secondLine}{" "}<em>{portfolio.headline.emphasis}</em></h1>
+      <div className="hero-footer"><span>Independent thinking.<br />Thoughtful building.</span><a href="#about" className="scroll-cue">Scroll to explore <span aria-hidden="true">↓</span></a></div>
+    </section>
+    <section id="about" className="introduction grid-surface" data-character="intro" data-tour="left" aria-label="About Sufyaan">
+      <p className="bio-copy" aria-label={portfolio.biography}>{portfolio.biography.split(" ").map((word, index) => <span className="bio-word" key={index} aria-hidden="true">{word}{" "}</span>)}</p>
+      <div className="intro-note"><span>Curiosity, code & a little imagination.</span><span>Selected work ↓</span></div>
+    </section>
+    {projects.slice(0, 3).map((project, index) => <section key={project.slug} id={scenes[index].id} className={`project-chapter grid-surface chapter-${index}`} data-character={scenes[index].id} data-tour={scenes[index].side} data-side={scenes[index].side} style={{ "--section-color": project.color, "--section-ink": project.ink } as CSSProperties} aria-labelledby={`heading-${project.slug}`}>
+      <div className="chapter-sticky"><div className="chapter-header"><div><p className="eyebrow">0{index + 1} / SELECTED WORK {!project.desktop && <span className="draft-tag">Illustrative preview</span>}</p><h2 id={`heading-${project.slug}`}>{project.title}</h2></div><Link href={`/projects/${project.slug}`} className="pill">View project <span aria-hidden="true">↗</span></Link></div><ProjectDemo project={project} sceneId={scenes[index].id} kind={scenes[index].demo} /></div><div className="chapter-lines">{scenes[index].dialogue.map((line, step) => <div className="chapter-line" data-story-step={step} key={step}><div className="chapter-bubble"><p aria-label={line}>{line.split(" ").map((word, wordIndex) => <span className="story-word" aria-hidden="true" key={wordIndex}>{word}{" "}</span>)}</p></div></div>)}</div>
+    </section>)}
+    <section id="work" className="all-work grid-surface" data-character="work" data-tour="badge" aria-labelledby="work-heading"><div className="work-header"><h2 id="work-heading">All work</h2><span>{projects.length} projects</span></div><div className="work-grid">{projects.map((project, index) => <Link className={`work-card ${index % 3 === 0 ? "card-wide" : ""}`} key={project.slug} href={`/projects/${project.slug}`} data-reveal><div className="work-card-image" style={{ background: project.color }}><div className={project.thumbnail ? "work-card-thumbnail" : "work-card-device"}>{project.thumbnail ? <ProjectArt project={project} thumbnail /> : <DeviceFrame project={project} />}</div><div className="card-dither" aria-hidden="true" /><span className="card-arrow" aria-hidden="true">↗</span></div><div className="work-card-label"><h3>{project.title}</h3><span>{project.year || "View project ↗"}</span></div></Link>)}</div>
+      <section id="experience" className="background-section" aria-labelledby="background-heading"><div className="background-heading"><h2 id="background-heading">Behind the work.</h2><Link className="pill" href="/resume">View résumé <span aria-hidden="true">↗</span></Link></div><div className="experience-grid">{portfolio.experience.map((item) => <article className="experience-entry" key={item.role}><p className="eyebrow">{item.company}</p><h3>{item.role}</h3><p className="experience-period">{item.period}</p><p>{item.summary}</p><ul>{item.contributions.map((line) => <li key={line}>{line}</li>)}</ul></article>)}</div><div className="skills-grid">{portfolio.skills.map((group) => <div key={group.label}><h3>{group.label}</h3><p>{group.items.join(" · ")}</p></div>)}</div><div className="education-note"><p>{portfolio.education.degree}<br /><span>{portfolio.education.institution} · {portfolio.education.period}</span></p><a href={portfolio.resume.url} download>Download résumé ↗</a></div></section>
+    </section>
+    <footer id="contact" className="contact grid-surface" data-character="contact" data-tour="outro"><div className="contact-top"><h2>Let’s build<br /><em>something good.</em></h2><p>{portfolio.availability}</p><CopyEmail email={portfolio.email} /></div><div className="footer-links">{portfolio.socials.map((link) => <a key={link.url} href={link.url} target="_blank" rel="noopener noreferrer">{link.label} ↗</a>)}<Link href="/resume">{portfolio.resume.label} ↗</Link><Link href="/#work">Explore my work ↗</Link><Link href="/404">Dress me up ↗</Link></div><div className="footer-meta"><span>© {new Date().getFullYear()} {portfolio.name}</span><TrickButton /></div><div className="footer-small"><p>A little code. A lot of curiosity.</p><a className="back-to-top" href="#main">Back to top <ShootingStar /></a></div></footer>
+  </main>;
 }

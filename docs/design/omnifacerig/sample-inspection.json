@@ -1,0 +1,923 @@
+{
+  "inspectedAt": "2026-11-03T21:18:54.318Z",
+  "scope": "Official donor example only. No OmniFaceRig inference, registration or transfer has been run on Sufyaan's model.",
+  "sampleSource": "https://omnifacerig.github.io/dataset_viewer/007_rig.glb",
+  "license": "FAIR Noncommercial Research License v1; local research only, not a portfolio deployment asset.",
+  "requiredLaughControls": [
+    "jawDrop",
+    "lipCornerPuller_L",
+    "lipCornerPuller_R",
+    "cheekRaiser_L",
+    "cheekRaiser_R",
+    "eyesClosed_L",
+    "eyesClosed_R"
+  ],
+  "source": {
+    "filename": "007_orig.glb",
+    "sha256": "2a1eb46464d13b878e264df100fcdda0be92bab12194b977755b71317cf82080",
+    "bytes": 5126244,
+    "embeddedImages": 2,
+    "extensions": [
+      "KHR_mesh_quantization",
+      "EXT_meshopt_compression"
+    ],
+    "meshes": [
+      {
+        "name": "geometry_0",
+        "vertices": 15569,
+        "triangles": 24077,
+        "bounds": {
+          "min": [
+            -0.9300515762810144,
+            -1,
+            -0.16602069154942473
+          ],
+          "max": [
+            0.9300515762810144,
+            1,
+            0.16602069154942473
+          ]
+        },
+        "morphs": []
+      }
+    ],
+    "animations": [],
+    "animationSamples": []
+  },
+  "rig": {
+    "filename": "007_rig.glb",
+    "sha256": "eea752a959f48a1ab674a0f3f233e5a72c3c1daaa169ca2066b27c4455c822e0",
+    "bytes": 4246540,
+    "embeddedImages": 1,
+    "extensions": [
+      "KHR_materials_specular",
+      "KHR_mesh_quantization",
+      "EXT_meshopt_compression"
+    ],
+    "meshes": [
+      {
+        "name": "body_geometry",
+        "vertices": 20999,
+        "triangles": 33957,
+        "bounds": {
+          "min": [
+            -1.1596728415784152,
+            -1.3289895321512457,
+            -0.43494979705191206
+          ],
+          "max": [
+            1.158940397350991,
+            1.3446150090029574,
+            0.44312875759147885
+          ]
+        },
+        "morphs": [
+          {
+            "name": "upperLipRaiser_R",
+            "maxDisplacement": 0.006382966502835839,
+            "movingVertices": 80
+          },
+          {
+            "name": "browLowerer_L",
+            "maxDisplacement": 0.015665005544651046,
+            "movingVertices": 258
+          },
+          {
+            "name": "browLowerer_R",
+            "maxDisplacement": 0.013656478872251765,
+            "movingVertices": 234
+          },
+          {
+            "name": "browLowerer_browSqueeze_innerBrowRaiser_L",
+            "maxDisplacement": 0.004853882345547909,
+            "movingVertices": 85
+          },
+          {
+            "name": "browLowerer_browSqueeze_innerBrowRaiser_R",
+            "maxDisplacement": 0.004341787589655139,
+            "movingVertices": 104
+          },
+          {
+            "name": "browLowerer_browSqueeze_innerBrowRaiser_outerBrowLowerer_L",
+            "maxDisplacement": 0.0046532471212002114,
+            "movingVertices": 138
+          },
+          {
+            "name": "browLowerer_browSqueeze_innerBrowRaiser_outerBrowLowerer_R",
+            "maxDisplacement": 0.003912087248502961,
+            "movingVertices": 138
+          },
+          {
+            "name": "browLowerer_innerBrowRaiser_L",
+            "maxDisplacement": 0.00618615531934931,
+            "movingVertices": 107
+          },
+          {
+            "name": "browLowerer_innerBrowRaiser_R",
+            "maxDisplacement": 0.0050891845053073715,
+            "movingVertices": 93
+          },
+          {
+            "name": "browLowerer_innerBrowRaiser_outerBrowLowerer_L",
+            "maxDisplacement": 0.004370864293946508,
+            "movingVertices": 114
+          },
+          {
+            "name": "browLowerer_innerBrowRaiser_outerBrowLowerer_R",
+            "maxDisplacement": 0.0038078491068409613,
+            "movingVertices": 109
+          },
+          {
+            "name": "browLowerer_innerBrowRaiser_outerBrowRaiser_L",
+            "maxDisplacement": 0.0051125563136990085,
+            "movingVertices": 84
+          },
+          {
+            "name": "browLowerer_innerBrowRaiser_outerBrowRaiser_R",
+            "maxDisplacement": 0.005357367658312739,
+            "movingVertices": 87
+          },
+          {
+            "name": "browLowerer_outerBrowLowerer_L",
+            "maxDisplacement": 0.002857679961112003,
+            "movingVertices": 48
+          },
+          {
+            "name": "browLowerer_outerBrowLowerer_R",
+            "maxDisplacement": 0.0024566926233708436,
+            "movingVertices": 61
+          },
+          {
+            "name": "browLowerer_outerBrowRaiser_L",
+            "maxDisplacement": 0.0014340452436256879,
+            "movingVertices": 17
+          },
+          {
+            "name": "browLowerer_outerBrowRaiser_R",
+            "maxDisplacement": 0.001490103532912223,
+            "movingVertices": 19
+          },
+          {
+            "name": "browSqueeze_L",
+            "maxDisplacement": 0.004835426452305883,
+            "movingVertices": 111
+          },
+          {
+            "name": "browSqueeze_R",
+            "maxDisplacement": 0.004152312107106528,
+            "movingVertices": 124
+          },
+          {
+            "name": "browSqueeze_browLowerer_L",
+            "maxDisplacement": 0.0027022240206523215,
+            "movingVertices": 119
+          },
+          {
+            "name": "browSqueeze_browLowerer_R",
+            "maxDisplacement": 0.0023449656925929804,
+            "movingVertices": 112
+          },
+          {
+            "name": "browSqueeze_browLowerer_outerBrowLowerer_L",
+            "maxDisplacement": 0.0035653143385748426,
+            "movingVertices": 69
+          },
+          {
+            "name": "browSqueeze_browLowerer_outerBrowLowerer_R",
+            "maxDisplacement": 0.003019944914542798,
+            "movingVertices": 80
+          },
+          {
+            "name": "cheekPuff_L",
+            "maxDisplacement": 0.011680259309400583,
+            "movingVertices": 255
+          },
+          {
+            "name": "cheekPuff_R",
+            "maxDisplacement": 0.012013598753988613,
+            "movingVertices": 217
+          },
+          {
+            "name": "cheekRaiser_L",
+            "maxDisplacement": 0.007341715728021434,
+            "movingVertices": 144
+          },
+          {
+            "name": "cheekRaiser_R",
+            "maxDisplacement": 0.007474480795845397,
+            "movingVertices": 143
+          },
+          {
+            "name": "cheekRaiser_lipCornerPuller_L",
+            "maxDisplacement": 0.002135423527883041,
+            "movingVertices": 14
+          },
+          {
+            "name": "cheekRaiser_lipCornerPuller_R",
+            "maxDisplacement": 0.002110857443866156,
+            "movingVertices": 14
+          },
+          {
+            "name": "cheekRaiser_noseWrinkler_L",
+            "maxDisplacement": 0.0013147776255707276,
+            "movingVertices": 8
+          },
+          {
+            "name": "cheekRaiser_noseWrinkler_R",
+            "maxDisplacement": 0.0013033940552423244,
+            "movingVertices": 6
+          },
+          {
+            "name": "chinRaiser_LB",
+            "maxDisplacement": 0.0036233581541565184,
+            "movingVertices": 970
+          },
+          {
+            "name": "chinRaiser_LT",
+            "maxDisplacement": 0.003102698453233762,
+            "movingVertices": 47
+          },
+          {
+            "name": "chinRaiser_RB",
+            "maxDisplacement": 0.004386179808519958,
+            "movingVertices": 996
+          },
+          {
+            "name": "chinRaiser_RT",
+            "maxDisplacement": 0.003266478630392688,
+            "movingVertices": 53
+          },
+          {
+            "name": "dimpler_L",
+            "maxDisplacement": 0.003280136440331896,
+            "movingVertices": 62
+          },
+          {
+            "name": "dimpler_R",
+            "maxDisplacement": 0.003472142741985019,
+            "movingVertices": 64
+          },
+          {
+            "name": "dimpler_jawDrop_L",
+            "maxDisplacement": 0.00515609291834904,
+            "movingVertices": 61
+          },
+          {
+            "name": "dimpler_jawDrop_R",
+            "maxDisplacement": 0.0072230291170931795,
+            "movingVertices": 65
+          },
+          {
+            "name": "dimpler_jawDrop_lipCornerPuller_L",
+            "maxDisplacement": 0.002270708363626609,
+            "movingVertices": 60
+          },
+          {
+            "name": "dimpler_jawDrop_lipCornerPuller_R",
+            "maxDisplacement": 0.0023765278889042985,
+            "movingVertices": 64
+          },
+          {
+            "name": "dimpler_lipStretcher_L",
+            "maxDisplacement": 0,
+            "movingVertices": 0
+          },
+          {
+            "name": "dimpler_lipStretcher_R",
+            "maxDisplacement": 0,
+            "movingVertices": 0
+          },
+          {
+            "name": "eyesClosed_L",
+            "maxDisplacement": 0.0099929363033578,
+            "movingVertices": 52
+          },
+          {
+            "name": "eyesClosed_R",
+            "maxDisplacement": 0.010554993168110495,
+            "movingVertices": 51
+          },
+          {
+            "name": "eyesLookDown_L",
+            "maxDisplacement": 0.007549862286356995,
+            "movingVertices": 67
+          },
+          {
+            "name": "eyesLookDown_R",
+            "maxDisplacement": 0.007301007259404,
+            "movingVertices": 65
+          },
+          {
+            "name": "eyesLookLeft_L",
+            "maxDisplacement": 0.0060767862616186484,
+            "movingVertices": 61
+          },
+          {
+            "name": "eyesLookLeft_R",
+            "maxDisplacement": 0.005910199132986336,
+            "movingVertices": 63
+          },
+          {
+            "name": "eyesLookRight_L",
+            "maxDisplacement": 0.006039889829085596,
+            "movingVertices": 66
+          },
+          {
+            "name": "eyesLookRight_R",
+            "maxDisplacement": 0.005893787141733236,
+            "movingVertices": 60
+          },
+          {
+            "name": "eyesLookUp_L",
+            "maxDisplacement": 0.006039889829085596,
+            "movingVertices": 52
+          },
+          {
+            "name": "eyesLookUp_R",
+            "maxDisplacement": 0.005836620056950919,
+            "movingVertices": 57
+          },
+          {
+            "name": "innerBrowRaiser_L",
+            "maxDisplacement": 0.010359044904239893,
+            "movingVertices": 136
+          },
+          {
+            "name": "innerBrowRaiser_R",
+            "maxDisplacement": 0.009604364519313183,
+            "movingVertices": 129
+          },
+          {
+            "name": "jawDrop",
+            "maxDisplacement": 0.026835749851772273,
+            "movingVertices": 3492
+          },
+          {
+            "name": "jawDrop_lipCornerDepressor_L",
+            "maxDisplacement": 0.003514799657921193,
+            "movingVertices": 70
+          },
+          {
+            "name": "jawDrop_lipCornerDepressor_R",
+            "maxDisplacement": 0.003400589196980894,
+            "movingVertices": 68
+          },
+          {
+            "name": "jawDrop_lipCornerDepressor_lipStretcher_L",
+            "maxDisplacement": 0.005423715296859172,
+            "movingVertices": 74
+          },
+          {
+            "name": "jawDrop_lipCornerDepressor_lipStretcher_R",
+            "maxDisplacement": 0.0051877875572071365,
+            "movingVertices": 78
+          },
+          {
+            "name": "jawDrop_lipCornerPuller_L",
+            "maxDisplacement": 0.005357367658312739,
+            "movingVertices": 87
+          },
+          {
+            "name": "jawDrop_lipCornerPuller_R",
+            "maxDisplacement": 0.0064016165542780945,
+            "movingVertices": 89
+          },
+          {
+            "name": "jawDrop_lipCornerPuller_lipStretcher_L",
+            "maxDisplacement": 0.003133762054016159,
+            "movingVertices": 40
+          },
+          {
+            "name": "jawDrop_lipCornerPuller_lipStretcher_R",
+            "maxDisplacement": 0.003439802924553452,
+            "movingVertices": 43
+          },
+          {
+            "name": "jawDrop_lipCornerPuller_upperLipRaiser_L",
+            "maxDisplacement": 0.003480715946991364,
+            "movingVertices": 70
+          },
+          {
+            "name": "jawDrop_lipCornerPuller_upperLipRaiser_R",
+            "maxDisplacement": 0.0035632238579855154,
+            "movingVertices": 69
+          },
+          {
+            "name": "jawDrop_lipFunneler_L",
+            "maxDisplacement": 0.002778357903193101,
+            "movingVertices": 85
+          },
+          {
+            "name": "jawDrop_lipFunneler_R",
+            "maxDisplacement": 0.002778357903193101,
+            "movingVertices": 82
+          },
+          {
+            "name": "jawDrop_lipFunneler_lipPucker_L",
+            "maxDisplacement": 0.0034462951661105635,
+            "movingVertices": 71
+          },
+          {
+            "name": "jawDrop_lipFunneler_lipPucker_R",
+            "maxDisplacement": 0.0031503617421342056,
+            "movingVertices": 68
+          },
+          {
+            "name": "jawDrop_lipFunneler_lipPucker_lipsToward_LB",
+            "maxDisplacement": 0.0074425128084603075,
+            "movingVertices": 54
+          },
+          {
+            "name": "jawDrop_lipFunneler_lipPucker_lipsToward_LT",
+            "maxDisplacement": 0.006833965881418943,
+            "movingVertices": 56
+          },
+          {
+            "name": "jawDrop_lipFunneler_lipPucker_lipsToward_RB",
+            "maxDisplacement": 0.010108585410277496,
+            "movingVertices": 58
+          },
+          {
+            "name": "jawDrop_lipFunneler_lipPucker_lipsToward_RT",
+            "maxDisplacement": 0.0067151817569994525,
+            "movingVertices": 55
+          },
+          {
+            "name": "jawDrop_lipFunneler_lipsToward_LB",
+            "maxDisplacement": 0.0028628899562507582,
+            "movingVertices": 56
+          },
+          {
+            "name": "jawDrop_lipFunneler_lipsToward_LT",
+            "maxDisplacement": 0.002516620762118998,
+            "movingVertices": 27
+          },
+          {
+            "name": "jawDrop_lipFunneler_lipsToward_RB",
+            "maxDisplacement": 0.004957168005431551,
+            "movingVertices": 59
+          },
+          {
+            "name": "jawDrop_lipFunneler_lipsToward_RT",
+            "maxDisplacement": 0.0018270369026271267,
+            "movingVertices": 27
+          },
+          {
+            "name": "jawDrop_lipPucker_L",
+            "maxDisplacement": 0.002495809601154927,
+            "movingVertices": 59
+          },
+          {
+            "name": "jawDrop_lipPucker_R",
+            "maxDisplacement": 0.002704979986713503,
+            "movingVertices": 65
+          },
+          {
+            "name": "jawDrop_lipPucker_lipsToward_LB",
+            "maxDisplacement": 0.0027890645243802267,
+            "movingVertices": 49
+          },
+          {
+            "name": "jawDrop_lipPucker_lipsToward_LT",
+            "maxDisplacement": 0.002551902213857463,
+            "movingVertices": 39
+          },
+          {
+            "name": "jawDrop_lipPucker_lipsToward_RB",
+            "maxDisplacement": 0.0031218510947097805,
+            "movingVertices": 51
+          },
+          {
+            "name": "jawDrop_lipPucker_lipsToward_RT",
+            "maxDisplacement": 0.002398374303950743,
+            "movingVertices": 47
+          },
+          {
+            "name": "jawDrop_lipStretcher_L",
+            "maxDisplacement": 0.00021143843593479747,
+            "movingVertices": 4
+          },
+          {
+            "name": "jawDrop_lipStretcher_R",
+            "maxDisplacement": 0.00029901910370594534,
+            "movingVertices": 4
+          },
+          {
+            "name": "jawDrop_lipsToward_LB",
+            "maxDisplacement": 0.001326063477425485,
+            "movingVertices": 9
+          },
+          {
+            "name": "jawDrop_lipsToward_LT",
+            "maxDisplacement": 0.0011772393885302842,
+            "movingVertices": 7
+          },
+          {
+            "name": "jawDrop_lipsToward_RB",
+            "maxDisplacement": 0.0013204326091972981,
+            "movingVertices": 10
+          },
+          {
+            "name": "jawDrop_lipsToward_RT",
+            "maxDisplacement": 0.0011320680557262738,
+            "movingVertices": 7
+          },
+          {
+            "name": "jawDrop_lowerLipDepressor_L",
+            "maxDisplacement": 0.004067099520604921,
+            "movingVertices": 30
+          },
+          {
+            "name": "jawDrop_lowerLipDepressor_R",
+            "maxDisplacement": 0.004237569495580257,
+            "movingVertices": 32
+          },
+          {
+            "name": "jawThrust",
+            "maxDisplacement": 0.010931592070021156,
+            "movingVertices": 3188
+          },
+          {
+            "name": "lidTightener_L",
+            "maxDisplacement": 0.004399748842662459,
+            "movingVertices": 58
+          },
+          {
+            "name": "lidTightener_R",
+            "maxDisplacement": 0.004455284302107525,
+            "movingVertices": 60
+          },
+          {
+            "name": "lipCincher",
+            "maxDisplacement": 0.0027863917259470386,
+            "movingVertices": 143
+          },
+          {
+            "name": "lipCornerDepressor_L",
+            "maxDisplacement": 0.0034289552061984654,
+            "movingVertices": 86
+          },
+          {
+            "name": "lipCornerDepressor_R",
+            "maxDisplacement": 0.0034592430958720064,
+            "movingVertices": 84
+          },
+          {
+            "name": "lipCornerPuller_L",
+            "maxDisplacement": 0.010584600500232732,
+            "movingVertices": 477
+          },
+          {
+            "name": "lipCornerPuller_R",
+            "maxDisplacement": 0.010795790623237043,
+            "movingVertices": 464
+          },
+          {
+            "name": "lipCornerPuller_lipStretcher_L",
+            "maxDisplacement": 0.0029701895347383498,
+            "movingVertices": 60
+          },
+          {
+            "name": "lipCornerPuller_lipStretcher_R",
+            "maxDisplacement": 0.0028732816055030536,
+            "movingVertices": 64
+          },
+          {
+            "name": "lipCornerPuller_lipStretcher_lowerLipDepressor_L",
+            "maxDisplacement": 0.0012508866562040589,
+            "movingVertices": 43
+          },
+          {
+            "name": "lipCornerPuller_lipStretcher_lowerLipDepressor_R",
+            "maxDisplacement": 0.0011121474140622332,
+            "movingVertices": 46
+          },
+          {
+            "name": "lipCornerPuller_lowerLipDepressor_L",
+            "maxDisplacement": 0,
+            "movingVertices": 0
+          },
+          {
+            "name": "lipCornerPuller_lowerLipDepressor_R",
+            "maxDisplacement": 0,
+            "movingVertices": 0
+          },
+          {
+            "name": "lipCornerPuller_upperLipRaiser_L",
+            "maxDisplacement": 0.003465698920640496,
+            "movingVertices": 66
+          },
+          {
+            "name": "lipCornerPuller_upperLipRaiser_R",
+            "maxDisplacement": 0.003465698920640496,
+            "movingVertices": 69
+          },
+          {
+            "name": "lipCtLower_B",
+            "maxDisplacement": 0.005864638031904935,
+            "movingVertices": 40
+          },
+          {
+            "name": "lipCtLower_T",
+            "maxDisplacement": 0.009875178522858576,
+            "movingVertices": 57
+          },
+          {
+            "name": "lipCtRaise_B",
+            "maxDisplacement": 0.004401442030657661,
+            "movingVertices": 50
+          },
+          {
+            "name": "lipCtRaise_T",
+            "maxDisplacement": 0.005006524040506577,
+            "movingVertices": 50
+          },
+          {
+            "name": "lipFunneler_L",
+            "maxDisplacement": 0.007441511595997519,
+            "movingVertices": 129
+          },
+          {
+            "name": "lipFunneler_R",
+            "maxDisplacement": 0.007379171122022725,
+            "movingVertices": 132
+          },
+          {
+            "name": "lipFunneler_lipPucker_L",
+            "maxDisplacement": 0.0035485560115356626,
+            "movingVertices": 74
+          },
+          {
+            "name": "lipFunneler_lipPucker_R",
+            "maxDisplacement": 0.003639772091647224,
+            "movingVertices": 76
+          },
+          {
+            "name": "lipFunneler_lowerLipDepressor_L",
+            "maxDisplacement": 0.002860286144928735,
+            "movingVertices": 61
+          },
+          {
+            "name": "lipFunneler_lowerLipDepressor_R",
+            "maxDisplacement": 0.0027459875799925515,
+            "movingVertices": 63
+          },
+          {
+            "name": "lipPressor",
+            "maxDisplacement": 0.002416942640244555,
+            "movingVertices": 121
+          },
+          {
+            "name": "lipPucker_L",
+            "maxDisplacement": 0.006143854259303137,
+            "movingVertices": 132
+          },
+          {
+            "name": "lipPucker_R",
+            "maxDisplacement": 0.006722944334489877,
+            "movingVertices": 126
+          },
+          {
+            "name": "lipStretcher_L",
+            "maxDisplacement": 0.006334925135815484,
+            "movingVertices": 112
+          },
+          {
+            "name": "lipStretcher_R",
+            "maxDisplacement": 0.006506672186644577,
+            "movingVertices": 115
+          },
+          {
+            "name": "lipStretcher_lowerLipDepressor_L",
+            "maxDisplacement": 0.002860286144928735,
+            "movingVertices": 38
+          },
+          {
+            "name": "lipStretcher_lowerLipDepressor_R",
+            "maxDisplacement": 0.0027459875799925515,
+            "movingVertices": 37
+          },
+          {
+            "name": "lipSuck_B",
+            "maxDisplacement": 0.011395465955494212,
+            "movingVertices": 122
+          },
+          {
+            "name": "lipSuck_T",
+            "maxDisplacement": 0.013867632197784552,
+            "movingVertices": 94
+          },
+          {
+            "name": "lipTightener",
+            "maxDisplacement": 0.003222847079670177,
+            "movingVertices": 117
+          },
+          {
+            "name": "lipsToward_LB",
+            "maxDisplacement": 0.008071669792079367,
+            "movingVertices": 71
+          },
+          {
+            "name": "lipsToward_LT",
+            "maxDisplacement": 0.009819185181281267,
+            "movingVertices": 70
+          },
+          {
+            "name": "lipsToward_RB",
+            "maxDisplacement": 0.008187155436680669,
+            "movingVertices": 69
+          },
+          {
+            "name": "lipsToward_RT",
+            "maxDisplacement": 0.009894776637060187,
+            "movingVertices": 66
+          },
+          {
+            "name": "lowerLidDepressor_L",
+            "maxDisplacement": 0.0003860320029503317,
+            "movingVertices": 6
+          },
+          {
+            "name": "lowerLidDepressor_R",
+            "maxDisplacement": 0.0002729658470412048,
+            "movingVertices": 5
+          },
+          {
+            "name": "lowerLidRaiser_L",
+            "maxDisplacement": 0.003241289845845333,
+            "movingVertices": 21
+          },
+          {
+            "name": "lowerLidRaiser_R",
+            "maxDisplacement": 0.0034202522601695364,
+            "movingVertices": 21
+          },
+          {
+            "name": "lowerLipDepressor_L",
+            "maxDisplacement": 0.005750451717063572,
+            "movingVertices": 58
+          },
+          {
+            "name": "lowerLipDepressor_R",
+            "maxDisplacement": 0.006178924276177258,
+            "movingVertices": 61
+          },
+          {
+            "name": "lowerSquash",
+            "maxDisplacement": 0.0021631574628949066,
+            "movingVertices": 47
+          },
+          {
+            "name": "lowerStretch",
+            "maxDisplacement": 0.004161274587007492,
+            "movingVertices": 108
+          },
+          {
+            "name": "mouthLeft",
+            "maxDisplacement": 0.013276919622689306,
+            "movingVertices": 293
+          },
+          {
+            "name": "mouthRight",
+            "maxDisplacement": 0.013169293798753487,
+            "movingVertices": 279
+          },
+          {
+            "name": "nasolabialFurrow_L",
+            "maxDisplacement": 0.002724193683208276,
+            "movingVertices": 35
+          },
+          {
+            "name": "nasolabialFurrow_R",
+            "maxDisplacement": 0.002724193683208276,
+            "movingVertices": 34
+          },
+          {
+            "name": "noseWrinkler_L",
+            "maxDisplacement": 0.007652786287988515,
+            "movingVertices": 60
+          },
+          {
+            "name": "noseWrinkler_R",
+            "maxDisplacement": 0.007573511090668586,
+            "movingVertices": 60
+          },
+          {
+            "name": "noseWrinkler_upperLipRaiser_L",
+            "maxDisplacement": 0.002860286144928735,
+            "movingVertices": 31
+          },
+          {
+            "name": "noseWrinkler_upperLipRaiser_R",
+            "maxDisplacement": 0.0027459875799925515,
+            "movingVertices": 32
+          },
+          {
+            "name": "outerBrowLowerer_L",
+            "maxDisplacement": 0.008760460276746315,
+            "movingVertices": 149
+          },
+          {
+            "name": "outerBrowLowerer_R",
+            "maxDisplacement": 0.008594740520197484,
+            "movingVertices": 134
+          },
+          {
+            "name": "outerBrowRaiser_L",
+            "maxDisplacement": 0.006646031721581445,
+            "movingVertices": 100
+          },
+          {
+            "name": "outerBrowRaiser_R",
+            "maxDisplacement": 0.005683985339798122,
+            "movingVertices": 97
+          },
+          {
+            "name": "upperLidRaiser_L",
+            "maxDisplacement": 0.0020169941272448876,
+            "movingVertices": 17
+          },
+          {
+            "name": "upperLidRaiser_R",
+            "maxDisplacement": 0.0017857892194375797,
+            "movingVertices": 18
+          },
+          {
+            "name": "upperLipRaiser_L",
+            "maxDisplacement": 0.006438754597853007,
+            "movingVertices": 78
+          }
+        ]
+      }
+    ],
+    "animations": [
+      {
+        "name": "Animation",
+        "seconds": 3.4583332538604736,
+        "tracks": 4
+      }
+    ],
+    "animationSamples": [
+      {
+        "time": 0,
+        "bounds": {
+          "min": [
+            -0.9288308359019746,
+            -0.9998998710475712,
+            -0.16579112809858837
+          ],
+          "max": [
+            0.9300515762810144,
+            0.9983110693747211,
+            0.16320541942672817
+          ]
+        }
+      },
+      {
+        "time": 0.8645833134651184,
+        "bounds": {
+          "min": [
+            -0.9288308359019746,
+            -0.9998998710475712,
+            -0.16579112809858837
+          ],
+          "max": [
+            0.9300515762810144,
+            0.9983110693747211,
+            0.16320541942672817
+          ]
+        }
+      },
+      {
+        "time": 1.7291666269302368,
+        "bounds": {
+          "min": [
+            -0.9288308359019746,
+            -0.9998998710475712,
+            -0.16579112809858837
+          ],
+          "max": [
+            0.9300515762810144,
+            0.9983110693747211,
+            0.16320541942672817
+          ]
+        }
+      },
+      {
+        "time": 2.5937499403953552,
+        "bounds": {
+          "min": [
+            -0.9288308359019746,
+            -0.9998998710475712,
+            -0.16579112809858837
+          ],
+          "max": [
+            0.9300515762810144,
+            0.9983110693747211,
+            0.16320541942672817
+          ]
+        }
+      }
+    ]
+  }
+}

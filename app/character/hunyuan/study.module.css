@@ -1,0 +1,16 @@
+.page { min-height: 100svh; background: #365de6; color: #f8f9f2; padding: clamp(20px, 3vw, 48px); }
+.header { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 28px; }
+.eyebrow { font-size: 11px; letter-spacing: .12em; margin-bottom: 12px; }
+.header h1 { font-size: clamp(36px, 4vw, 64px); line-height: 1; }
+.home { border-bottom: 1px solid #ffffff80; padding: 8px 0; white-space: nowrap; }
+.comparison { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+.panel { min-width: 0; border: 1px solid #ffffff35; border-radius: 20px; overflow: hidden; }
+.label { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; padding: 18px 22px; border-bottom: 1px solid #ffffff35; }
+.label h2 { font-size: 22px; letter-spacing: -.03em; }
+.label span { font-size: 12px; opacity: .7; }
+.reference { aspect-ratio: 1; display: grid; place-items: center; padding: 20px; background: #ffffff06; }
+.reference img { width: 100%; height: auto; max-height: 100%; object-fit: contain; }
+.footer { display: flex; justify-content: space-between; gap: 32px; padding-top: 22px; font-size: 14px; line-height: 1.5; }
+.footer p { max-width: 650px; opacity: .8; }
+.footer a { white-space: nowrap; text-decoration: underline; text-underline-offset: 4px; }
+@media(max-width: 760px) { .comparison { grid-template-columns: 1fr; } .header, .footer { align-items: flex-start; flex-direction: column; gap: 16px; } .label { padding: 16px; } }
