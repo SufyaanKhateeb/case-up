@@ -1,10 +1,28 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { Vector3 } from "three";
-import { createCharacter, HEAD_RADIUS } from "../components/character/model";
+import { Box3, Vector3 } from "three";
+import { createCharacter, HEAD_HEIGHT, HEAD_RADIUS } from "../components/character/model";
+import { tourPlacement } from "../lib/character-tour";
 import { createCharacterMotion } from "../components/character/motion";
 import { characterManifest } from "../content/character";
 import { tricks } from "../lib/character-state";
+
+test("phone tour keeps the original bottom-cropped torso composition", () => {
+  const rig = createCharacter(characterManifest.look);
+  try {
+    const torso = new Box3().setFromObject(rig.root.getObjectByName("SweatshirtTorso")!);
+    for (const [width, height] of [[320, 568], [393, 852], [430, 932]]) {
+      const viewport = { width, height, margin: 18, gap: 9 };
+      for (const kind of ["hero", "left", "right", "outro"] as const) {
+        const frame = tourPlacement(kind, viewport, height - 300);
+        const scale = frame.radius / HEAD_RADIUS;
+        const hem = frame.y + (HEAD_HEIGHT - torso.min.y) * scale;
+        assert.ok(hem >= height, `${kind} torso must continue through the bottom edge`);
+        assert.ok(frame.y - frame.radius * 1.6 >= 0, `${kind} head remains visible`);
+      }
+    }
+  } finally { rig.dispose(); }
+});
 
 test("all articulated tricks render finite transforms and reduced motion restores neutral", () => {
   const rig = createCharacter(characterManifest.look);

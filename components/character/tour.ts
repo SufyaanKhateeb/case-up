@@ -20,10 +20,13 @@ export function useCharacterTour(stage: RefObject<HTMLElement>, state: Character
     let scroll = window.scrollY, lastScroll = scroll, direction = 1, targetDirection = 1;
     let alive = true;
     let hero: HTMLElement | null = null;
+    let chapterBubbles: HTMLElement[] = [];
     function measure() {
       const margin = element!.querySelector<HTMLElement>(".character-grid-measure")!.getBoundingClientRect().width;
-      viewport = { width: innerWidth, height: innerHeight, margin, gap: margin / 2 };
+      // Use the same dynamic viewport as the canvas when mobile browser chrome changes.
+      viewport = { width: element!.clientWidth, height: element!.clientHeight, margin, gap: margin / 2 };
       hero = document.querySelector<HTMLElement>('.hero[data-character="hero"]');
+      chapterBubbles = Array.from(document.querySelectorAll<HTMLElement>(".chapter-bubble"));
       anchors = Array.from(document.querySelectorAll<HTMLElement>("[data-character]")).map((section) => {
         const kind = (section.dataset.tour as TourKind | undefined) ?? (section.dataset.character === "detail" ? "badge" : "error");
         const last = section.lastElementChild as HTMLElement | null;
@@ -67,13 +70,25 @@ export function useCharacterTour(stage: RefObject<HTMLElement>, state: Character
       } else delete bubble.dataset.tail;
       bubble.style.transform = `translate(${Math.round(bx)}px,${Math.round(Math.max(viewport.margin, by))}px)`;
       bubble.style.setProperty("--tail-x", `${Math.max(24, Math.min(bubble.offsetWidth - 24, x - bx))}px`);
+      bubble.style.setProperty("--tail-y", `${Math.max(24, Math.min(bubble.offsetHeight - 24, y - Math.max(viewport.margin, by)))}px`);
+      for (const narration of chapterBubbles) {
+        if (viewport.width >= 768) { delete narration.dataset.tail; continue; }
+        const rect = narration.getBoundingClientRect();
+        if (rect.bottom < 0 || rect.top > viewport.height) continue;
+        const dx = x - rect.left - rect.width / 2;
+        const dy = y - rect.top - rect.height / 2;
+        narration.dataset.tail = Math.abs(dx) / rect.width > Math.abs(dy) / rect.height
+          ? dx < 0 ? "left" : "right" : dy < 0 ? "top" : "bottom";
+        narration.style.setProperty("--tail-x", `${Math.max(22, Math.min(rect.width - 22, x - rect.left))}px`);
+        narration.style.setProperty("--tail-y", `${Math.max(22, Math.min(rect.height - 22, y - rect.top))}px`);
+      }
       if (poster) { poster.style.width = `${radius * 3.5}px`; poster.style.height = `${radius * 3.5}px`; poster.style.transform = `translate(${x - radius * 1.75}px,${y - radius * 1.4}px)`; }
     }
     function pointer(event: PointerEvent) {
       if (event.pointerType !== "mouse") return;
       look.current = { x: Math.max(-1, Math.min(1, (event.clientX - frame.current.x) / viewport.width * 1.4)), y: Math.max(-1, Math.min(1, (event.clientY - frame.current.y) / viewport.height * .8)) };
     }
-    const observer = new ResizeObserver(measure); observer.observe(document.documentElement);
+    const observer = new ResizeObserver(measure); observer.observe(document.documentElement); observer.observe(element);
     measure(); gsap.ticker.add(update);
     window.addEventListener("resize", measure); window.addEventListener("pointermove", pointer);
     void document.fonts.ready.then(() => { if (alive) measure(); });

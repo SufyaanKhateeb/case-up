@@ -142,14 +142,18 @@ export function PortfolioRuntime({ children }: { children: React.ReactNode }) {
     const initialProgress = initialLine ? storyProgress(window.scrollY, initialLine.getBoundingClientRect().top + window.scrollY, initialLine.offsetHeight, innerHeight) : 0;
     dispatch({ type: "chapter", chapter: initial?.dataset.character ?? "hidden", progress: initialProgress });
     let alive = true;
+    const initialHash = window.location.hash;
     const refresh = () => ScrollTrigger.refresh();
     void document.fonts.ready.then(() => {
       if (!alive) return;
       refresh();
       // Honor direct chapter links after Next's initial scroll restoration.
       try {
-        const id = decodeURIComponent(window.location.hash.slice(1));
-        if (id) document.getElementById(id)?.scrollIntoView({ behavior: "instant", block: "start" });
+        const id = decodeURIComponent(initialHash.slice(1));
+        if (id && window.location.hash === initialHash) {
+          if (id === "contact") window.scrollTo({ top: document.documentElement.scrollHeight, behavior: "instant" });
+          else document.getElementById(id)?.scrollIntoView({ behavior: "instant", block: "start" });
+        }
       } catch { /* A malformed URL fragment should not interrupt the page. */ }
     });
     window.addEventListener("load", refresh);
@@ -186,6 +190,17 @@ export function PortfolioRuntime({ children }: { children: React.ReactNode }) {
 export function TrickButton() {
   const { openTricks } = usePortfolio();
   return <button className="text-button" onClick={openTricks}>Do a trick <span aria-hidden="true">↗</span></button>;
+}
+
+export function ContactLink({ children, className }: { children: React.ReactNode; className?: string }) {
+  const { reducedMotion } = usePortfolio();
+  return <a className={className} href="#contact" onClick={event => {
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    if (window.location.hash !== "#contact") window.history.pushState(null, "", "#contact");
+    document.getElementById("contact")?.focus({ preventScroll: true });
+    window.scrollTo({ top: document.documentElement.scrollHeight, behavior: reducedMotion ? "instant" : "smooth" });
+  }}>{children}</a>;
 }
 
 export function CopyEmail({ email }: { email: string }) {
