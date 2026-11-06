@@ -67,4 +67,17 @@ in `docs/design/character-msk-concept.png` for review.
 
 The previous loader/header and Locomotive Scroll initialization have been retired.
 Unreferenced legacy SVGs, utility components, and asset files remain available.
-Deployment is separate from this local build.
+Production is hosted on Vercel at [sufyaankhateeb.site](https://sufyaankhateeb.site).
+
+## Version history
+
+- `1.0.0`: the original `main` portfolio, commit `432a5e8`.
+- `2.0.0`: the latest `content-test` portfolio, commit `9471953`.
+- `3.0.0`: the color-character portfolio.
+- `v3.1.0`: the preferred procedural character with mobile anchoring, continuously
+  aimed speech tails, smooth scrolling, synthesized sound (muted on load), idle
+  behavior, consistent work-card effects and responsive chapter spacing.
+
+This release restores the preferred backup implementation while retaining Node
+22 and the existing Next.js 14.2.35 deployment patch. Experimental color-model
+routes and assets remain available in Git history and on `codex/color-character`.
