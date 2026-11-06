@@ -10,6 +10,15 @@ const right = tourPlacement("right", viewport);
 const badge = tourPlacement("badge", viewport);
 const near = (actual: number, expected: number) => assert.ok(Math.abs(actual - expected) < .01, `${actual} ≠ ${expected}`);
 
+test("portrait tablets use the compact grid and keep the hero head inside the page", () => {
+  const portrait = { width: 768, height: 1024, margin: 20, gap: 10 };
+  const hero = tourPlacement("hero", portrait);
+  near(hero.x, portrait.width / 2);
+  assert.ok(hero.x - hero.radius > 0 && hero.x + hero.radius < portrait.width);
+  const left = tourPlacement("left", portrait), right = tourPlacement("right", portrait);
+  near(left.x + right.x, portrait.width);
+});
+
 test("landscape anchors match the source grid, head radius, and height", () => {
   near(hero.x, 1179.84); near(hero.y, 540); near(hero.radius, 153);
   near(left.x, 202.68); near(right.x, 1237.32); near(left.radius, 129.6); near(left.y, 588.96);

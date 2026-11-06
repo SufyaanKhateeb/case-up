@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import "lenis/dist/lenis.css";
 import "./globals.css";
 import { PortfolioRuntime } from "@/components/portfolio/runtime";
 import { portfolio } from "@/content/portfolio";

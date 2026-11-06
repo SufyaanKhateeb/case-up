@@ -17,6 +17,7 @@ export function createCharacterMotion(rig: CharacterRig) {
   let active: gsap.core.Timeline | null = null;
   let enabled = true;
   let grabbing = false;
+  let sleeping = false;
   let swiping = false;
   let queuedGesture: [TourGesture, number, { x: number; y: number } | undefined] | null = null;
   let nextBlink = 2.2;
@@ -58,7 +59,7 @@ export function createCharacterMotion(rig: CharacterRig) {
   }
   function start() {
     active?.kill();
-    grabbing = false; swiping = false; queuedGesture = null;
+    grabbing = false; sleeping = false; swiping = false; queuedGesture = null;
     active = gsap.timeline({ paused: !enabled });
     active.add(neutral(.22), 0);
     return active;
@@ -114,6 +115,27 @@ export function createCharacterMotion(rig: CharacterRig) {
     timeline.add(face({ mouth: "oh", brow: .13, wide: 1.1 }), 0);
   }
   function release() { grabbing = false; start().add(face({ happy: true, brow: .05 }), .15).add(neutral(.7), .7); }
+
+  function sleep() {
+    const timeline = start(); sleeping = true;
+    timeline.add(face({ mouth: "yawn", brow: .06 }, .9), .2)
+      .to(rig.face, { eyeOpen: .15, duration: .6 }, .4)
+      .to(rig.headTilt.rotation, { x: -.12, z: .03, duration: .9, ease: "sine.inOut" }, .2)
+      .to(rig.motion, { hop: .05, duration: .9, ease: "sine.inOut" }, .2)
+      .add(face({ mouth: "flat", brow: -.03 }, .6), 1.7)
+      .to(rig.face, { eyeOpen: .08, duration: .6 }, 1.7)
+      .to(rig.headTilt.rotation, { x: 0, z: .06, duration: .6 }, 1.7)
+      .to(rig.motion, { hop: 0, duration: .6 }, 1.7)
+      .to(rig.body.rotation, { z: -.02, duration: 2.5, repeat: -1, yoyo: true, ease: "sine.inOut" }, 2.3);
+    return timeline;
+  }
+  function wake() {
+    return start().add(face({ mouth: "oh", brow: .13, wide: 1.12 }, .15), 0)
+      .to(rig.motion, { hop: .12, duration: .12, repeat: 1, yoyo: true }, 0)
+      .to(rig.headTilt.rotation, { x: -.05, y: .2, z: 0, duration: .25 }, .1)
+      .to(rig.headTilt.rotation, { y: -.2, duration: .35 }, .4)
+      .add(neutral(.5), .8);
+  }
 
   function perform(trick: Trick) {
     const timeline = start();
@@ -220,13 +242,13 @@ export function createCharacterMotion(rig: CharacterRig) {
     rig.root.scale.setScalar(.6);
     rig.root.position.y = -2.23 + rig.motion.hop * .6;
     rig.root.rotation.set(0, -.15 + rig.motion.turn, rig.motion.lean);
-    rig.body.position.y = Math.sin(t * 1.8) * .03;
+    rig.body.position.y = Math.sin(t * (sleeping ? 1 : 1.8)) * (sleeping ? .05 : .03);
     rig.head.rotation.z = Math.sin(t * .8) * .035;
     rig.head.rotation.x = Math.sin(t * .6) * .03;
     if (!reduced && grabbing) {
       rig.motion.lean = MathUtils.damp(rig.motion.lean, -look.x * .15, 5, delta);
       rig.arms.forEach((arm, index) => { arm.shoulder.rotation.z = MathUtils.damp(arm.shoulder.rotation.z, Math.max(0, look.x * (index ? -1 : 1)) * .8, 7, delta); });
-    } else if (!active?.isActive() && !reduced) {
+    } else if (!sleeping && !active?.isActive() && !reduced) {
       rig.neck.rotation.y = MathUtils.damp(rig.neck.rotation.y, look.x * .25, 5, delta);
       rig.neck.rotation.x = MathUtils.damp(rig.neck.rotation.x, look.y * .12, 5, delta);
     }
@@ -262,5 +284,5 @@ export function createCharacterMotion(rig: CharacterRig) {
   function dispose() { active?.kill(); active = null; }
   // Initial hand curvature is authored rather than a row of disconnected spheres.
   rig.arms.forEach((arm) => arm.fingers.forEach((finger, index) => { finger.knuckle.rotation.x = -hands.relaxed.fingers[index] * 1.5; finger.joint.rotation.x = -hands.relaxed.fingers[index] * 1.7; }));
-  return { gesture, swipe, perform, grab, release, rest, update, setActive, dispose };
+  return { gesture, swipe, perform, grab, release, rest, sleep, wake, update, setActive, dispose };
 }

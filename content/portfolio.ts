@@ -144,8 +144,8 @@ export const projects: Project[] = [
     color: "#fae767", ink: "#121212", illustration: "type", status: "ready",
     previewCopy: { firstLine: "Ideas,", emphasis: "in motion." },
     repositoryUrl: "https://github.com/SufyaanKhateeb/case-up",
-    thumbnail: { src: "/projects/portfolio/desktop.jpg", alt: "The portfolio homepage with blue grid, oversized headline and shooting-star character" },
-    desktop: { src: "/projects/portfolio/desktop.jpg", alt: "Desktop view of Sufyaan’s portfolio homepage" },
+    thumbnail: { src: "/projects/portfolio/desktop-1920.jpg", alt: "The portfolio homepage with blue grid, oversized headline and shooting-star character" },
+    desktop: { src: "/projects/portfolio/desktop-1920.jpg", alt: "Desktop view of Sufyaan’s portfolio homepage" },
     mobile: { src: "/projects/portfolio/mobile.jpg", alt: "Mobile view of Sufyaan’s portfolio homepage" },
     summary: "My personal space on the web: an evolving portfolio built around expressive typography, scroll-driven storytelling and a playful interactive character.",
     contributions: [

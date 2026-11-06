@@ -4,7 +4,7 @@ import type { Project, ProjectMedia } from "@/content/portfolio";
 
 export function ProjectArt({ project, variant = 0, thumbnail = false, mediaOverride }: { project: Project; variant?: number; thumbnail?: boolean; mediaOverride?: ProjectMedia }) {
   const media = mediaOverride ?? (thumbnail ? project.thumbnail ?? project.desktop : project.desktop);
-  if (media) return <div className="project-art has-media"><Image src={media.src} alt={media.alt} fill sizes="(max-width: 700px) 92vw, 75vw" className="project-media" /></div>;
+  if (media) return <div className="project-art has-media"><Image src={media.src} alt={media.alt} fill sizes="(max-width: 700px) 92vw, 75vw" quality={90} className="project-media" /></div>;
   return <div className={`project-art art-${project.illustration} variant-${variant}`} style={{ "--art-accent": project.color } as CSSProperties} aria-label={`Illustrative preview of ${project.title}; not an application screenshot`}>
     <div className="art-nav"><span>SK<span className="art-asterisk">✳</span></span><span>EXPLORATION / 0{variant + 1}</span><span>↗</span></div>
     <div className="art-copy">{project.previewCopy.firstLine}<br /><i>{project.previewCopy.emphasis}</i></div>

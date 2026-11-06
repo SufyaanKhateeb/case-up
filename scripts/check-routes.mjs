@@ -25,6 +25,7 @@ for (const [route, type] of [
   ["/resume/fullstack-2.jpg", "image/jpeg"],
   ["/resume/data-1.jpg", "image/jpeg"],
   ["/projects/portfolio/desktop.jpg", "image/jpeg"],
+  ["/projects/portfolio/desktop-1920.jpg", "image/jpeg"],
   ["/projects/portfolio/mobile.jpg", "image/jpeg"],
 ]) {
   const response = await fetch(new URL(route, base));

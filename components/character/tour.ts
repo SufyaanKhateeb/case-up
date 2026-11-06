@@ -4,6 +4,7 @@ import { useEffect, useRef, type MutableRefObject, type RefObject } from "react"
 import { usePathname } from "next/navigation";
 import gsap from "gsap";
 import { sampleTour, tourPlacement, type TourAnchor, type TourFrame, type TourKind, type TourViewport } from "@/lib/character-tour";
+import { bubbleTail, tailPolygon } from "@/lib/character-interaction";
 import type { CharacterState } from "@/lib/character-state";
 
 const initialViewport = { width: 1440, height: 900, margin: 40, gap: 20 };
@@ -20,13 +21,16 @@ export function useCharacterTour(stage: RefObject<HTMLElement>, state: Character
     let scroll = window.scrollY, lastScroll = scroll, direction = 1, targetDirection = 1;
     let alive = true;
     let hero: HTMLElement | null = null;
-    let chapterBubbles: HTMLElement[] = [];
+    let speechRadius = 27;
+    let chapterBubbles: { element: HTMLElement; cornerRadius: number }[] = [];
     function measure() {
       const margin = element!.querySelector<HTMLElement>(".character-grid-measure")!.getBoundingClientRect().width;
-      // Use the same dynamic viewport as the canvas when mobile browser chrome changes.
+      // Coordinates belong to the render surface. On mobile its stable large
+      // viewport height is pinned to the bottom, rather than resized by toolbars.
       viewport = { width: element!.clientWidth, height: element!.clientHeight, margin, gap: margin / 2 };
       hero = document.querySelector<HTMLElement>('.hero[data-character="hero"]');
-      chapterBubbles = Array.from(document.querySelectorAll<HTMLElement>(".chapter-bubble"));
+      speechRadius = parseFloat(getComputedStyle(bubble).borderTopLeftRadius) || 0;
+      chapterBubbles = Array.from(document.querySelectorAll<HTMLElement>(".chapter-bubble"), element => ({ element, cornerRadius: parseFloat(getComputedStyle(element).borderTopLeftRadius) || 0 }));
       anchors = Array.from(document.querySelectorAll<HTMLElement>("[data-character]")).map((section) => {
         const kind = (section.dataset.tour as TourKind | undefined) ?? (section.dataset.character === "detail" ? "badge" : "error");
         const last = section.lastElementChild as HTMLElement | null;
@@ -35,7 +39,7 @@ export function useCharacterTour(stage: RefObject<HTMLElement>, state: Character
         const textBottom = kind === "outro" && last ? viewport.height - section.offsetHeight + last.offsetTop + last.offsetHeight : undefined;
         return { top: section.getBoundingClientRect().top + window.scrollY, frame: tourPlacement(kind, viewport, textBottom) };
       });
-      scroll = window.scrollY; update(0, 1000);
+      scroll = window.scrollY; update(0, 1000); element!.dataset.positioned = "true";
     }
     function update(_time: number, delta: number) {
       if (document.hidden) return;
@@ -55,44 +59,52 @@ export function useCharacterTour(stage: RefObject<HTMLElement>, state: Character
       handle.style.transform = `translate(${x - radius * 1.3}px,${y - radius * 1.2}px)`;
       handle.style.width = `${radius * 2.6}px`; handle.style.height = `${radius * 4.7}px`;
       const show = latest.mode !== "tour" || ["hero", "contact", "error"].includes(latest.chapter);
-      // Hide the opening narration before the biography reaches its settled anchor.
-      const heroVisible = !hero || actual < hero.offsetHeight - viewport.height * .6;
-      bubble.style.visibility = show && (latest.chapter !== "hero" || heroVisible || latest.mode !== "tour") ? "visible" : "hidden";
+      const openingBubble = latest.chapter === "hero";
+      // Keep the welcome attached above the head while it gently fades on scroll.
+      const fadeProgress = hero && openingBubble && latest.mode === "tour"
+        ? Math.max(0, Math.min(1, ((actual - (anchors[0]?.top ?? 0)) / viewport.height - .12) / .3)) : 0;
+      const opacity = reduced ? (fadeProgress >= 1 ? 0 : 1) : 1 - fadeProgress * fadeProgress * (3 - 2 * fadeProgress);
+      bubble.style.opacity = String(opacity);
+      bubble.style.visibility = show && opacity > 0 ? "visible" : "hidden";
       bubble.style.maxWidth = `${Math.min(base.bubble, viewport.width - viewport.margin * 2)}px`;
+      const origin = element.getBoundingClientRect();
       let bx = Math.max(viewport.margin, Math.min(viewport.width - viewport.margin - bubble.offsetWidth, x - bubble.offsetWidth / 2));
       let by = y - radius * 1.75 - bubble.offsetHeight - 18;
-      if (base.beside > .5) {
+      const footerBubble = viewport.width < 768 && latest.chapter === "contact";
+      if (!openingBubble && (base.beside > .5 || footerBubble)) {
         const left = x < viewport.width / 2;
-        bubble.style.maxWidth = `${Math.max(140, Math.min(base.bubble, (left ? viewport.width - x : x) - radius * 1.45 - viewport.margin))}px`;
-        bx = left ? x + radius * 1.45 : x - radius * 1.45 - bubble.offsetWidth;
+        const separation = footerBubble ? 1.1 : 1.45;
+        bubble.style.maxWidth = `${Math.max(100, Math.min(base.bubble, (left ? viewport.width - x : x) - radius * separation - viewport.margin))}px`;
+        bx = left ? x + radius * separation : x - radius * separation - bubble.offsetWidth;
         by = Math.min(y - radius * .4 - bubble.offsetHeight / 2, viewport.height - 80 - bubble.offsetHeight);
+        if (footerBubble) {
+          const footerText = document.querySelector(".footer-small")?.getBoundingClientRect();
+          if (footerText) by = Math.max(by, footerText.bottom - origin.top + 16);
+        }
         bubble.dataset.tail = left ? "left" : "right";
       } else delete bubble.dataset.tail;
-      bubble.style.transform = `translate(${Math.round(bx)}px,${Math.round(Math.max(viewport.margin, by))}px)`;
-      bubble.style.setProperty("--tail-x", `${Math.max(24, Math.min(bubble.offsetWidth - 24, x - bx))}px`);
-      bubble.style.setProperty("--tail-y", `${Math.max(24, Math.min(bubble.offsetHeight - 24, y - Math.max(viewport.margin, by)))}px`);
-      for (const narration of chapterBubbles) {
-        if (viewport.width >= 768) { delete narration.dataset.tail; continue; }
+      bx = Math.max(viewport.margin, Math.min(viewport.width - viewport.margin - bubble.offsetWidth, bx));
+      const bubbleY = Math.max(viewport.margin - origin.top, by);
+      bubble.style.transform = `translate(${Math.round(bx)}px,${Math.round(bubbleY)}px)`;
+      bubble.style.setProperty("--bubble-tail", tailPolygon(bubbleTail(bubble.offsetWidth, bubble.offsetHeight, { x: x - bx, y: y - bubbleY }, speechRadius)));
+      const screenX = x + origin.left, screenY = y + origin.top;
+      for (const { element: narration, cornerRadius } of chapterBubbles) {
         const rect = narration.getBoundingClientRect();
-        if (rect.bottom < 0 || rect.top > viewport.height) continue;
-        const dx = x - rect.left - rect.width / 2;
-        const dy = y - rect.top - rect.height / 2;
-        narration.dataset.tail = Math.abs(dx) / rect.width > Math.abs(dy) / rect.height
-          ? dx < 0 ? "left" : "right" : dy < 0 ? "top" : "bottom";
-        narration.style.setProperty("--tail-x", `${Math.max(22, Math.min(rect.width - 22, x - rect.left))}px`);
-        narration.style.setProperty("--tail-y", `${Math.max(22, Math.min(rect.height - 22, y - rect.top))}px`);
+        if (rect.bottom < 0 || rect.top > origin.bottom) continue;
+        narration.style.setProperty("--bubble-tail", tailPolygon(bubbleTail(rect.width, rect.height, { x: screenX - rect.left, y: screenY - rect.top }, cornerRadius)));
       }
       if (poster) { poster.style.width = `${radius * 3.5}px`; poster.style.height = `${radius * 3.5}px`; poster.style.transform = `translate(${x - radius * 1.75}px,${y - radius * 1.4}px)`; }
     }
     function pointer(event: PointerEvent) {
       if (event.pointerType !== "mouse") return;
-      look.current = { x: Math.max(-1, Math.min(1, (event.clientX - frame.current.x) / viewport.width * 1.4)), y: Math.max(-1, Math.min(1, (event.clientY - frame.current.y) / viewport.height * .8)) };
+      const origin = element.getBoundingClientRect();
+      look.current = { x: Math.max(-1, Math.min(1, (event.clientX - origin.left - frame.current.x) / viewport.width * 1.4)), y: Math.max(-1, Math.min(1, (event.clientY - origin.top - frame.current.y) / viewport.height * .8)) };
     }
     const observer = new ResizeObserver(measure); observer.observe(document.documentElement); observer.observe(element);
     measure(); gsap.ticker.add(update);
     window.addEventListener("resize", measure); window.addEventListener("pointermove", pointer);
     void document.fonts.ready.then(() => { if (alive) measure(); });
-    return () => { alive = false; observer.disconnect(); gsap.ticker.remove(update); window.removeEventListener("resize", measure); window.removeEventListener("pointermove", pointer); };
+    return () => { alive = false; delete element.dataset.positioned; observer.disconnect(); gsap.ticker.remove(update); window.removeEventListener("resize", measure); window.removeEventListener("pointermove", pointer); };
   }, [pathname, reduced, stage, look]);
   return frame;
 }

@@ -72,15 +72,17 @@ type Props = {
   accessories: string[];
   active: boolean;
   reducedMotion: boolean;
+  sleeping: boolean;
   onFailure: () => void;
   look: MutableRefObject<{ x: number; y: number }>;
 };
 
-function PrintedCharacter({ state, tour, accessories, active, reducedMotion, look }: Omit<Props, "onFailure">) {
+function PrintedCharacter({ state, tour, accessories, active, reducedMotion, sleeping, look }: Omit<Props, "onFailure">) {
   const { gl, scene, camera, size, invalidate } = useThree();
   const rig = useMemo(() => createCharacter(characterManifest.look), []);
   const animation = useMemo(() => createCharacterMotion(rig), [rig]);
   const previousMode = useRef(state.mode);
+  const wasSleeping = useRef(false);
   const previousCue = useRef({ chapter: state.chapter, step: 0 });
   const travel = useRef({ x: tour.current.x, lean: 0 });
   const basePixelSize = useRef(2);
@@ -121,6 +123,8 @@ function PrintedCharacter({ state, tour, accessories, active, reducedMotion, loo
     if (reducedMotion) { animation.rest(true); invalidate(); return; }
     if (state.mode === "drag") animation.grab();
     else if (state.trick) animation.perform(state.trick);
+    else if (sleeping) animation.sleep();
+    else if (wasSleeping.current) animation.wake();
     else {
       const gesture = cueActive ? chapterGesture(chapter ?? "", step) : null;
       const direction = tour.current.x > size.width / 2 ? -1 : 1;
@@ -135,9 +139,10 @@ function PrintedCharacter({ state, tour, accessories, active, reducedMotion, loo
       else animation.rest();
     }
     previousMode.current = state.mode;
+    wasSleeping.current = sleeping && state.mode === "tour";
     previousCue.current = { chapter: chapter ?? "", step: swipeStep };
     invalidate();
-  }, [animation, state.mode, state.trick, state.actionId, chapter, step, swipeStep, cueActive, reducedMotion, tour, size.width, size.height, invalidate]);
+  }, [animation, state.mode, state.trick, state.actionId, chapter, step, swipeStep, cueActive, reducedMotion, sleeping, tour, size.width, size.height, invalidate]);
   const accessoryKey = Array.from(new Set(accessories)).sort().join(",");
   useEffect(() => {
     const names = accessoryKey.split(",");
@@ -194,7 +199,7 @@ function PrintedCharacter({ state, tour, accessories, active, reducedMotion, loo
 export default function CharacterScene(props: Props) {
   // R3F defaults its wrapper to pointer-events:auto, overriding the paint layer.
   // All character input belongs to the separate, tightly bounded HTML handle.
-  return <Canvas style={{ pointerEvents: "none" }} aria-hidden="true" orthographic camera={{ position: [0, 0, 2000], zoom: 1, near: .1, far: 4000 }} dpr={[1, 2]} frameloop={props.active && !props.reducedMotion ? "always" : "demand"} gl={{ alpha: true, antialias: false, powerPreference: "low-power" }} onCreated={({ gl }) => { gl.setClearColor(0x000000, 0); gl.toneMapping = THREE.NoToneMapping; }} fallback={<span>Character preview unavailable</span>}>
+  return <Canvas style={{ pointerEvents: "none" }} resize={{ scroll: false, debounce: 0 }} aria-hidden="true" orthographic camera={{ position: [0, 0, 2000], zoom: 1, near: .1, far: 4000 }} dpr={[1, 2]} frameloop={props.active && !props.reducedMotion ? "always" : "demand"} gl={{ alpha: true, antialias: false, powerPreference: "low-power" }} onCreated={({ gl }) => { gl.setClearColor(0x000000, 0); gl.toneMapping = THREE.NoToneMapping; }} fallback={<span>Character preview unavailable</span>}>
     <FitCamera />
     <ContextHealth onFailure={props.onFailure} />
     <hemisphereLight args={["#ffffff", "#5a5a5a", 1.1]} />

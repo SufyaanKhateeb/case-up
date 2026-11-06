@@ -7,7 +7,24 @@ import { createCharacterMotion } from "../components/character/motion";
 import { characterManifest } from "../content/character";
 import { tricks } from "../lib/character-state";
 
-test("phone tour keeps the original bottom-cropped torso composition", () => {
+test("idle yawn settles into closed eyes and wakes or interrupts cleanly", () => {
+  const rig = createCharacter(characterManifest.look);
+  const motion = createCharacterMotion(rig);
+  motion.setActive(false);
+  try {
+    const idle = motion.sleep(); idle.seek(1.2, false);
+    assert.ok(rig.mouth.open > .3);
+    assert.ok(rig.face.eyeOpen < .2);
+    idle.seek(2.4, false); assert.ok(rig.face.eyeOpen < .15);
+    motion.wake().seek(1.4, false);
+    assert.equal(idle.parent, null); assert.equal(rig.face.eyeOpen, 1);
+    const again = motion.sleep(); again.seek(1, false);
+    motion.grab(); assert.equal(again.parent, null);
+    motion.rest(true); assert.equal(rig.face.eyeOpen, 1);
+  } finally { motion.dispose(); rig.dispose(); }
+});
+
+test("phone tour stays bottom-cropped through repeated toolbar expansion and collapse", () => {
   const rig = createCharacter(characterManifest.look);
   try {
     const torso = new Box3().setFromObject(rig.root.getObjectByName("SweatshirtTorso")!);
@@ -17,8 +34,13 @@ test("phone tour keeps the original bottom-cropped torso composition", () => {
         const frame = tourPlacement(kind, viewport, height - 300);
         const scale = frame.radius / HEAD_RADIUS;
         const hem = frame.y + (HEAD_HEIGHT - torso.min.y) * scale;
-        assert.ok(hem >= height, `${kind} torso must continue through the bottom edge`);
-        assert.ok(frame.y - frame.radius * 1.6 >= 0, `${kind} head remains visible`);
+        // The large render surface stays constant while browser chrome changes
+        // the visible window; CSS bottom anchoring moves its origin immediately.
+        for (const visibleHeight of [height - 112, height - 80, height - 32, height, height - 48, height - 96, height]) {
+          const origin = visibleHeight - height;
+          assert.ok(origin + hem >= visibleHeight, `${kind} torso must continue through the moving bottom edge`);
+          assert.ok(origin + frame.y - frame.radius * 1.6 >= 0, `${kind} head remains visible`);
+        }
       }
     }
   } finally { rig.dispose(); }
