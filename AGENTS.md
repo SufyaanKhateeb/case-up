@@ -69,6 +69,11 @@ build failure was resolved by the rebuild.
   unknown URLs must retain HTTP 404 status.
 - `components/portfolio/runtime.tsx`: shared context, GSAP scroll director,
   preferences, synthesized audio, trick dialog, email-copy feedback.
+- `components/portfolio/use-smooth-scroll.ts`: one Lenis instance on native document
+  scrolling, driven by GSAP; touch scrolling remains native and reduced motion
+  disables smoothing. `use-presence.ts` owns 20-second idle sleep/wake and away titles.
+- `lib/portfolio-audio.ts`: locally synthesized effects and cancellable voice
+  ownership. `portfolio-presence.ts`: idle deadlines and word-reveal sound cues.
 - `components/portfolio/project-demo.tsx`: accessible local demonstrations.
 - `components/portfolio/project-art.tsx`: real-media rendering and clearly marked
   illustrative fallback artwork. Do not present fallback art as client work.
@@ -78,6 +83,9 @@ build failure was resolved by the rebuild.
   and accessories. `motion.ts`: owned GSAP pose/expression timelines.
 - `lib/character-tour.ts`: pure grid placements, continuous travel/turn/scale,
   narration progress/fades, and section gesture selection.
+- `lib/character-interaction.ts`: continuously aimed bubble triangles, elastic
+  pickup resistance and touch scroll/drag intent. Keep vertical touch swipes
+  available on both the character and scratch demonstration.
 - `components/character/tour.ts`: measured document anchors and smoothed viewport
   head coordinates. `scene.tsx` renders one full-viewport canvas, print pass, badge
   clipping, accessory transitions, and synchronized mirrored gestures.

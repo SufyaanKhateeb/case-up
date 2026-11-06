@@ -41,6 +41,54 @@ The active character now follows the reference’s appearance, as requested.
 A custom Sufyaan likeness can later be made through `content/character.ts` and
 geometry changes; a separately authored GLB is not a prerequisite for this rig.
 
+## Sound design
+
+Inspected on November 5, 2026:
+https://www.sebg.ch/_astro/Layout.astro_astro_type_script_index_0_lang.CG11_cnK.js
+
+The reference uses Web Audio synthesis, with short triangle/sine sweeps for speech,
+vibrato for pickup/drop and dizziness, filtered noise for scratching and impacts,
+and distinct note patterns for tricks. It has no background music or downloaded
+soundtrack. `portfolio-audio.ts` follows those pitches, envelopes and effect types,
+with timing adjusted to our existing poses. Our toggle plays an audible confirmation,
+awaits context resume, and immediately cancels pending voices when muted.
+
+The inspected mascot also has a 20-second inactivity threshold (shorter during its
+late-night mode), sleep/wake poses and synthesized sounds, and a visibility-driven
+away title. The homepage dispatches speech cues during word reveals; its stylesheet
+includes Lenis smooth-scroll integration. The local adaptation uses a 20-second
+idle deadline, preserves the user's shooting-star favicon, and runs one Lenis
+instance with native touch scrolling and reduced-motion support.
+
+The source's shared `dither.BN2G_tIV.js` initializes Lenis with `smoothWheel: true`,
+`lerp: 0.1` (`1` for reduced motion), and `stopInertiaOnNavigate: true`. Its RAF
+runs on the GSAP ticker in milliseconds, with `gsap.ticker.lagSmoothing(0)`.
+The local scroll owner now matches these wheel damping and clock settings;
+reduced motion uses native scrolling, and local anchors retain their 20px offset.
+
+## Bubble tails and pickup
+
+The reference uses a clipped triangular tail aimed from the bubble's rounded
+perimeter toward the head. Local tails now use the same continuous geometry for
+both guide speech and chapter narration, updating during scrolling and dragging.
+This replaces square tails that switched between horizontal and vertical edges.
+The broad tail base is inset against the actual CSS corner radius, with both
+endpoints inside the rounded body. This prevents detached wedges at shallow
+angles and short/wide responsive bubbles; the tip still aims at the head.
+
+Pickup starts after 6px of mouse movement; touch supports a 250ms hold or a
+horizontal drag while an early vertical swipe yields to page scrolling. Movement
+uses the reference's saturating resistance and a 0.9-second elastic return.
+Keyboard controls remain available. The scratch surface also yields vertical
+touch gestures, and neither interactive surface opts out of Lenis wheel handling.
+
+The reference saves the sound preference. The local version follows the user's
+later override: start muted on every load/reload and require explicit enabling
+for the current visit. Load, scroll, idle and focus cannot enable sound or trigger
+forbidden autoplay retries. The sound button owns its gesture separately to avoid
+immediately muting itself.
+Once activated, a pending resume retains only the latest cue; muting cancels it.
+
 ## Eye rendering correction
 
 Eye anchors have a small outward clearance so smile arcs remain above the head

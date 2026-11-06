@@ -40,8 +40,49 @@ No separately modeled asset or GLB is required by the current runtime.
 
 ## Sound and failure modes
 
-Effects are synthesized locally. Audio defaults to muted, with a saved preference;
-playback still requires a browser-allowed gesture. No reference recordings load.
+After 20 seconds without pointer, key, touch or scroll activity, the character
+yawns and settles into closed eyes with gentle breathing. Input wakes it and
+returns to the tour; dragging, tricks, dialogs, reduced motion and hidden pages
+take priority. `use-presence.ts` owns the cancellable idle deadline and temporarily
+changes the title to “I’ll wait here — Sufyaan” while the page is hidden/unfocused.
+Route-specific titles are restored on return. `motion.ts` owns sleep/wake timelines.
+
+`lib/portfolio-audio.ts` synthesizes the reference-style triangle/sine blips,
+vibrato, filtered noise, and short melodies locally. `runtime.tsx` connects speech
+cues, grab/drop, accessories, the trick menu and all eleven tricks; project demos
+connect scratch/reveal and view controls. Delayed effects match the local hiccup,
+selfie, peekaboo and sneeze poses. Sleep uses a filtered breathing/yawn sweep and
+wake uses two short rising notes. Word-reveal tweens emit rate-limited blips in
+both scroll directions, including the biography. No recordings or remote audio
+scripts load.
+Audio starts muted on every page load/reload; the old saved sound preference is
+ignored. Sound remains enabled during client-side navigation only when explicitly
+enabled in the current visit. The toggle unlocks/resumes the
+context inside a deliberate gesture and plays a confirmation. Muting, hiding the
+tab, changing routes or interrupting a trick stops queued voices; unmount closes
+the context. Speech and scratch effects are rate limited. Unsupported audio is
+optional and cannot block navigation or character interactions.
+The control reflects the context's actual state: enabled audio waiting
+for browser activation is labeled “Activate sound”, rather than “Mute sound”.
+Its first activation click resumes audio without toggling the current choice
+off. Global activation listeners skip the sound button so pointerdown cannot
+change its Activate action into Mute before click. Pending activation
+shows “Tap for sound”. No context is created or resumed on load, idle, scroll,
+focus or visibility alone before browser user activation. Once activated, effects
+can recover a suspended context, and state changes update the control directly.
 The matching PNG poster covers scene loading, unavailable WebGL, and context loss.
 HTML content and navigation remain usable. Reduced motion retains a static pose
 and text feedback, and hidden scenes pause their rendering and timelines.
+
+## Scroll coordination
+
+`use-smooth-scroll.ts` owns one Lenis instance on the native document scroller,
+driven by the existing GSAP ticker and synchronized with ScrollTrigger. Touch
+inertia stays native (`syncTouch: false`); reduced motion disables Lenis. Dialogs
+pause it and nested résumé/character/scratch controls retain their input. Anchor
+links and Get in touch use the same scroll owner. Cleanup removes the ticker and
+destroys the instance on navigation. Do not also initialize Locomotive Scroll.
+
+Word opacities are initialized before staggered reveal playback. Portrait tablets
+use the four-column character grid; opening speech clears the headline, and the
+phone biography font/spacing leaves room for the bottom-anchored character.

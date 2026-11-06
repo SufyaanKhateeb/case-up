@@ -53,6 +53,8 @@ The comparison, scratch and viewport controls remain local demonstrations of the
 presentation. Update their narration and media together. The portfolio uses
 actual desktop/mobile captures of the current local build under
 `public/projects/portfolio/`.
+The desktop/thumbnail uses `desktop-1920.jpg`, a 1920×1116 capture. All-work cards
+share the same browser frame, tilt/zoom, dither fade and keyboard focus effects.
 
 ## Character review
 
