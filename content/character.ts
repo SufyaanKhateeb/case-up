@@ -1,13 +1,12 @@
-// User-approved smoothed high-quality character; originals remain preserved.
+// The reference is a procedural model, not a GLB. Its look is configurable here.
 export const characterManifest = {
-  version: 7,
-  status: "sufyaan-approved-connected-arms",
-  model: "/character/arms-continuous.glb",
-  source: "/msk_cartoon.png",
+  version: 2,
+  status: "reference-procedural-character",
+  source: "https://www.sebg.ch/",
   look: {
-    hair: "quiff" as const,
+    hair: "curly" as const,
     beard: true,
-    colors: { skin: "#eda36b", hair: "#39251b", beard: "#473024", sweater: "#f4e7d3", ink: "#0b0b0c", paper: "#fbfbf8" },
+    colors: { skin: "#fbf3ec", hair: "#77573d", beard: "#c49c74", sweater: "#a4ad9b", ink: "#0b0b0c", paper: "#fbfbf8" },
   },
-  poster: "/character/smoothed-poster.png",
+  poster: "/character/poster.png",
 };

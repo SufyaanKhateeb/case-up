@@ -10,7 +10,8 @@ const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
 export function tourPlacement(kind: TourKind, viewport: TourViewport, textBottom?: number): TourFrame {
   const { width: w, height: h, margin: m, gap } = viewport;
-  const count = w < 768 ? 4 : 12;
+  const compact = w < 768 || h >= w;
+  const count = compact ? 4 : 12;
   const col = (w - 2 * m - (count - 1) * gap) / count;
   const columns = (n: number) => n * col + (n - 1) * gap;
   const span = (first: number, last: number) => m + (first - 1) * (col + gap) + columns(last - first + 1) / 2;
@@ -18,7 +19,7 @@ export function tourPlacement(kind: TourKind, viewport: TourViewport, textBottom
   if (kind === "badge") return { ...frame, x: m + 42, y: h - m - 42, radius: 84 * .28, turn: 0, clip: 42, badge: 1 };
   if (kind === "left" || kind === "right") {
     const right = kind === "right";
-    if (w < 768 || h >= w) return { ...frame, x: w < 768 ? span(right ? 4 : 1, right ? 4 : 1) : span(right ? 10 : 1, right ? 12 : 3), y: h * .92 - 64, radius: h * .075, turn: right ? -.2 : .2, beside: 1 };
+    if (w < 768 || h >= w) return { ...frame, x: span(right ? 4 : 1, right ? 4 : 1), y: h * .92 - 64, radius: h * .075, turn: right ? -.2 : .2, beside: 1 };
     return { ...frame, x: span(right ? 10 : 1, right ? 12 : 3), y: h - Math.min(h * .36, w * .216), radius: Math.min(h * .15, w * .09), turn: right ? -.2 : .2, bubble: columns(3) };
   }
   if (kind === "detail") return { ...frame, x: w < 768 ? span(3, 4) : span(10, 12), y: h * (w < 768 ? .9 : .62), radius: h * (w < 768 ? .06 : .14) };
@@ -27,18 +28,8 @@ export function tourPlacement(kind: TourKind, viewport: TourViewport, textBottom
     const radius = Math.max(12, Math.min(h * .12, w * .28, (h - ceiling) / 3.75));
     return { ...frame, x: span(1, 3), y: Math.max(h * .76, ceiling + radius * 1.75), radius };
   }
-  if (kind === "error" && textBottom !== undefined && (w < 768 || h < 500)) {
-    // Reserve space for both the accessory controls and the speech above the head.
-    const ceiling = textBottom + 16;
-    const radius = Math.max(12, Math.min(h * (w < 768 ? .13 : .17), w * (w < 768 ? .3 : .09), (h - ceiling - 72) / 2.8));
-    return { ...frame, x: w < 768 ? span(1, 4) : span(9, 12), y: Math.max(h * (w < 768 ? .74 : .6), ceiling + 72 + radius * 1.75), radius };
-  }
   if (kind === "hero" || kind === "outro" || kind === "error") {
-    if (w >= 768 && h >= w && kind !== "outro") {
-      // Portrait tablets need room for the quiff below the opening headline.
-      return { ...frame, x: w / 2, y: h * .74, radius: Math.min(h * .13, w * .23), bubble: columns(7) };
-    }
-    return { ...frame, x: w < 768 ? span(1, kind === "outro" ? 3 : 4) : span(9, 12), y: h * (w < 768 ? .74 : kind === "outro" ? .62 : .6), radius: w < 768 ? Math.min(h * .13, w * .3) : h * .17, beside: kind === "hero" && w >= 768 && h < 500 ? 1 : 0 };
+    return { ...frame, x: compact ? span(1, kind === "outro" ? 3 : 4) : span(9, 12), y: h * (compact ? .74 : kind === "outro" ? .62 : .6), radius: compact ? Math.min(h * .13, w * .3) : h * .17 };
   }
   return frame;
 }

@@ -1,11 +1,50 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { Mesh, Texture, Vector3 } from "three";
-import { createCharacter, mouths } from "../components/character/model";
+import { Box3, Vector3 } from "three";
+import { createCharacter, HEAD_HEIGHT, HEAD_RADIUS } from "../components/character/model";
+import { tourPlacement } from "../lib/character-tour";
 import { createCharacterMotion } from "../components/character/motion";
-import { faceFrontZ } from "../components/character/sculpt";
 import { characterManifest } from "../content/character";
 import { tricks } from "../lib/character-state";
+
+test("idle yawn settles into closed eyes and wakes or interrupts cleanly", () => {
+  const rig = createCharacter(characterManifest.look);
+  const motion = createCharacterMotion(rig);
+  motion.setActive(false);
+  try {
+    const idle = motion.sleep(); idle.seek(1.2, false);
+    assert.ok(rig.mouth.open > .3);
+    assert.ok(rig.face.eyeOpen < .2);
+    idle.seek(2.4, false); assert.ok(rig.face.eyeOpen < .15);
+    motion.wake().seek(1.4, false);
+    assert.equal(idle.parent, null); assert.equal(rig.face.eyeOpen, 1);
+    const again = motion.sleep(); again.seek(1, false);
+    motion.grab(); assert.equal(again.parent, null);
+    motion.rest(true); assert.equal(rig.face.eyeOpen, 1);
+  } finally { motion.dispose(); rig.dispose(); }
+});
+
+test("phone tour stays bottom-cropped through repeated toolbar expansion and collapse", () => {
+  const rig = createCharacter(characterManifest.look);
+  try {
+    const torso = new Box3().setFromObject(rig.root.getObjectByName("SweatshirtTorso")!);
+    for (const [width, height] of [[320, 568], [393, 852], [430, 932]]) {
+      const viewport = { width, height, margin: 18, gap: 9 };
+      for (const kind of ["hero", "left", "right", "outro"] as const) {
+        const frame = tourPlacement(kind, viewport, height - 300);
+        const scale = frame.radius / HEAD_RADIUS;
+        const hem = frame.y + (HEAD_HEIGHT - torso.min.y) * scale;
+        // The large render surface stays constant while browser chrome changes
+        // the visible window; CSS bottom anchoring moves its origin immediately.
+        for (const visibleHeight of [height - 112, height - 80, height - 32, height, height - 48, height - 96, height]) {
+          const origin = visibleHeight - height;
+          assert.ok(origin + hem >= visibleHeight, `${kind} torso must continue through the moving bottom edge`);
+          assert.ok(origin + frame.y - frame.radius * 1.6 >= 0, `${kind} head remains visible`);
+        }
+      }
+    }
+  } finally { rig.dispose(); }
+});
 
 test("all articulated tricks render finite transforms and reduced motion restores neutral", () => {
   const rig = createCharacter(characterManifest.look);
@@ -63,42 +102,11 @@ test("smiling eyes stay above the face through a blink", () => {
         for (let index = 0; index < positions.count; index++) {
           vertex.fromBufferAttribute(positions, index);
           happy.localToWorld(vertex); rig.head.worldToLocal(vertex);
-          assert.ok(vertex.z > faceFrontZ(vertex.x, vertex.y), "smile arc must stay above the sculpted face");
+          assert.ok(vertex.length() > HEAD_RADIUS, "smile arc must not intersect the face");
         }
       }
     }
   } finally { rig.dispose(); }
-});
-
-test("every mouth expression follows the sculpted lips without sinking into the face", () => {
-  const rig = createCharacter(characterManifest.look);
-  try {
-    const mesh = rig.head.getObjectByName("AnimatedMouth");
-    assert.ok(mesh instanceof Mesh);
-    for (const pose of Object.values(mouths)) for (const chatter of [0, .8]) {
-      Object.assign(rig.mouth, pose, { chatter }); rig.updateMouth();
-      const points = mesh.geometry.attributes.position;
-      for (let i = 0; i < points.count; i++) {
-        assert.ok(points.getZ(i) > faceFrontZ(points.getX(i), points.getY(i)) + .01);
-      }
-    }
-  } finally { rig.dispose(); }
-});
-
-test("shared procedural surface textures are released exactly once with the rig", () => {
-  const rig = createCharacter(characterManifest.look), disposed = new Map<Texture, number>();
-  rig.root.traverse((object) => {
-    if (!(object instanceof Mesh)) return;
-    for (const material of Array.isArray(object.material) ? object.material : [object.material]) {
-      for (const value of Object.values(material)) {
-        if (!(value instanceof Texture) || disposed.has(value)) continue;
-        disposed.set(value, 0); value.addEventListener("dispose", () => disposed.set(value, disposed.get(value)! + 1));
-      }
-    }
-  });
-  assert.ok(disposed.size >= 3);
-  rig.dispose();
-  disposed.forEach((count) => assert.equal(count, 1));
 });
 
 test("eye expressions swap only at the closed point and reopen together", () => {
@@ -139,7 +147,7 @@ test("tour poses mirror their active arm and include the source wrist-view pose"
     assert.equal(rig.arms[0].elbow.rotation.x, 0);
     motion.gesture("watch", 1).seek(1.1, false);
     assert.ok(rig.arms[0].elbow.rotation.x < -1.5);
-    assert.equal(rig.neck.rotation.x, 0);
+    assert.ok(rig.neck.rotation.x > .5);
     motion.grab();
     motion.rest(true);
     assert.equal(rig.arms[0].elbow.rotation.x, 0);

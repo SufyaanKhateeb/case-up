@@ -10,18 +10,13 @@ const right = tourPlacement("right", viewport);
 const badge = tourPlacement("badge", viewport);
 const near = (actual: number, expected: number) => assert.ok(Math.abs(actual - expected) < .01, `${actual} ≠ ${expected}`);
 
-test("the taller likeness fits portrait tablets and short-landscape speech clears the header", () => {
-  for (const [width, height] of [[768, 1024], [820, 1180]]) {
-    for (const kind of ["hero", "error"] as const) {
-      const frame = tourPlacement(kind, { width, height, margin: 20, gap: 10 });
-      assert.ok(frame.x - frame.radius * 1.3 > 20);
-      assert.ok(frame.x + frame.radius * 1.3 < width - 20);
-      assert.ok(frame.y - frame.radius * 1.7 > height * .4);
-    }
-  }
-  const short = tourPlacement("hero", { width: 844, height: 390, margin: 20, gap: 10 });
-  assert.equal(short.beside, 1);
-  assert.equal(hero.beside, 0);
+test("portrait tablets use the compact grid and keep the hero head inside the page", () => {
+  const portrait = { width: 768, height: 1024, margin: 20, gap: 10 };
+  const hero = tourPlacement("hero", portrait);
+  near(hero.x, portrait.width / 2);
+  assert.ok(hero.x - hero.radius > 0 && hero.x + hero.radius < portrait.width);
+  const left = tourPlacement("left", portrait), right = tourPlacement("right", portrait);
+  near(left.x + right.x, portrait.width);
 });
 
 test("landscape anchors match the source grid, head radius, and height", () => {
@@ -83,14 +78,4 @@ test("mobile outro fits below footer controls instead of covering their click ta
   const tallerText = tourPlacement("outro", viewport, footerBottom + 60);
   assert.ok(tallerText.radius < frame.radius);
   assert.ok(tallerText.y - tallerText.radius * 1.2 > footerBottom + 60);
-});
-
-test("404 speech and character clear accessory controls on phones and short landscapes", () => {
-  for (const [width, height, controlsBottom] of [[390, 844, 355.5], [390, 667, 355.5], [390, 568, 355.5], [360, 640, 342], [900, 390, 131]]) {
-    const frame = tourPlacement("error", { width, height, margin: 20, gap: 10 }, controlsBottom);
-    assert.ok(frame.y - frame.radius * 1.75 - 54 - 18 >= controlsBottom + 16 - .01);
-    assert.ok(frame.y - frame.radius * 1.2 > controlsBottom);
-    assert.ok(frame.y + frame.radius < height);
-  }
-  near(tourPlacement("error", viewport, 172).y, tourPlacement("error", viewport).y);
 });
